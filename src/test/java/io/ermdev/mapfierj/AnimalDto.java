@@ -1,13 +1,11 @@
 package io.ermdev.mapfierj;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AnimalDto {
 
     private String name;
     private Integer size;
-    private List<String> list = new ArrayList<>();
+
+    private FoodDto food;
 
     public AnimalDto(){}
 
@@ -27,12 +25,12 @@ public class AnimalDto {
         this.size = size;
     }
 
-    public List<String> getList() {
-        return list;
+    public FoodDto getFood() {
+        return food;
     }
 
-    public void setList(List<String> list) {
-        this.list = list;
+    public void setFood(FoodDto food) {
+        this.food = food;
     }
 
     @Override
@@ -40,7 +38,7 @@ public class AnimalDto {
         return "AnimalDto{" +
                 "name='" + name + '\'' +
                 ", size=" + size +
-                ", list=" + list +
+                ", food=" + food +
                 '}';
     }
 }

@@ -8,9 +8,16 @@ public class Transaction {
     private final HashMap<String, Object> fields = new HashMap<>();
 
     public Transaction(Object obj) throws Exception {
+        if(obj == null)
+            return;
         for(Field field : obj.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            fields.put(field.getName(), field.get(obj));
+            MapTo maps = field.getAnnotation(MapTo.class);
+            if(maps != null) {
+                fields.put(field.getName(), new Transaction(field.get(obj)).mapTo(maps.value()));
+            } else {
+                fields.put(field.getName(), field.get(obj));
+            }
         }
     }
 
@@ -32,6 +39,7 @@ public class Transaction {
             }
             return instance;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
