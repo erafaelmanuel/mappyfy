@@ -1,11 +1,15 @@
 package io.ermdev.mapfierj;
 
-public class Converter<To, From> {
+public class Transaction<To, From> {
 
     private To obj;
 
-    public Converter(To obj) {
+    public Transaction(To obj) {
         this.obj=obj;
+        if(obj instanceof ToModel)
+            System.out.println("Not Raw");
+        else
+            System.out.println("Raw");
     }
 
     public <T> T mapTo(Class<T> _class) throws IllegalAccessException, InstantiationException {

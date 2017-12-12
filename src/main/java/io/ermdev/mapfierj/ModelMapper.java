@@ -2,7 +2,9 @@ package io.ermdev.mapfierj;
 
 public class ModelMapper<To, From> {
 
-    public Converter<To, From> set(To obj) {
-        return new Converter<>(obj);
+    private String sample;
+
+    public Transaction<To, From> set(To obj) {
+        return new Transaction<>(obj);
     }
 }
