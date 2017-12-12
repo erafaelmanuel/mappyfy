@@ -1,13 +1,11 @@
 # mapfierJ [![](https://jitpack.io/v/erafaelmanuel/mapfierJ.svg)](https://jitpack.io/#erafaelmanuel/mapfierJ)
- A simple mapping library that automatically maps objects to each other
- <br />
- <br />
+ A simple mapping library that maps objects to another objects
  
 # How to use
 The class you 'mapTo' requires a contructor with no argument. It is needed when creating an instance of a class using reflection API
 ```js
  SimpleMapper mapper = new SimpleMapper();
- YourDto dto = mapper.set(new YourEntity()).mapTo(YourDto.class);
+ YourDto dto = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
 or
 ```js
@@ -16,7 +14,39 @@ or
  ModelMapper mapper = new ModelMapper();
  
  mapper.setTransaction(transaction);
- YourDto dto = mapper.getTransaction().mapTo(YourDto.class);
+ YourDto dto = mapper.getTransaction().mapTo(PersonDto.class);
+```
+## models
+
+Person.java
+```js
+ public class Person {
+  private String name;
+  private int age;
+  
+  public Person() {}
+  
+  //getter and setter
+ }
+```
+
+PersonDto.java
+```js
+ public class PersonDto {
+  private String name;
+  private int age;
+  
+  public PersonDto() {}
+  
+  //getter and setter
+ }
+```
+## @Excluded
+To exclude a field just add an @Excluded annotation to your dto
+```js
+  ...
+  @Excluded
+  private List<Pet> pets = new ArrayList<>();
 ```
 
 # Download
@@ -54,7 +84,7 @@ dependencies {
 <dependencies>
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
-    <artifactId>excelj</artifactId>
+    <artifactId>mapfierJ</artifactId>
     <version>v1.0-beta.1</version>
   </dependency>
 </dependencies>
