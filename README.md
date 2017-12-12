@@ -2,6 +2,22 @@
  A simple mapping library that automatically maps objects to each other
  <br />
  <br />
+ 
+# How to use
+The class you 'mapTo' requires a contructor with no argument. It is needed when creating an instance of a class using reflection API
+```js
+ SimpleMapper mapper = new SimpleMapper();
+ YourDto dto = mapper.set(new YourEntity()).mapTo(YourDto.class);
+```
+or
+```js
+ //You can use hashmap too
+ Transaction transaction = new Transaction(new HashMap<String, Object>);
+ ModelMapper mapper = new ModelMapper();
+ 
+ mapper.setTransaction(transaction);
+ YourDto dto = mapper.getTransaction().mapTo(YourDto.class);
+```
 
 # Download
 Download the latest jar [here](https://jitpack.io/#erafaelmanuel/mapfierJ) or via:
