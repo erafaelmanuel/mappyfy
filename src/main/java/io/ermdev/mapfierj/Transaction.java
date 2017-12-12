@@ -1,23 +1,36 @@
 package io.ermdev.mapfierj;
 
-public class Transaction<To, From> {
+import java.lang.reflect.Field;
+import java.util.HashMap;
 
-    private To obj;
+public class Transaction {
 
-    public Transaction(To obj) {
-        this.obj=obj;
-        if(obj instanceof ToModel)
-            System.out.println("Not Raw");
-        else
-            System.out.println("Raw");
+    private final HashMap<String, Object> fields = new HashMap<>();
+
+    public Transaction(Object obj) throws Exception {
+        for(Field field : obj.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            fields.put(field.getName(), field.get(obj));
+        }
     }
 
-    public <T> T mapTo(Class<T> _class) throws IllegalAccessException, InstantiationException {
-        return _class.newInstance();
+    public Transaction(HashMap<String, Object> map) {
+        fields.clear();
+        fields.putAll(map);
     }
 
-    public From map() {
-        From f = null;
-        return f;
+    public <T> T mapTo(Class<T> _class) {
+        try {
+            T instance = _class.newInstance();
+            for (Field field : _class.getDeclaredFields()) {
+                field.setAccessible(true);
+                Object value = fields.get(field.getName());
+                if (value != null)
+                    field.set(instance, value);
+            }
+            return instance;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

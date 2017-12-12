@@ -2,11 +2,11 @@ package io.ermdev.mapfierj;
 
 import java.util.HashMap;
 
-public class ModelMapper<F> {
+public class SimpleMapper {
 
     private Transaction transaction;
 
-    public Transaction set(F obj) {
+    public Transaction set(Object obj) {
         try {
             transaction=new Transaction(obj);
             return transaction;
@@ -22,13 +22,5 @@ public class ModelMapper<F> {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
     }
 }
