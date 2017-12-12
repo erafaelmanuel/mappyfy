@@ -5,7 +5,7 @@
 The class you 'mapTo' requires a contructor with no argument. It is needed when creating an instance of a class using reflection API
 ```js
  SimpleMapper mapper = new SimpleMapper();
- YourDto dto = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
+ PersonDto dto = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
 or
 ```js
@@ -48,9 +48,16 @@ To exclude a field just add an @Excluded annotation to your dto
   @Excluded
   private List<Pet> pets = new ArrayList<>();
 ```
+## @MapTo(value=[class])
+To map the field or (fields of a field) of an object to a certain class
+```js
+  ...
+  @MapTo(PetDto.class)
+  private Pet pet;
+```
 
 # Download
-Download the latest jar [here](https://jitpack.io/#erafaelmanuel/mapfierJ) or via:
+Download the latest jar [here](https://github.com/erafaelmanuel/mapfierJ/archive/v1.0-beta.2.zip) or via:
 
 * Gradle
 
@@ -65,7 +72,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.1'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.2'
 }
 ```
 
@@ -85,7 +92,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.1</version>
+    <version>v1.0-beta.2</version>
   </dependency>
 </dependencies>
 ```
