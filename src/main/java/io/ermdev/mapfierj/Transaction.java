@@ -24,9 +24,11 @@ public class Transaction {
             T instance = _class.newInstance();
             for (Field field : _class.getDeclaredFields()) {
                 field.setAccessible(true);
-                Object value = fields.get(field.getName());
-                if (value != null)
-                    field.set(instance, value);
+                if(field.getAnnotation(Excluded.class) == null) {
+                    Object value = fields.get(field.getName());
+                    if (value != null)
+                        field.set(instance, value);
+                }
             }
             return instance;
         } catch (Exception e) {
