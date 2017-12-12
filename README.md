@@ -1,7 +1,5 @@
 # mapfierJ [![](https://jitpack.io/v/erafaelmanuel/mapfierJ.svg)](https://jitpack.io/#erafaelmanuel/mapfierJ)
- A simple mapping library that automatically maps objects to each other
- <br />
- <br />
+ A simple mapping library that maps objects to another objects
  
 # How to use
 The class you 'mapTo' requires a contructor with no argument. It is needed when creating an instance of a class using reflection API
@@ -18,7 +16,7 @@ or
  mapper.setTransaction(transaction);
  YourDto dto = mapper.getTransaction().mapTo(PersonDto.class);
 ```
-## classes
+## models
 
 Person.java
 ```js
@@ -43,7 +41,7 @@ PersonDto.java
   //getter and setter
  }
 ```
-
+## @Excluded
 To exclude a field just add an @Excluded annotation to your dto
 ```js
   ...
