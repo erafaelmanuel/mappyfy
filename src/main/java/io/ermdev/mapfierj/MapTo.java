@@ -10,5 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface MapTo {
 
-    public Class<?> value();
+    Class<?> value();
+
+    boolean collection() default false;
 }

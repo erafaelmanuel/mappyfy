@@ -1,12 +1,17 @@
 package io.ermdev.mapfierj;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class Animal{
 
     private String name;
     private Integer size;
 
-    @MapTo(FoodDto.class)
-    private Food food;
+    @MapTo(value = FoodDto.class, collection = true)
+    private Set<Food> foods = new HashSet<>();
 
     public Animal(){}
 
@@ -31,11 +36,11 @@ public class Animal{
         this.size = size;
     }
 
-    public Food getFood() {
-        return food;
+    public Set<Food> getFoods() {
+        return foods;
     }
 
-    public void setFood(Food food) {
-        this.food = food;
+    public void setFoods(Set<Food> foods) {
+        this.foods = foods;
     }
 }

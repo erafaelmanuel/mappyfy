@@ -1,7 +1,7 @@
 package io.ermdev.mapfierj;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.*;
 
 public class Transaction {
 
@@ -12,11 +12,17 @@ public class Transaction {
             return;
         for(Field field : obj.getClass().getDeclaredFields()) {
             field.setAccessible(true);
+            Object value = field.get(obj);
+
             MapTo maps = field.getAnnotation(MapTo.class);
             if(maps != null) {
-                fields.put(field.getName(), new Transaction(field.get(obj)).mapTo(maps.value()));
+                if(value instanceof Collection || maps.collection()) {
+                    fields.put(field.getName(), transaction((Collection) value, maps));
+                } else {
+                    fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
+                }
             } else {
-                fields.put(field.getName(), field.get(obj));
+                fields.put(field.getName(), value);
             }
         }
     }
@@ -24,6 +30,20 @@ public class Transaction {
     public Transaction(HashMap<String, Object> map) {
         fields.clear();
         fields.putAll(map);
+    }
+
+    private Object transaction(Collection collection, MapTo maps) throws Exception {
+        if(collection == null)
+            return null;
+        Collection<Object> list = new ArrayList<>();
+        for(Object o : collection) {
+            list.add(new Transaction(o).mapTo(maps.value()));
+        }
+        return list;
+    }
+
+    public HashMap<String, Object> getMap() {
+        return fields;
     }
 
     public <T> T mapTo(Class<T> _class) {
@@ -35,6 +55,29 @@ public class Transaction {
                     Object value = fields.get(field.getName());
                     if (value != null)
                         field.set(instance, value);
+                }
+            }
+            return instance;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //TODO
+    public <T> T mapAllTo(Class<T> c) {
+        try {
+            T instance = c.newInstance();
+            for (Field field : c.getDeclaredFields()) {
+                field.setAccessible(true);
+                if(field.getAnnotation(Excluded.class) == null) {
+                    Object value = fields.get(field.getName());
+                    if (value != null) {
+                        if(!field.getType().equals(value.getClass())) {
+                            value = new Transaction(value).mapTo(field.getType());
+                        }
+                        field.set(instance, value);
+                    }
                 }
             }
             return instance;

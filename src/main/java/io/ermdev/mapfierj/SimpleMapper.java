@@ -11,6 +11,7 @@ public class SimpleMapper {
             transaction=new Transaction(obj);
             return transaction;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

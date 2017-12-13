@@ -21,7 +21,7 @@ public class FoodDto {
 
     @Override
     public String toString() {
-        return "Food{" +
+        return "FoodDto{" +
                 "name='" + name + '\'' +
                 '}';
     }
