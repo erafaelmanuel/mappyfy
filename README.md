@@ -1,4 +1,4 @@
-# mapfierJ [![](https://jitpack.io/v/erafaelmanuel/mapfierJ.svg)](https://jitpack.io/#erafaelmanuel/mapfierJ)
+# MapfierJ [![](https://jitpack.io/v/erafaelmanuel/mapfierJ.svg)](https://jitpack.io/#erafaelmanuel/mapfierJ)
  A simple mapping library that maps objects to another objects
  
 # How to use
@@ -9,14 +9,14 @@ The class you 'mapTo' requires a contructor with no argument. It is needed when 
 ```
 or
 ```js
- //You can use hashmap too
  Transaction transaction = new Transaction(new HashMap<String, Object>);
- ModelMapper mapper = new ModelMapper();
- 
- mapper.setTransaction(transaction);
- YourDto dto = mapper.getTransaction().mapTo(PersonDto.class);
+ PersonDto dto = transaction.mapTo(PersonDto.class);
 ```
-## models
+to map a field [here](#maptovalueclass), or just simply use mapAllTo();
+```js
+ PersonDto dto = mapper.mapAllTo(PersonDto.class);
+```
+## Models
 
 Person.java
 ```js
@@ -49,15 +49,24 @@ To exclude a field just add an @Excluded annotation to your dto
   private List<Pet> pets = new ArrayList<>();
 ```
 ## @MapTo(value=[class])
-To map the field or (fields of a field) of an object to a certain class
+To map a field or (fields of a field) of an object to a certain class
+* value
+* collection
+* type
 ```js
   ...
   @MapTo(PetDto.class)
   private Pet pet;
 ```
+Example with a collection field:
+```js
+  ...
+  @MapTo(value = PetDto.class, collection = true, type = List.class)
+  private Set<Pet> pets = new HashSet<>(); // map to -> List<PetDto> pets = new ArrayList<>();
+```
 
 # Download
-Download the latest jar [here](https://github.com/erafaelmanuel/mapfierJ/archive/v1.0-beta.2.zip) or via:
+Download the latest jar [here](https://github.com/erafaelmanuel/mapfierJ/archive/v1.0-beta.3.zip) or via:
 
 * Gradle
 
@@ -72,7 +81,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.2'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.3'
 }
 ```
 
@@ -92,7 +101,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.2</version>
+    <version>v1.0-beta.3</version>
   </dependency>
 </dependencies>
 ```
