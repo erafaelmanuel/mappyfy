@@ -41,7 +41,7 @@ public class MapperTest {
         animal.setFoods(foods);
 
         SimpleMapper mapper = new SimpleMapper();
-        AnimalDto dto = mapper.set(animal).mapTo(AnimalDto.class);
+        Animal dto = mapper.set(animal).mapTo(Animal.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());

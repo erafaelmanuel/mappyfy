@@ -17,7 +17,10 @@ public class Transaction {
             MapTo maps = field.getAnnotation(MapTo.class);
             if(maps != null) {
                 if(value instanceof Collection || maps.collection()) {
-                    fields.put(field.getName(), transaction((Collection) value, maps));
+                    if(field.getType().equals(List.class))
+                        fields.put(field.getName(), transaction((List) value, maps));
+                    else
+                        fields.put(field.getName(), transaction((Set) value, maps));
                 } else {
                     fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
                 }
@@ -32,7 +35,7 @@ public class Transaction {
         fields.putAll(map);
     }
 
-    private Object transaction(Collection collection, MapTo maps) throws Exception {
+    private Object transaction(List collection, MapTo maps) throws Exception {
         if(collection == null)
             return null;
         Collection<Object> list = new ArrayList<>();
@@ -40,6 +43,16 @@ public class Transaction {
             list.add(new Transaction(o).mapTo(maps.value()));
         }
         return list;
+    }
+
+    private Object transaction(Set collection, MapTo maps) throws Exception {
+        if(collection == null)
+            return null;
+        Collection<Object> set = new HashSet<>();
+        for(Object o : collection) {
+            set.add(new Transaction(o).mapTo(maps.value()));
+        }
+        return set;
     }
 
     public HashMap<String, Object> getMap() {
