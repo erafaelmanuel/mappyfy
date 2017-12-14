@@ -23,10 +23,17 @@ public class Transaction {
             MapTo maps = field.getAnnotation(MapTo.class);
             if(maps != null) {
                 if(value instanceof Collection || maps.collection()) {
+                    final Collection<?> collection = (Collection) value;
                     if(maps.type().equals(List.class))
-                        fields.put(field.getName(), transaction((Collection) value, maps.value(), List.class));
+                        fields.put(field.getName(), mapList(collection, maps.value()));
                     else if(maps.type().equals(Set.class))
-                        fields.put(field.getName(), transaction((Collection) value, maps.value(), Set.class));
+                        fields.put(field.getName(), mapSet(collection, maps.value()));
+                    else {
+                        if(field.getType().equals(List.class))
+                            fields.put(field.getName(), mapList(collection, maps.value()));
+                        else if(maps.type().equals(Set.class))
+                            fields.put(field.getName(), mapSet(collection, maps.value()));
+                    }
                 } else {
                     fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
                 }
@@ -36,21 +43,29 @@ public class Transaction {
         }
     }
 
-    private Object transaction(Collection<?> collection, Class<?> parameter, Class<?> type) throws Exception {
+    private Object mapList(Collection<?> collection, Class<?> c) throws Exception {
+        Collection<Object> list = new ArrayList<>();
+        for(Object o : collection) {
+            list.add(new Transaction(o).mapTo(c));
+        }
+        return list;
+    }
+
+    private Object mapSet(Collection collection, Class<?> c) throws Exception {
+        Collection<Object> set = new HashSet<>();
+        for(Object o : collection) {
+            set.add(new Transaction(o).mapTo(c));
+        }
+        return set;
+    }
+
+    private Object mapCollection(Collection<?> collection, Class<?> parameter, Class<?> type) throws Exception {
         if(collection == null)
             return null;
         if(type.equals(List.class)) {
-            Collection<Object> list = new ArrayList<>();
-            for (Object o : collection) {
-                list.add(new Transaction(o).mapTo(parameter));
-            }
-            return list;
+            return mapList(collection, parameter);
         } else {
-            Collection<Object> set = new HashSet<>();
-            for(Object o : collection) {
-                set.add(new Transaction(o).mapTo(parameter));
-            }
-            return set;
+            return mapSet(collection, parameter);
         }
     }
 
@@ -89,13 +104,13 @@ public class Transaction {
                             if(field.getGenericType() instanceof ParameterizedType) {
                                 ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                                 Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                                value = transaction((Collection) value, parameter, List.class);
+                                value = mapCollection((Collection) value, parameter, List.class);
                             }
                         } else {
                             if(field.getGenericType() instanceof ParameterizedType) {
                                 ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                                 Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                                value = transaction((Collection) value, parameter, Set.class);
+                                value = mapCollection((Collection) value, parameter, Set.class);
                             }
                         }
                         field.set(instance, value);
