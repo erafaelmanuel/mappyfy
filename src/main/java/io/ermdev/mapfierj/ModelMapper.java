@@ -11,6 +11,7 @@ public class ModelMapper<F> {
             transaction=new Transaction(obj);
             return transaction;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -20,6 +21,7 @@ public class ModelMapper<F> {
             transaction=new Transaction(map);
             return transaction;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

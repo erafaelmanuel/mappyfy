@@ -1,14 +1,16 @@
 package io.ermdev.mapfierj;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AnimalDto {
 
     private String name;
     private Integer size;
 
-    private List<FoodDto> foods = new ArrayList<>();
+    private Set<FoodDto> foods = new HashSet<>();
 
     public AnimalDto(){}
 

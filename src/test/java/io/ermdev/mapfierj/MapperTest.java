@@ -19,7 +19,7 @@ public class MapperTest {
         //animal.setFood(new Food("Bone"));
         animal.setFoods(null);
         ModelMapper<Animal> mapper = new ModelMapper<>();
-        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
+        AnimalDto dto = mapper.set(animal).mapTo(AnimalDto.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());
@@ -36,9 +36,8 @@ public class MapperTest {
         foods.add(new Food("Fuck"));
 
         animal.setFoods(foods);
-
         SimpleMapper mapper = new SimpleMapper();
-        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
+        AnimalDto dto = mapper.set(animal).mapTo(AnimalDto.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());

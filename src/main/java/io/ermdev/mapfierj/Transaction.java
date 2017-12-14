@@ -21,7 +21,7 @@ public class Transaction {
             Object value = field.get(obj);
 
             MapTo maps = field.getAnnotation(MapTo.class);
-            if(maps != null) {
+            if(maps != null && value != null) {
                 if(value instanceof Collection || maps.collection()) {
                     final Collection<?> collection = (Collection) value;
                     if(maps.type().equals(List.class))
@@ -31,7 +31,7 @@ public class Transaction {
                     else {
                         if(field.getType().equals(List.class))
                             fields.put(field.getName(), mapList(collection, maps.value()));
-                        else if(maps.type().equals(Set.class))
+                        else if(field.getType().equals(Set.class))
                             fields.put(field.getName(), mapSet(collection, maps.value()));
                     }
                 } else {
