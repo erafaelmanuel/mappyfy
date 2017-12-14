@@ -13,4 +13,6 @@ public @interface MapTo {
     Class<?> value();
 
     boolean collection() default false;
+
+    Class<?> type() default Object.class;
 }

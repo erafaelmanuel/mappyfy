@@ -1,11 +1,17 @@
 package io.ermdev.mapfierj;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 public class Transaction {
 
     private final HashMap<String, Object> fields = new HashMap<>();
+
+    public Transaction(HashMap<String, Object> map) {
+        fields.clear();
+        fields.putAll(map);
+    }
 
     public Transaction(Object obj) throws Exception {
         if(obj == null)
@@ -17,10 +23,10 @@ public class Transaction {
             MapTo maps = field.getAnnotation(MapTo.class);
             if(maps != null) {
                 if(value instanceof Collection || maps.collection()) {
-                    if(field.getType().equals(List.class))
-                        fields.put(field.getName(), transaction((List) value, maps));
-                    else
-                        fields.put(field.getName(), transaction((Set) value, maps));
+                    if(maps.type().equals(List.class))
+                        fields.put(field.getName(), transaction((Collection) value, maps.value(), List.class));
+                    else if(maps.type().equals(Set.class))
+                        fields.put(field.getName(), transaction((Collection) value, maps.value(), Set.class));
                 } else {
                     fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
                 }
@@ -30,29 +36,22 @@ public class Transaction {
         }
     }
 
-    public Transaction(HashMap<String, Object> map) {
-        fields.clear();
-        fields.putAll(map);
-    }
-
-    private Object transaction(List collection, MapTo maps) throws Exception {
+    private Object transaction(Collection<?> collection, Class<?> parameter, Class<?> type) throws Exception {
         if(collection == null)
             return null;
-        Collection<Object> list = new ArrayList<>();
-        for(Object o : collection) {
-            list.add(new Transaction(o).mapTo(maps.value()));
+        if(type.equals(List.class)) {
+            Collection<Object> list = new ArrayList<>();
+            for (Object o : collection) {
+                list.add(new Transaction(o).mapTo(parameter));
+            }
+            return list;
+        } else {
+            Collection<Object> set = new HashSet<>();
+            for(Object o : collection) {
+                set.add(new Transaction(o).mapTo(parameter));
+            }
+            return set;
         }
-        return list;
-    }
-
-    private Object transaction(Set collection, MapTo maps) throws Exception {
-        if(collection == null)
-            return null;
-        Collection<Object> set = new HashSet<>();
-        for(Object o : collection) {
-            set.add(new Transaction(o).mapTo(maps.value()));
-        }
-        return set;
     }
 
     public HashMap<String, Object> getMap() {
@@ -77,7 +76,6 @@ public class Transaction {
         }
     }
 
-    //TODO
     public <T> T mapAllTo(Class<T> c) {
         try {
             T instance = c.newInstance();
@@ -85,7 +83,23 @@ public class Transaction {
                 field.setAccessible(true);
                 if(field.getAnnotation(Excluded.class) == null) {
                     Object value = fields.get(field.getName());
-                    if (value != null) {
+
+                    if(value instanceof Collection) {
+                        if(field.getType().equals(List.class)) {
+                            if(field.getGenericType() instanceof ParameterizedType) {
+                                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                value = transaction((Collection) value, parameter, List.class);
+                            }
+                        } else {
+                            if(field.getGenericType() instanceof ParameterizedType) {
+                                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                value = transaction((Collection) value, parameter, Set.class);
+                            }
+                        }
+                        field.set(instance, value);
+                    }else if (value != null) {
                         if(!field.getType().equals(value.getClass())) {
                             value = new Transaction(value).mapTo(field.getType());
                         }
