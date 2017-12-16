@@ -1,4 +1,15 @@
 package io.ermdev.mapfierj;
 
-public class LongAnimalTypeConverter {
+@TypeConverter(applyTo = Animal.class)
+public class LongAnimalTypeConverter extends TypeConverterAdapter<String, Food> {
+
+    @Override
+    public String convertTo(Food food) {
+        return food.getName();
+    }
+
+    @Override
+    public Food convertFrom(String name) {
+        return new Food(name);
+    }
 }

@@ -1,4 +1,6 @@
 package io.ermdev.mapfierj;
 
-public class TypeConverter {
+public @interface TypeConverter {
+
+    Class<?>[] applyTo() default {};
 }

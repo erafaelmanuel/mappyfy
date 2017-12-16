@@ -1,7 +1,6 @@
 package io.ermdev.mapfierj;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Animal{
@@ -9,7 +8,6 @@ public class Animal{
     private String name;
     private Integer size;
 
-    @MapTo(value = FoodDto.class, collection = true)
     private Set<Food> foods = new HashSet<>();
 
     public Animal(){}

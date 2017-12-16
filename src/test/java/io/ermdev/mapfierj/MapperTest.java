@@ -10,7 +10,8 @@ public class MapperTest {
 
     @Test
     public void shouldPass() {
-        Assert.assertEquals(1+1, 2);
+        int c = 1;
+        Assert.assertEquals(++c, 2);
     }
 
     @Test
@@ -19,10 +20,11 @@ public class MapperTest {
         //animal.setFood(new Food("Bone"));
         animal.setFoods(null);
         ModelMapper<Animal> mapper = new ModelMapper<>();
-        AnimalDto dto = mapper.set(animal).mapTo(AnimalDto.class);
+        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());
+
 
         System.out.println(dto);
     }
@@ -36,8 +38,9 @@ public class MapperTest {
         foods.add(new Food("Fuck"));
 
         animal.setFoods(foods);
+
         SimpleMapper mapper = new SimpleMapper();
-        AnimalDto dto = mapper.set(animal).mapTo(AnimalDto.class);
+        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());
