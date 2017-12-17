@@ -10,7 +10,9 @@ public class AnimalDto {
     private String name;
     private Integer size;
 
-    private Set<FoodDto> foods = new HashSet<>();
+    //private Set<FoodDto> foods = new HashSet<>();
+
+    private Food food;
 
     public AnimalDto(){}
 
@@ -30,12 +32,22 @@ public class AnimalDto {
         this.size = size;
     }
 
+//    @Override
+//    public String toString() {
+//        return "AnimalDto{" +
+//                "name='" + name + '\'' +
+//                ", size=" + size +
+//                ", foods=" + foods +
+//                '}';
+//    }
+
+
     @Override
     public String toString() {
         return "AnimalDto{" +
                 "name='" + name + '\'' +
                 ", size=" + size +
-                ", foods=" + foods +
+                ", food=" + food +
                 '}';
     }
 }

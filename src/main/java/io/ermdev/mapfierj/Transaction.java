@@ -116,7 +116,9 @@ public class Transaction {
                         field.set(instance, value);
                     }else if (value != null) {
                         if(!field.getType().equals(value.getClass())) {
-                            value = new Transaction(value).mapTo(field.getType());
+                            if(!TypeChecker.isPrimitive(field.getType())) {
+                                value = new Transaction(value).mapTo(field.getType());
+                            }
                         }
                         field.set(instance, value);
                     }
