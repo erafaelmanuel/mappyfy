@@ -21,11 +21,14 @@ public class TypeChecker {
 
     public static boolean isPrimitive(Class<?> c) {
         if(c == null) return false;
-
         for(String p : PRIMITIVE_TYPES) {
             if(p.equals(c.toString()))
                 return true;
         }
         return false;
+    }
+
+    public static boolean isReference(Class<?> c) {
+        return !isPrimitive(c);
     }
 }
