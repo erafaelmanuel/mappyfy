@@ -23,9 +23,7 @@ Person.java
  public class Person {
   private String name;
   private int age;
-  
-  public Person() {}
-  
+ 
   //getter and setter
  }
 ```
@@ -81,7 +79,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.3'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.3.1'
 }
 ```
 
@@ -101,7 +99,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.3</version>
+    <version>v1.0-beta.3.1</version>
   </dependency>
 </dependencies>
 ```
