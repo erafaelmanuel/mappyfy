@@ -80,8 +80,10 @@ public class Transaction {
 
     }
 
-    private Object mapList(Collection<?> collection, Class<?> c) throws Exception {
-        Collection<Object> list = new ArrayList<>();
+    public <T> List<T> mapList(Collection<?> collection, Class<T> c) throws Exception {
+        List<T> list = new ArrayList<>();
+        if(collection == null)
+            return null;
         for(Object o : collection) {
             list.add(new Transaction(o).mapTo(c));
         }
@@ -96,8 +98,10 @@ public class Transaction {
         return list;
     }
 
-    private Object mapSet(Collection collection, Class<?> c) throws Exception {
-        Collection<Object> set = new HashSet<>();
+    public <T> Set<T> mapSet(Collection collection, Class<T> c) throws Exception {
+        if(collection == null)
+            return null;
+        Set<T> set = new HashSet<>();
         for(Object o : collection) {
             set.add(new Transaction(o).mapTo(c));
         }
@@ -113,8 +117,6 @@ public class Transaction {
     }
 
     private Object mapCollection(Collection<?> collection, Class<?> parameter, Class<?> type) throws Exception {
-        if(collection == null)
-            return null;
         if(type.equals(List.class)) {
             return mapList(collection, parameter);
         } else {
