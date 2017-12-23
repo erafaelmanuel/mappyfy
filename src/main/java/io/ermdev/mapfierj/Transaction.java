@@ -45,6 +45,7 @@ public class Transaction {
         }
     }
 
+    @Deprecated
     private Transaction(Object o, List<Class<?>> no_repeat_classes) throws Exception {
         if(o == null)
             return;
@@ -90,6 +91,7 @@ public class Transaction {
         return list;
     }
 
+    @Deprecated
     private Object mapList(Collection<?> collection, Class<?> c, List<Class<?>> no_repeat_classes) throws Exception {
         Collection<Object> list = new ArrayList<>();
         for(Object o : collection) {
@@ -108,6 +110,7 @@ public class Transaction {
         return set;
     }
 
+    @Deprecated
     private Object mapSet(Collection collection, Class<?> c, List<Class<?>> no_repeat_classes) throws Exception {
         Collection<Object> set = new HashSet<>();
         for(Object o : collection) {
@@ -124,6 +127,7 @@ public class Transaction {
         }
     }
 
+    @Deprecated
     private Object mapCollection(Collection<?> collection, Class<?> parameter, Class<?> type,
                                  List<Class<?>> no_repeat_classes) throws Exception {
         if(collection == null)
