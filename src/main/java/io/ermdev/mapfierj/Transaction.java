@@ -10,6 +10,13 @@ public class Transaction {
 
     private final List<Class<?>> NO_REPEAT_CLASSES = new ArrayList<>();
 
+    private final List<Object> list = new ArrayList<>();
+
+    public Transaction(Collection collection){
+        if(collection != null)
+            list.addAll(collection);
+    }
+
     public Transaction(HashMap<String, Object> map) {
         fields.clear();
         fields.putAll(map);
@@ -81,14 +88,19 @@ public class Transaction {
 
     }
 
-    public <T> List<T> mapList(Collection<?> collection, Class<T> c) throws Exception {
+    private <T> List<T> mapList(Collection<?> collection, Class<T> c) {
         List<T> list = new ArrayList<>();
-        if(collection == null)
-            return null;
-        for(Object o : collection) {
-            list.add(new Transaction(o).mapTo(c));
+        try {
+            if (collection == null)
+                throw new RuntimeException("Collection must not null");
+            for (Object o : collection) {
+                list.add(new Transaction(o).mapTo(c));
+            }
+            return list;
+        } catch (Exception e){
+            e.printStackTrace();
+            return list;
         }
-        return list;
     }
 
     @Deprecated
@@ -100,14 +112,19 @@ public class Transaction {
         return list;
     }
 
-    public <T> Set<T> mapSet(Collection collection, Class<T> c) throws Exception {
-        if(collection == null)
-            return null;
+    private <T> Set<T> mapSet(Collection collection, Class<T> c) {
         Set<T> set = new HashSet<>();
-        for(Object o : collection) {
-            set.add(new Transaction(o).mapTo(c));
+        try {
+            if (collection == null)
+                throw new RuntimeException("Collection must not null");
+            for (Object o : collection) {
+                set.add(new Transaction(o).mapTo(c));
+            }
+            return set;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return set;
         }
-        return set;
     }
 
     @Deprecated
@@ -141,24 +158,6 @@ public class Transaction {
 
     public HashMap<String, Object> getMap() {
         return fields;
-    }
-
-    public <T> T mapTo(Class<T> _class) {
-        try {
-            T instance = _class.newInstance();
-            for (Field field : _class.getDeclaredFields()) {
-                field.setAccessible(true);
-                if(field.getAnnotation(Excluded.class) == null) {
-                    Object value = fields.get(field.getName());
-                    if (value != null)
-                        field.set(instance, value);
-                }
-            }
-            return instance;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     public <T> T mapAllTo(Class<T> c) {
@@ -199,6 +198,32 @@ public class Transaction {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public <T> T mapTo(Class<T> _class) {
+        try {
+            T instance = _class.newInstance();
+            for (Field field : _class.getDeclaredFields()) {
+                field.setAccessible(true);
+                if(field.getAnnotation(Excluded.class) == null) {
+                    Object value = fields.get(field.getName());
+                    if (value != null)
+                        field.set(instance, value);
+                }
+            }
+            return instance;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public <T> List<T> mapToList(Class<T> c) {
+        return mapList(list, c);
+    }
+
+    public <T> Set<T> mapToSet(Class<T> c) {
+        return mapSet(list, c);
     }
 
     private boolean isReaper(Class<?> c) {

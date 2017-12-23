@@ -1,5 +1,6 @@
 package io.ermdev.mapfierj;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class SimpleMapper {
@@ -24,5 +25,9 @@ public class SimpleMapper {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Transaction set(Collection collection) {
+        return transaction=new Transaction(collection);
     }
 }

@@ -16,16 +16,24 @@ public class MapperTest {
 
     @Test
     public void shouldPassOnModelMapper() {
+
         Animal animal = new Animal("Dog", 5);
         //animal.setFood(new Food("Bone"));
-        ModelMapper<Animal> mapper = new ModelMapper<>();
+
+        Animal animal1 = new Animal("Dog", 5);
+
+        Set<Animal> animals = new HashSet<>();
+        animals.add(animal);
+        animals.add(animal1);
+
+        SimpleMapper mapper = new SimpleMapper();
         AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());
 
-
-        System.out.println(dto);
+        System.out.println(mapper.set(animals).mapToList(AnimalDto.class));
+        System.out.println(mapper.set(animal).mapAllTo(AnimalDto.class));
     }
 
     @Test
