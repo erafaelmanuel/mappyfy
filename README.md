@@ -2,21 +2,10 @@
  A simple mapping library that maps objects to another objects
  
 # How to use
-The class you 'mapTo' requires a contructor with no argument. It is needed when creating an instance of a class using reflection API
-```js
- SimpleMapper mapper = new SimpleMapper();
- PersonDto dto = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
-```
-or
-```js
- Transaction transaction = new Transaction(new HashMap<String, Object>);
- PersonDto dto = transaction.mapTo(PersonDto.class);
-```
-to map a field [here](#maptovalueclass), or just simply use mapAllTo();
-```js
- PersonDto dto = mapper.mapAllTo(PersonDto.class);
-```
-## Models
+* Add a no-arg constructor to your dto class
+* It will only map the same field name
+* It will skip the field that same name, but not same data type
+* Example :
 
 Person.java
 ```js
@@ -39,6 +28,27 @@ PersonDto.java
   //getter and setter
  }
 ```
+Map a simple object :
+```js
+ SimpleMapper mapper = new SimpleMapper();
+ PersonDto dto = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
+```
+<br />
+
+or a collection :
+```js
+ Transaction transaction = mapper.set(new ArrayList<Animal>);
+ List<PersonDto> list = transaction.mapToList(PersonDto.class); // or mapToSet
+```
+<br />
+
+To be able to maps the field that same name, but not same data type follow the example [here](#maptovalueclass), <br/>
+or just simply use mapAllTo() :
+```js
+ PersonDto dto = mapper.mapAllTo(PersonDto.class);
+```
+<br />
+
 ## @Excluded
 To exclude a field just add an @Excluded annotation to your dto
 ```js
@@ -79,7 +89,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.3.1'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.3.2'
 }
 ```
 
@@ -99,7 +109,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.3.1</version>
+    <version>v1.0-beta.3.2</version>
   </dependency>
 </dependencies>
 ```
