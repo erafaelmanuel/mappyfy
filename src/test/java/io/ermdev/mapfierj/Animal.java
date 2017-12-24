@@ -1,13 +1,15 @@
 package io.ermdev.mapfierj;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Animal{
 
     private String name;
 
     private int size;
 
-    private long foodId=1;
-    //private Set<Food> foods = new HashSet<>();
+    private Set<Food> foods = new HashSet<>();
 
     public Animal(){}
 
@@ -32,20 +34,20 @@ public class Animal{
         this.size = size;
     }
 
-//    public Set<Food> getFoods() {
-//        return foods;
-//    }
-//
-//    public void setFoods(Set<Food> foods) {
-//        this.foods = foods;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Animal{" +
-//                "name='" + name + '\'' +
-//                ", size=" + size +
-//                ", foods=" + foods +
-//                '}';
-//    }
+    public Set<Food> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(Set<Food> foods) {
+        this.foods = foods;
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "name='" + name + '\'' +
+                ", size=" + size +
+                ", foods=" + foods +
+                '}';
+    }
 }

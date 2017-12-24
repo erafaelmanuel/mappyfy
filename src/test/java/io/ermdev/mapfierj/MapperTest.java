@@ -1,6 +1,7 @@
 package io.ermdev.mapfierj;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -18,7 +19,12 @@ public class MapperTest {
     public void shouldPassOnModelMapper() {
 
         Animal animal = new Animal("Dog", 5);
-        //animal.setFood(new Food("Bone"));
+
+        Set<Food> foods = new HashSet<>();
+        foods.add(new Food("Tae"));
+        foods.add(new Food("Milf"));
+        foods.add(new Food("Fuck"));
+        animal.setFoods(foods);
 
         Animal animal1 = new Animal("Dog", 5);
 
@@ -36,6 +42,7 @@ public class MapperTest {
         System.out.println(mapper.set(animal).mapAllTo(AnimalDto.class));
     }
 
+    @Ignore
     @Test
     public void shouldPassOnSimpleMapper() {
         Animal animal = new Animal("Dog", 5);
@@ -47,7 +54,7 @@ public class MapperTest {
         //animal.setFoods(foods);
 
         SimpleMapper mapper = new SimpleMapper();
-        AnimalDto dto = mapper.set(animal).mapTo(AnimalDto.class);
+        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
 
         Assert.assertEquals(animal.getName(), dto.getName());
         Assert.assertEquals(animal.getSize(), dto.getSize());

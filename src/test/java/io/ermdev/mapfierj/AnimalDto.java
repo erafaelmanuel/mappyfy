@@ -1,8 +1,6 @@
 package io.ermdev.mapfierj;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class AnimalDto {
@@ -10,7 +8,7 @@ public class AnimalDto {
     private String name;
     private Integer size;
 
-    //private Set<FoodDto> foods = new HashSet<>();
+    private Set<FoodDto> foods = new HashSet<>();
 
     private Food food;
 
@@ -32,22 +30,12 @@ public class AnimalDto {
         this.size = size;
     }
 
-//    @Override
-//    public String toString() {
-//        return "AnimalDto{" +
-//                "name='" + name + '\'' +
-//                ", size=" + size +
-//                ", foods=" + foods +
-//                '}';
-//    }
-
-
     @Override
     public String toString() {
         return "AnimalDto{" +
                 "name='" + name + '\'' +
                 ", size=" + size +
-                ", food=" + food +
+                ", foods=" + foods +
                 '}';
     }
 }
