@@ -22,48 +22,52 @@ public class Transaction {
             fields.putAll(map);
     }
 
-    public Transaction(Object o) throws Exception {
-        if(o != null) {
-            for (Field field : o.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                Object value = field.get(o);
-
-                MapTo maps = field.getAnnotation(MapTo.class);
-                if (maps != null && value != null) {
-                    if (value instanceof Collection || maps.collection()) {
-                        final Collection collection = (Collection) value;
-                        if (maps.type().equals(List.class)) {
-                            fields.put(field.getName(), mapList(collection, maps.value(), true));
-                        } else if (maps.type().equals(Set.class)) {
-                            fields.put(field.getName(), mapSet(collection, maps.value(), true));
-                        } else {
-                            if (field.getType().equals(List.class)) {
-                                fields.put(field.getName(), mapList(collection, maps.value(), true));
-                            } else if (field.getType().equals(Set.class)) {
-                                fields.put(field.getName(), mapSet(collection, maps.value(), true));
-                            }
-                        }
-                    } else {
-                        fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
-                    }
-                } else {
-                    fields.put(field.getName(), value);
-                }
-            }
-        }
-    }
+//    public Transaction(Object o) throws Exception {
+//        if(o != null) {
+//            for (Field field : o.getClass().getDeclaredFields()) {
+//                field.setAccessible(true);
+//                Object value = field.get(o);
+//
+//                MapTo maps = field.getAnnotation(MapTo.class);
+//                if (maps != null && value != null) {
+//                    if (value instanceof Collection || maps.collection()) {
+//                        final Collection collection = (Collection) value;
+//                        if (maps.type().equals(List.class)) {
+//                            fields.put(field.getName(), mapList(collection, maps.value(), true));
+//                        } else if (maps.type().equals(Set.class)) {
+//                            fields.put(field.getName(), mapSet(collection, maps.value(), true));
+//                        } else {
+//                            if (field.getType().equals(List.class)) {
+//                                fields.put(field.getName(), mapList(collection, maps.value(), true));
+//                            } else if (field.getType().equals(Set.class)) {
+//                                fields.put(field.getName(), mapSet(collection, maps.value(), true));
+//                            }
+//                        }
+//                    } else {
+//                        fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
+//                    }
+//                } else {
+//                    fields.put(field.getName(), value);
+//                }
+//            }
+//        }
+//    }
 
     @Deprecated
-    private Transaction(Object o, List<Class<?>> no_repeat_classes) throws Exception {
+    private Transaction(Object o) throws Exception {
         if(o == null)
             return;
-        NO_REPEAT_CLASSES.addAll(no_repeat_classes);
+
+        if(isReaper(o.getClass())) {
+            return;
+        } else {
+            if(o.getClass().getAnnotation(NoRepeat.class) != null)
+                getNO_REPEAT_CLASSES().add(o.getClass());
+        }
 
         for(Field field : o.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             Object value = field.get(o);
-
-            if(isReaper(field.getType())) continue;
 
             MapTo maps = field.getAnnotation(MapTo.class);
             if(maps != null && value != null) {
@@ -80,7 +84,7 @@ public class Transaction {
                             fields.put(field.getName(), mapSet(collection, maps.value(), true));
                     }
                 } else {
-                    fields.put(field.getName(), new Transaction(value, no_repeat_classes).mapTo(maps.value()));
+                    fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
                 }
             } else {
                 fields.put(field.getName(), value);
@@ -89,6 +93,14 @@ public class Transaction {
 
     }
 
+    /**
+     *
+     * @param collection
+     * @param c the class you will bind to your object or collection
+     * @param hasMapTo return true if the generic class of the collection is annotated of @MapTo
+     * @param <T>
+     * @return
+     */
     private <T> List<T> mapList(Collection collection, Class<T> c, boolean hasMapTo) {
         List<T> list = new ArrayList<>();
         try {
@@ -108,15 +120,6 @@ public class Transaction {
             e.printStackTrace();
             return list;
         }
-    }
-
-    @Deprecated
-    private Object mapList(Collection<?> collection, Class<?> c, List<Class<?>> no_repeat_classes) throws Exception {
-        Collection<Object> list = new ArrayList<>();
-        for(Object o : collection) {
-            list.add(new Transaction(o, no_repeat_classes).mapTo(c));
-        }
-        return list;
     }
 
     private <T> Set<T> mapSet(Collection collection, Class<T> c, boolean hasMapTo) {
@@ -140,32 +143,11 @@ public class Transaction {
         }
     }
 
-    @Deprecated
-    private Object mapSet(Collection collection, Class<?> c, List<Class<?>> no_repeat_classes) throws Exception {
-        Collection<Object> set = new HashSet<>();
-        for(Object o : collection) {
-            set.add(new Transaction(o, no_repeat_classes).mapTo(c));
-        }
-        return set;
-    }
-
     private Object mapCollection(Collection<?> collection, Class<?> parameter, Class<?> type, boolean hasMapTo) {
         if(type.equals(List.class)) {
             return mapList(collection, parameter, hasMapTo);
         } else {
             return mapSet(collection, parameter, hasMapTo);
-        }
-    }
-
-    @Deprecated
-    private Object mapCollection(Collection<?> collection, Class<?> parameter, Class<?> type,
-                                 List<Class<?>> no_repeat_classes) throws Exception {
-        if(collection == null)
-            return null;
-        if(type.equals(List.class)) {
-            return mapList(collection, parameter, no_repeat_classes);
-        } else {
-            return mapSet(collection, parameter, no_repeat_classes);
         }
     }
 
@@ -241,5 +223,9 @@ public class Transaction {
 
     private boolean isReaper(Class<?> c) {
         return NO_REPEAT_CLASSES.parallelStream().anyMatch(item->item.equals(c));
+    }
+
+    public List<Class<?>> getNO_REPEAT_CLASSES() {
+        return NO_REPEAT_CLASSES;
     }
 }
