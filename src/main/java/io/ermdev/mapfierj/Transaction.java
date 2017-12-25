@@ -54,7 +54,7 @@ public class Transaction {
 //    }
 
     @Deprecated
-    private Transaction(Object o) throws Exception {
+    public Transaction(Object o) throws Exception {
         if(o == null)
             return;
 
