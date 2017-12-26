@@ -27,7 +27,6 @@ public class Transaction {
 
     public Transaction(Object o) throws Exception {
         if(o != null) {
-            List<Class<?>> classes = new ArrayList<>();
             if(o.getClass().getAnnotation(NoRepeat.class) != null) {
                 classes.add(o.getClass());
             }
@@ -124,11 +123,11 @@ public class Transaction {
             } else {
                 for (Object o : collection) {
                     if(classes != null && classes.size() > 0) {
-                        T instance = new Transaction(o, classes).mapTo(c);
+                        T instance = new Transaction(o, classes).mapAllTo(c);
                         if(instance != null)
                             list.add(instance);
                     } else {
-                        T instance = new Transaction(o).mapTo(c);
+                        T instance = new Transaction(o).mapAllTo(c);
                         if(instance != null)
                             list.add(instance);
                     }
@@ -162,11 +161,11 @@ public class Transaction {
             } else {
                 for (Object o : collection) {
                     if(classes != null && classes.size() > 0) {
-                        T instance = new Transaction(o, classes).mapTo(c);
+                        T instance = new Transaction(o, classes).mapAllTo(c);
                         if(instance != null)
                             set.add(instance);
                     } else {
-                        T instance = new Transaction(o).mapTo(c);
+                        T instance = new Transaction(o).mapAllTo(c);
                         if(instance != null)
                             set.add(instance);
                     }
