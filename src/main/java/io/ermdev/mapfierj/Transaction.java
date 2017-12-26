@@ -6,13 +6,14 @@ import java.util.*;
 
 public class Transaction {
 
-    List<Class<?>> classes = new ArrayList<>();
+    private List<Class<?>> classes = new ArrayList<>();
 
     private HashMap<String, Object> fields = new HashMap<>();
 
     private List<Object> col = new ArrayList<>();
 
-    private Boolean absoluteNull = false;
+    private boolean absoluteNull;
+
 
     public Transaction(Collection collection){
         if(collection != null)
@@ -41,16 +42,16 @@ public class Transaction {
                         if (maps.type().equals(List.class)) {
                             fields.put(field.getName(), mapList(collection, maps.value(), true, classes));
                         } else if (maps.type().equals(Set.class)) {
-                            fields.put(field.getName(), mapSet(collection, maps.value(), true));
+                            fields.put(field.getName(), mapSet(collection, maps.value(), true, classes));
                         } else {
                             if (field.getType().equals(List.class)) {
                                 fields.put(field.getName(), mapList(collection, maps.value(), true, classes));
                             } else if (field.getType().equals(Set.class)) {
-                                fields.put(field.getName(), mapSet(collection, maps.value(), true));
+                                fields.put(field.getName(), mapSet(collection, maps.value(), true, classes));
                             }
                         }
                     } else {
-                        if(classes != null && classes.size() > 0) {
+                        if(classes.size() > 0) {
                             fields.put(field.getName(), new Transaction(value, classes).mapTo(maps.value()));
                         } else {
                             fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
@@ -63,51 +64,44 @@ public class Transaction {
         }
     }
 
-    @Deprecated
     public Transaction(Object o, List<Class<?>> classes) throws Exception {
-        System.out.println(o);
-        System.out.println(classes);
+        if(o != null && !isRepeater(classes, o.getClass())) {
+            classes.parallelStream().forEach(this.classes::add);
+            if (o.getClass().getAnnotation(NoRepeat.class) != null) {
+                this.classes.add(o.getClass());
+            }
+            for (Field field : o.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                Object value = field.get(o);
 
-        this.classes=classes;
-        if(o == null) {
-            absoluteNull=true;
-            return;
-        } if(isReaper(classes, o.getClass())) {
-            absoluteNull=true;
-            return;
-        } if(classes != null && o.getClass().getAnnotation(NoRepeat.class) != null) {
-            classes.add(o.getClass());
-        }
-        for(Field field : o.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            Object value = field.get(o);
-
-            MapTo maps = field.getAnnotation(MapTo.class);
-            if(maps != null && value != null) {
-                if(value instanceof Collection || maps.collection()) {
-                    final Collection<?> collection = (Collection) value;
-                    if(maps.type().equals(List.class))
-                        fields.put(field.getName(), mapList(collection, maps.value(), true, classes));
-                    else if(maps.type().equals(Set.class))
-                        fields.put(field.getName(), mapSet(collection, maps.value(), true));
-                    else {
-                        if(field.getType().equals(List.class))
-                            fields.put(field.getName(), mapList(collection, maps.value(), true, classes));
-                        else if(field.getType().equals(Set.class))
-                            fields.put(field.getName(), mapSet(collection, maps.value(), true));
+                MapTo maps = field.getAnnotation(MapTo.class);
+                if (maps != null && value != null) {
+                    if (value instanceof Collection || maps.collection()) {
+                        final Collection<?> collection = (Collection) value;
+                        if (maps.type().equals(List.class))
+                            fields.put(field.getName(), mapList(collection, maps.value(), true, this.classes));
+                        else if (maps.type().equals(Set.class))
+                            fields.put(field.getName(), mapSet(collection, maps.value(), true, this.classes));
+                        else {
+                            if (field.getType().equals(List.class))
+                                fields.put(field.getName(), mapList(collection, maps.value(), true, this.classes));
+                            else if (field.getType().equals(Set.class))
+                                fields.put(field.getName(), mapSet(collection, maps.value(), true, this.classes));
+                        }
+                    } else {
+                        if (classes.size() > 0) {
+                            fields.put(field.getName(), new Transaction(value, this.classes).mapTo(maps.value()));
+                        } else {
+                            fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
+                        }
                     }
                 } else {
-                    if(classes != null && classes.size() > 0) {
-                        fields.put(field.getName(), new Transaction(value, classes).mapTo(maps.value()));
-                    } else {
-                        fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
-                    }
+                    fields.put(field.getName(), value);
                 }
-            } else {
-                fields.put(field.getName(), value);
             }
+        } else {
+            absoluteNull=true;
         }
-
     }
 
     private <T> List<T> mapList(Collection collection, Class<T> c, boolean hasMapTo, List<Class<?>> classes) {
@@ -118,17 +112,25 @@ public class Transaction {
             if(hasMapTo) {
                 for (Object o : collection) {
                     if(classes != null && classes.size() > 0) {
-                        list.add(new Transaction(o, classes).mapTo(c));
+                        T instance = new Transaction(o, classes).mapTo(c);
+                        if(instance != null)
+                            list.add(instance);
                     } else {
-                        list.add(new Transaction(o).mapTo(c));
+                        T instance = new Transaction(o).mapTo(c);
+                        if(instance != null)
+                            list.add(instance);
                     }
                 }
             } else {
                 for (Object o : collection) {
                     if(classes != null && classes.size() > 0) {
-                        list.add(new Transaction(o, classes).mapAllTo(c));
+                        T instance = new Transaction(o, classes).mapTo(c);
+                        if(instance != null)
+                            list.add(instance);
                     } else {
-                        list.add(new Transaction(o).mapAllTo(c));
+                        T instance = new Transaction(o).mapTo(c);
+                        if(instance != null)
+                            list.add(instance);
                     }
                 }
             }
@@ -139,7 +141,7 @@ public class Transaction {
         }
     }
 
-    private <T> Set<T> mapSet(Collection collection, Class<T> c, boolean hasMapTo) {
+    private <T> Set<T> mapSet(Collection collection, Class<T> c, boolean hasMapTo, List<Class<?>> classes) {
         Set<T> set = new HashSet<>();
         try {
             if (collection == null)
@@ -147,18 +149,26 @@ public class Transaction {
             if(hasMapTo) {
                 for (Object o : collection) {
                     if(classes != null && classes.size() > 0) {
-                        set.add(new Transaction(o, classes).mapTo(c));
+                        T instance = new Transaction(o, classes).mapTo(c);
+                        if(instance != null)
+                            set.add(instance);
                     } else {
-                        set.add(new Transaction(o).mapTo(c));
+                        T instance = new Transaction(o).mapTo(c);
+                        if(instance != null)
+                            set.add(instance);
                     }
 
                 }
             } else {
                 for (Object o : collection) {
                     if(classes != null && classes.size() > 0) {
-                        set.add(new Transaction(o, classes).mapAllTo(c));
+                        T instance = new Transaction(o, classes).mapTo(c);
+                        if(instance != null)
+                            set.add(instance);
                     } else {
-                        set.add(new Transaction(o).mapAllTo(c));
+                        T instance = new Transaction(o).mapTo(c);
+                        if(instance != null)
+                            set.add(instance);
                     }
                 }
             }
@@ -166,14 +176,6 @@ public class Transaction {
         } catch (Exception e) {
             e.printStackTrace();
             return set;
-        }
-    }
-
-    private Object mapCollection(Collection<?> collection, Class<?> parameter, Class<?> type, boolean hasMapTo) {
-        if(type.equals(List.class)) {
-            return mapList(collection, parameter, hasMapTo, null);
-        } else {
-            return mapSet(collection, parameter, hasMapTo);
         }
     }
 
@@ -201,7 +203,7 @@ public class Transaction {
                             if(field.getGenericType() instanceof ParameterizedType) {
                                 ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                                 Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                                value = mapSet((Collection) value, parameter, false);
+                                value = mapSet((Collection) value, parameter, false, classes);
                             }
                         }
                         field.set(instance, value);
@@ -226,11 +228,11 @@ public class Transaction {
         }
     }
 
-    public <T> T mapTo(Class<T> _class) {
+    public <T> T mapTo(Class<T> c) {
         if(absoluteNull) return null;
         try {
-            T instance = _class.newInstance();
-            for (Field field : _class.getDeclaredFields()) {
+            T instance = c.newInstance();
+            for (Field field : c.getDeclaredFields()) {
                 field.setAccessible(true);
                 if(field.getAnnotation(Excluded.class) == null) {
                     Object value = fields.get(field.getName());
@@ -250,10 +252,18 @@ public class Transaction {
     }
 
     public <T> Set<T> mapToSet(Class<T> c) {
-        return mapSet(col, c, false);
+        return mapSet(col, c, false, null);
     }
 
-    private boolean isReaper(List<Class<?>> list, Class<?> c) {
-        return list != null && list.parallelStream().anyMatch(item->item.equals(c));
+    public Object mapToCollection(Class<?> c, Class<?> type) {
+        if(type.equals(List.class) || type.equals(ArrayList.class)) {
+            return mapList(col, c, false, null);
+        } else {
+            return mapSet(col, c, false, null);
+        }
+    }
+
+    private boolean isRepeater(List<Class<?>> classes, Class<?> c) {
+        return classes != null && classes.parallelStream().anyMatch(item->item.equals(c));
     }
 }
