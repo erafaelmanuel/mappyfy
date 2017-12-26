@@ -60,6 +60,8 @@ public class Transaction {
                     fields.put(field.getName(), value);
                 }
             }
+        } else {
+            absoluteNull=true;
         }
     }
 
