@@ -33,31 +33,32 @@ public class Transaction {
             for (Field field : o.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 Object value = field.get(o);
+                String fieldName = FieldHelper.fieldName(field);
 
                 MapTo maps = field.getAnnotation(MapTo.class);
                 if (maps != null && value != null) {
                     if (value instanceof Collection || maps.collection()) {
                         final Collection collection = (Collection) value;
                         if (maps.type().equals(List.class)) {
-                            fields.put(field.getName(), mapList(collection, maps.value(), true, classes));
+                            fields.put(fieldName, mapList(collection, maps.value(), true, classes));
                         } else if (maps.type().equals(Set.class)) {
-                            fields.put(field.getName(), mapSet(collection, maps.value(), true, classes));
+                            fields.put(fieldName, mapSet(collection, maps.value(), true, classes));
                         } else {
                             if (field.getType().equals(List.class)) {
-                                fields.put(field.getName(), mapList(collection, maps.value(), true, classes));
+                                fields.put(fieldName, mapList(collection, maps.value(), true, classes));
                             } else if (field.getType().equals(Set.class)) {
-                                fields.put(field.getName(), mapSet(collection, maps.value(), true, classes));
+                                fields.put(fieldName, mapSet(collection, maps.value(), true, classes));
                             }
                         }
                     } else {
                         if(classes.size() > 0) {
-                            fields.put(field.getName(), new Transaction(value, classes).mapTo(maps.value()));
+                            fields.put(fieldName, new Transaction(value, classes).mapTo(maps.value()));
                         } else {
-                            fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
+                            fields.put(fieldName, new Transaction(value).mapTo(maps.value()));
                         }
                     }
                 } else {
-                    fields.put(field.getName(), value);
+                    fields.put(fieldName, value);
                 }
             }
         } else {
@@ -74,30 +75,31 @@ public class Transaction {
             for (Field field : o.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 Object value = field.get(o);
+                String fieldName = FieldHelper.fieldName(field);
 
                 MapTo maps = field.getAnnotation(MapTo.class);
                 if (maps != null && value != null) {
                     if (value instanceof Collection || maps.collection()) {
                         final Collection<?> collection = (Collection) value;
                         if (maps.type().equals(List.class))
-                            fields.put(field.getName(), mapList(collection, maps.value(), true, this.classes));
+                            fields.put(fieldName, mapList(collection, maps.value(), true, this.classes));
                         else if (maps.type().equals(Set.class))
-                            fields.put(field.getName(), mapSet(collection, maps.value(), true, this.classes));
+                            fields.put(fieldName, mapSet(collection, maps.value(), true, this.classes));
                         else {
                             if (field.getType().equals(List.class))
-                                fields.put(field.getName(), mapList(collection, maps.value(), true, this.classes));
+                                fields.put(fieldName, mapList(collection, maps.value(), true, this.classes));
                             else if (field.getType().equals(Set.class))
-                                fields.put(field.getName(), mapSet(collection, maps.value(), true, this.classes));
+                                fields.put(fieldName, mapSet(collection, maps.value(), true, this.classes));
                         }
                     } else {
                         if (classes.size() > 0) {
-                            fields.put(field.getName(), new Transaction(value, this.classes).mapTo(maps.value()));
+                            fields.put(fieldName, new Transaction(value, this.classes).mapTo(maps.value()));
                         } else {
-                            fields.put(field.getName(), new Transaction(value).mapTo(maps.value()));
+                            fields.put(fieldName, new Transaction(value).mapTo(maps.value()));
                         }
                     }
                 } else {
-                    fields.put(field.getName(), value);
+                    fields.put(fieldName, value);
                 }
             }
         } else {

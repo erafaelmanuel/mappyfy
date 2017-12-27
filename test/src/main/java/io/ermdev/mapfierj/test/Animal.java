@@ -1,11 +1,14 @@
 package io.ermdev.mapfierj.test;
 
+import io.ermdev.mapfierj.core.FieldName;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Animal{
 
-    private String name;
+    @FieldName("name")
+    private String title;
 
     private int size;
 
@@ -14,16 +17,16 @@ public class Animal{
     public Animal(){}
 
     public Animal(String name, Integer size) {
-        this.name = name;
+        this.title = name;
         this.size = size;
     }
 
     public String getName() {
-        return name;
+        return title;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.title = name;
     }
 
     public Integer getSize() {
@@ -45,7 +48,7 @@ public class Animal{
     @Override
     public String toString() {
         return "Animal{" +
-                "name='" + name + '\'' +
+                "name='" + title + '\'' +
                 ", size=" + size +
                 ", foods=" + foods +
                 '}';
