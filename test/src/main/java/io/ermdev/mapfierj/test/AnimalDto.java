@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.test;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -10,6 +10,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>core</module>
+        <module>typeconverter</module>
+        <module>test</module>
     </modules>
 
     <dependencyManagement>
@@ -17,19 +19,22 @@
             <dependency>
                 <groupId>io.ermdev.mapfierj</groupId>
                 <artifactId>core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.ermdev.mapfierj</groupId>
+                <artifactId>typeconverter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.ermdev.mapfierj</groupId>
+                <artifactId>test</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.core;
 
 public abstract class TypeConverterAdapter<T1, T2> {
 

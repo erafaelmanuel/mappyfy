@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.core;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,5 +8,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(FIELD)
 @Retention(RUNTIME)
-public @interface Ignore {
+public @interface Excluded {
 }

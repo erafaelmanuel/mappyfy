@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.core;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;

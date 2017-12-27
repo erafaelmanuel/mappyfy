@@ -1,5 +1,6 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.test;
 
+import io.ermdev.mapfierj.core.SimpleMapper;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

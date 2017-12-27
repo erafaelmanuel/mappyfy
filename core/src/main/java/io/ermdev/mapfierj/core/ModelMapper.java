@@ -1,13 +1,12 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.core;
 
-import java.util.Collection;
 import java.util.HashMap;
 
-public class SimpleMapper {
+public class ModelMapper<F> {
 
     private Transaction transaction;
 
-    public Transaction set(Object obj) {
+    public Transaction set(F obj) {
         try {
             transaction=new Transaction(obj);
             return transaction;
@@ -27,7 +26,11 @@ public class SimpleMapper {
         }
     }
 
-    public Transaction set(Collection collection) {
-        return transaction=new Transaction(collection);
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }
