@@ -7,10 +7,9 @@ import java.util.Set;
 
 public class Animal{
 
-    @FieldName("name")
     private String title;
 
-    private int size;
+    private int width;
 
     private Set<Food> foods = new HashSet<>();
 
@@ -18,7 +17,7 @@ public class Animal{
 
     public Animal(String name, Integer size) {
         this.title = name;
-        this.size = size;
+        this.width = size;
     }
 
     public String getName() {
@@ -30,11 +29,11 @@ public class Animal{
     }
 
     public Integer getSize() {
-        return size;
+        return width;
     }
 
     public void setSize(Integer size) {
-        this.size = size;
+        this.width = size;
     }
 
     public Set<Food> getFoods() {
@@ -49,7 +48,7 @@ public class Animal{
     public String toString() {
         return "Animal{" +
                 "name='" + title + '\'' +
-                ", size=" + size +
+                ", size=" + width +
                 ", foods=" + foods +
                 '}';
     }

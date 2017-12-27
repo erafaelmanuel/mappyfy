@@ -1,5 +1,6 @@
 package io.ermdev.mapfierj.test;
 
+import io.ermdev.mapfierj.core.ModelMapper;
 import io.ermdev.mapfierj.core.SimpleMapper;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -43,7 +44,6 @@ public class MapperTest {
         System.out.println(mapper.set(animal).mapAllTo(AnimalDto.class));
     }
 
-    @Ignore
     @Test
     public void shouldPassOnSimpleMapper() {
         Animal animal = new Animal("Dog", 5);
@@ -54,8 +54,17 @@ public class MapperTest {
 
         //animal.setFoods(foods);
 
-        SimpleMapper mapper = new SimpleMapper();
-        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
+//        SimpleMapper mapper = new SimpleMapper();
+//        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
+
+        ModelMapper mapper = new ModelMapper();
+        AnimalDto dto = mapper.set(animal)
+                .field("title", "name")
+                .field("width", "size")
+                .getTransaction()
+                .mapAllTo(AnimalDto.class);
+
+
 
 //        Assert.assertEquals(animal.getName(), dto.getName());
 //        Assert.assertEquals(animal.getSize(), dto.getSize());
