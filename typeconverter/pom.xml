@@ -11,5 +11,10 @@
 
     <artifactId>typeconverter</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>io.ermdev.mapfierj</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+    </dependencies>
 </project>
