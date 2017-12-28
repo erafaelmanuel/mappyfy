@@ -14,7 +14,6 @@ public class Transaction {
 
     private boolean absoluteNull;
 
-
     public Transaction(Collection collection){
         if(collection != null)
             col.addAll(collection);
@@ -32,6 +31,11 @@ public class Transaction {
             }
             for (Field field : o.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
+
+                if(field.getAnnotation(Ignore.class) != null) {
+                    continue;
+                }
+
                 Object value = field.get(o);
                 String fieldName = FieldHelper.fieldName(field);
 
@@ -74,6 +78,11 @@ public class Transaction {
             }
             for (Field field : o.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
+
+                if(field.getAnnotation(Ignore.class) != null) {
+                    continue;
+                }
+
                 Object value = field.get(o);
                 String fieldName = FieldHelper.fieldName(field);
 

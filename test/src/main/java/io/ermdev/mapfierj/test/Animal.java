@@ -1,12 +1,14 @@
 package io.ermdev.mapfierj.test;
 
 import io.ermdev.mapfierj.core.FieldName;
+import io.ermdev.mapfierj.core.Ignore;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Animal{
 
+    @Ignore
     private String title;
 
     private int width;
