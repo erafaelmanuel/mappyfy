@@ -7,7 +7,7 @@
 * It will skip the field that same name, but not same data type
 * Example :
 
-#### Using the SimpleMapper
+1) #### SimpleMapper
 
 Person.java
 ```js
@@ -33,6 +33,8 @@ PersonDto.java
 Map a simple object or a collection
 ```js
  SimpleMapper mapper = new SimpleMapper();
+```
+```js
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
 ```js
@@ -42,6 +44,32 @@ In order to map a field that same name, but not same data type follow the exampl
 ```js
  PersonDto dto = transaction.mapAllTo(PersonDto.class);
 ```
+2) #### ModelMapper
+```js
+ ModelMapper mapper = new ModelMapepr();
+```
+```js
+ Dog dog = new Dog();
+```
+In order to map different field between the two class:
+```js
+ maper.set(dog)
+  .field("name", "title")
+  .field("age", "year")
+```
+Exclude a field without annotation:
+```js
+ maper.set(dog)
+  .excluded("title")
+  .excluded("year")
+```
+Use a converter where mapper can't handle mapping an instance of a source object into a specific destination type.
+```js
+ maper.set(dog)
+  .converter("height", new IntegerStringConverter())
+```
+
+3) #### Annotations
 ## @Excluded
 In order to exclude a field just add an @Excluded annotation to your dto
 ```js
@@ -59,7 +87,6 @@ In order to map a field or (fields of a field) of an object to a certain class
   @MapTo(PetDto.class)
   private Pet pet;
 ```
-Example with a collection field:
 ```js
   ...
   @MapTo(value = PetDto.class, collection = true, type = List.class)
