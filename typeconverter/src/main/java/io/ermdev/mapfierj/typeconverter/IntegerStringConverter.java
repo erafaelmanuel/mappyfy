@@ -7,16 +7,16 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class IntegerStringConverter extends TypeConverterAdapter<Integer, String> {
 
     @Override
-    public Integer convertTo(String o) {
+    public String convertTo(Integer o) {
+        return String.valueOf(o);
+    }
+
+    @Override
+    public Integer convertFrom(String o) {
         try {
             return Integer.parseInt(o);
         } catch (NumberFormatException e) {
             return 0;
         }
-    }
-
-    @Override
-    public String convertFrom(Integer o) {
-        return String.valueOf(o);
     }
 }

@@ -7,16 +7,16 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class LongStringConverter extends TypeConverterAdapter<Long, String> {
 
     @Override
-    public Long convertTo(String o) {
+    public String convertTo(Long o) {
+        return String.valueOf(o);
+    }
+
+    @Override
+    public Long convertFrom(String o) {
         try {
             return Long.parseLong(o);
         } catch (NumberFormatException e) {
             return 0L;
         }
-    }
-
-    @Override
-    public String convertFrom(Long o) {
-        return String.valueOf(o);
     }
 }

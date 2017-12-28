@@ -7,16 +7,16 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class CharStringConverter extends TypeConverterAdapter<Character, String> {
 
     @Override
-    public Character convertTo(String o) {
+    public String convertTo(Character o) {
+        return String.valueOf(o);
+    }
+
+    @Override
+    public Character convertFrom(String o) {
         try {
             return (o.trim().charAt(0));
         } catch (NullPointerException e) {
             return 0;
         }
-    }
-
-    @Override
-    public String convertFrom(Character o) {
-        return String.valueOf(o);
     }
 }

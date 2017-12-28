@@ -68,7 +68,7 @@ public class MapperTest {
 
         ModelMapper mapper = new ModelMapper();
         Tae dto = mapper.set(animal)
-                .convert("width", new IntegerStringConverter())
+                .setConverter("width", new IntegerStringConverter())
                 .getTransaction()
                 .mapTo(Tae.class);
 

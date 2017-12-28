@@ -7,16 +7,16 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class BooleanStringConverter extends TypeConverterAdapter<Boolean, String> {
 
     @Override
-    public Boolean convertTo(String o) {
+    public String convertTo(Boolean o) {
+        return String.valueOf(o);
+    }
+
+    @Override
+    public Boolean convertFrom(String o) {
         try {
             return Boolean.getBoolean(o);
         } catch (NullPointerException e) {
             return false;
         }
-    }
-
-    @Override
-    public String convertFrom(Boolean o) {
-        return String.valueOf(o);
     }
 }
