@@ -30,30 +30,27 @@ PersonDto.java
   //getter and setter
  }
 ```
-map a simple object
+Map a simple object or a collection
 ```js
  SimpleMapper mapper = new SimpleMapper();
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
-or a collection
-
 ```js
  List<PersonDto> list = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class); // or mapToSet
 ```
-to be able to map the field that same name, but not same data type follow the example [here](#maptovalueclass),
-or just simply use:
+In order to map a field that same name, but not same data type follow the example [here](#maptovalueclass), or just simply use:
 ```js
  PersonDto dto = transaction.mapAllTo(PersonDto.class);
 ```
 ## @Excluded
-To exclude a field just add an @Excluded annotation to your dto
+In order to exclude a field just add an @Excluded annotation to your dto
 ```js
   ...
   @Excluded
   private List<Pet> pets = new ArrayList<>();
 ```
 ## @MapTo(value=[class])
-To map a field or (fields of a field) of an object to a certain class
+In order to map a field or (fields of a field) of an object to a certain class
 * value
 * collection
 * type
@@ -91,7 +88,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.4.0'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.4.1'
 }
 ```
 
@@ -111,7 +108,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.4.0</version>
+    <version>v1.0-beta.4.1</version>
   </dependency>
 </dependencies>
 ```
