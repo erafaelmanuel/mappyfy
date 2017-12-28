@@ -7,6 +7,8 @@
 * It will skip the field that same name, but not same data type
 * Example :
 
+#### Using the SimpleMapper
+
 Person.java
 ```js
  public class Person {
@@ -28,27 +30,21 @@ PersonDto.java
   //getter and setter
  }
 ```
-Map a simple object :
+map a simple object
 ```js
  SimpleMapper mapper = new SimpleMapper();
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
-<br />
+or a collection
 
-or a collection :
 ```js
- Transaction transaction = mapper.set(new ArrayList<Animal>());
- List<PersonDto> list = transaction.mapToList(PersonDto.class); // or mapToSet
+ List<PersonDto> list = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class); // or mapToSet
 ```
-<br />
-
-To be able to map the field that same name, but not same data type follow the example [here](#maptovalueclass), <br/>
-or just simply use mapAllTo() :
+to be able to map the field that same name, but not same data type follow the example [here](#maptovalueclass),
+or just simply use:
 ```js
  PersonDto dto = transaction.mapAllTo(PersonDto.class);
 ```
-<br />
-
 ## @Excluded
 To exclude a field just add an @Excluded annotation to your dto
 ```js
