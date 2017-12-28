@@ -7,6 +7,18 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
 
     @Override
+    public Object convert(Object o) {
+        if(o != null) {
+            if(o instanceof Float)
+                return convertTo((Float) o);
+            else if(o instanceof String)
+                return convertFrom((String) o);
+            else return null;
+        }
+        return null;
+    }
+
+    @Override
     public String convertTo(Float o) {
         return String.valueOf(o);
     }

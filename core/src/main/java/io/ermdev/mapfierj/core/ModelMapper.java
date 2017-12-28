@@ -34,16 +34,20 @@ public class ModelMapper {
         map.remove(field);
         if(o != null) {
             map.put(field2, o);
-            setTransaction(new Transaction(map));
         }
         return this;
     }
 
-    public <F, T> ModelMapper setConverter(String field, TypeConverterAdapter<F, T> adapter) {
+    public ModelMapper excluded(String field) {
+        map.remove(field);
+        return this;
+    }
+
+    public ModelMapper setConverter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         if(o != null) {
             try {
-                T instance = adapter.convertFrom((F) o);
+                Object instance = adapter.convert(o);
                 map.put(field, instance);
             } catch (Exception e) {
                 e.printStackTrace();

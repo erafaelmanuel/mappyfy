@@ -8,7 +8,6 @@ import java.util.Set;
 
 public class Animal{
 
-    @Ignore
     private String title;
 
     private int width;

@@ -7,6 +7,18 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {
 
     @Override
+    public Object convert(Object o) {
+        if(o != null) {
+            if(o instanceof Double)
+                return convertTo((Double) o);
+            else if(o instanceof String)
+                return convertFrom((String) o);
+            else return null;
+        }
+        return null;
+    }
+
+    @Override
     public String convertTo(Double o) {
         return String.valueOf(o);
     }

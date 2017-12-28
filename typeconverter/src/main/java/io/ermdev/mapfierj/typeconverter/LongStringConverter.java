@@ -7,6 +7,18 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 public class LongStringConverter extends TypeConverterAdapter<Long, String> {
 
     @Override
+    public Object convert(Object o) {
+        if(o != null) {
+            if(o instanceof Long)
+                return convertTo((Long) o);
+            else if(o instanceof String)
+                return convertFrom((String) o);
+            else return null;
+        }
+        return null;
+    }
+
+    @Override
     public String convertTo(Long o) {
         return String.valueOf(o);
     }
