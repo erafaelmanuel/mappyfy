@@ -43,7 +43,7 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper setConverter(String field, TypeConverterAdapter adapter) {
+    public ModelMapper converter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         if(o != null) {
             try {

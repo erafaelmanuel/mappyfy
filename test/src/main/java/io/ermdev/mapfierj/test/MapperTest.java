@@ -70,7 +70,7 @@ public class MapperTest {
 //        ModelMapper mapper = new ModelMapper();
 //        Tae dto = mapper.set(animal)
 //                .setConverter("width", new IntegerStringConverter())
-//                .setConverter("width", new DoubleStringConverter())
+//                .converter("width", new DoubleStringConverter())
 //                .excluded("width")
 //                .getTransaction()
 //                .mapTo(Tae.class);
