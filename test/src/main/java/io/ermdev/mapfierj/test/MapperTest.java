@@ -2,6 +2,8 @@ package io.ermdev.mapfierj.test;
 
 import io.ermdev.mapfierj.core.ModelMapper;
 import io.ermdev.mapfierj.core.SimpleMapper;
+import io.ermdev.mapfierj.typeconverter.IntegerStringConverter;
+import io.ermdev.mapfierj.typeconverter.LongStringConverter;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -57,12 +59,18 @@ public class MapperTest {
 //        SimpleMapper mapper = new SimpleMapper();
 //        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
 
+//        ModelMapper mapper = new ModelMapper();
+//        AnimalDto dto = mapper.set(animal)
+//                .field("title", "name")
+//                .field("width", "size")
+//                .getTransaction()
+//                .mapAllTo(AnimalDto.class);
+
         ModelMapper mapper = new ModelMapper();
-        AnimalDto dto = mapper.set(animal)
-                .field("title", "name")
-                .field("width", "size")
+        Tae dto = mapper.set(animal)
+                .convert("width", new IntegerStringConverter())
                 .getTransaction()
-                .mapAllTo(AnimalDto.class);
+                .mapTo(Tae.class);
 
 
 
