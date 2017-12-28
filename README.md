@@ -7,6 +7,8 @@
 * It will skip the field that same name, but not same data type
 * Example :
 
+1) #### SimpleMapper
+
 Person.java
 ```js
  public class Person {
@@ -28,36 +30,55 @@ PersonDto.java
   //getter and setter
  }
 ```
-Map a simple object :
+Map a simple object or a collection
 ```js
  SimpleMapper mapper = new SimpleMapper();
+```
+```js
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
-<br />
-
-or a collection :
 ```js
- Transaction transaction = mapper.set(new ArrayList<Animal>());
- List<PersonDto> list = transaction.mapToList(PersonDto.class); // or mapToSet
+ List<PersonDto> list = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class); // or mapToSet
 ```
-<br />
-
-To be able to map the field that same name, but not same data type follow the example [here](#maptovalueclass), <br/>
-or just simply use mapAllTo() :
+In order to map a field that same name, but not same data type follow the example [here](#maptovalueclass), or just simply use:
 ```js
  PersonDto dto = transaction.mapAllTo(PersonDto.class);
 ```
-<br />
+2) #### ModelMapper
+```js
+ ModelMapper mapper = new ModelMapepr();
+```
+```js
+ Dog dog = new Dog();
+```
+In order to map different field between the two class:
+```js
+ maper.set(dog)
+  .field("name", "title")
+  .field("age", "year")
+```
+Exclude a field without annotation:
+```js
+ maper.set(dog)
+  .excluded("title")
+  .excluded("year")
+```
+Use a converter where mapper can't handle mapping an instance of a source object into a specific destination type.
+```js
+ maper.set(dog)
+  .converter("height", new IntegerStringConverter())
+```
 
+3) #### Annotations
 ## @Excluded
-To exclude a field just add an @Excluded annotation to your dto
+In order to exclude a field just add an @Excluded annotation to your dto
 ```js
   ...
   @Excluded
   private List<Pet> pets = new ArrayList<>();
 ```
 ## @MapTo(value=[class])
-To map a field or (fields of a field) of an object to a certain class
+In order to map a field or (fields of a field) of an object to a certain class
 * value
 * collection
 * type
@@ -66,7 +87,6 @@ To map a field or (fields of a field) of an object to a certain class
   @MapTo(PetDto.class)
   private Pet pet;
 ```
-Example with a collection field:
 ```js
   ...
   @MapTo(value = PetDto.class, collection = true, type = List.class)
@@ -95,7 +115,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.4.0'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.4.1'
 }
 ```
 
@@ -115,7 +135,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.4.0</version>
+    <version>v1.0-beta.4.1</version>
   </dependency>
 </dependencies>
 ```
