@@ -48,7 +48,28 @@ public class ModelMapper {
         if(o != null) {
             try {
                 Object instance = adapter.convert(o);
-                map.put(field, instance);
+                if(instance!=null)
+                    map.put(field, instance);
+                else
+                    map.remove(field);
+            } catch (Exception e) {
+                e.printStackTrace();
+                map.remove(field);
+            }
+        }
+        return this;
+    }
+
+    public ModelMapper converter(String field, Class<? extends TypeConverterAdapter> c) {
+        final Object o = map.get(field);
+        if(o != null) {
+            try {
+                TypeConverterAdapter adapter = c.newInstance();
+                Object instance = adapter.convert(o);
+                if(instance!=null)
+                    map.put(field, instance);
+                else
+                    map.remove(field);
             } catch (Exception e) {
                 e.printStackTrace();
                 map.remove(field);

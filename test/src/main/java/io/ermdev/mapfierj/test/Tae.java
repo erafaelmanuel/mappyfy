@@ -2,7 +2,7 @@ package io.ermdev.mapfierj.test;
 
 public class Tae {
 
-    private double width;
+    private String width;
 
     @Override
     public String toString() {

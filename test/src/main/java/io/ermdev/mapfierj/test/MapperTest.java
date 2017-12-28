@@ -60,20 +60,18 @@ public class MapperTest {
 //        SimpleMapper mapper = new SimpleMapper();
 //        AnimalDto dto = mapper.set(animal).mapAllTo(AnimalDto.class);
 
-        ModelMapper mapper = new ModelMapper();
-        AnimalDto dto = mapper.set(animal)
-                .field("title", "name")
-                .field("width", "size")
-                .getTransaction()
-                .mapAllTo(AnimalDto.class);
-
 //        ModelMapper mapper = new ModelMapper();
-//        Tae dto = mapper.set(animal)
-//                .setConverter("width", new IntegerStringConverter())
-//                .converter("width", new DoubleStringConverter())
-//                .excluded("width")
+//        AnimalDto dto = mapper.set(animal)
+//                .field("title", "name")
+//                .field("width", "size")
 //                .getTransaction()
-//                .mapTo(Tae.class);
+//                .mapAllTo(AnimalDto.class);
+
+        ModelMapper mapper = new ModelMapper();
+        Tae dto = mapper.set(animal)
+                .converter("width", IntegerStringConverter.class)
+                .getTransaction()
+                .mapTo(Tae.class);
 
 
 
