@@ -10,7 +10,7 @@ A simple mapping library that maps objects to another objects
 
 # How to use
 
-1) #### SimpleMapper
+1) ### SimpleMapper
 
 Person.java
 ```js
@@ -56,7 +56,7 @@ In order to map one or more fields to a different class. Follow the example [her
 ```js
  PersonDto dto = mapper.set(person).mapAllTo(PersonDto.class);
 ```
-2) #### ModelMapper
+2) ### ModelMapper
 ```js
  ModelMapper mapper = new ModelMapepr();
 ```
@@ -85,8 +85,13 @@ Use a converter where mapper can't handle mapping an instance of a source object
 ## @Excluded
 Exclude the field of your dto class
 ```js
-  ...
   @Excluded
+  private List<PetDto> pets = new ArrayList<>();
+```
+## @FieldName
+The field will map as the value of the annotation
+```js
+  @FieldName("petDto")
   private List<Pet> pets = new ArrayList<>();
 ```
 ## @MapTo(value=[class])
@@ -95,12 +100,10 @@ Map one or more fields to a different class
 * collection
 * type
 ```js
-  ...
   @MapTo(PetDto.class)
   private Pet pet;
 ```
 ```js
-  ...
   @MapTo(value = PetDto.class, collection = true, type = List.class)
   private Set<Pet> pets = new HashSet<>(); // map to -> List<PetDto> pets = new ArrayList<>();
 ```
