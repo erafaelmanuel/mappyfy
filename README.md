@@ -78,7 +78,7 @@ To ignore the field of object inside a collection:
 ```js
  maper.set(dogs).excludeAll("title") ...
 ```
-Use a converters out of the box (or your own [custom](##custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
+Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
  
 ```js
  maper.set(dog)
