@@ -1,5 +1,6 @@
 package io.ermdev.mapfierj.core;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class ModelMapper {
@@ -7,10 +8,9 @@ public class ModelMapper {
     private Transaction transaction;
     private HashMap<String, Object> map = new HashMap<>();
 
-    public ModelMapper set(Object obj) {
+    public ModelMapper set(Object o) {
         try {
-            transaction=new Transaction(obj);
-            map=transaction.getMap();
+            map=setAndGetTransaction(o).getMap();
             return this;
         } catch (Exception e) {
             e.printStackTrace();
@@ -18,15 +18,43 @@ public class ModelMapper {
         }
     }
 
+    public ModelMapper set(HashMap<String, Object> map) {
+        try {
+            this.map=setAndGetTransaction(map).getMap();
+            return this;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ModelMapper set(Collection collection) {
+        map=setAndGetTransaction(collection).getMap();
+        return this;
+    }
+
     public Transaction setAndGetTransaction(Object obj) {
         try {
             transaction=new Transaction(obj);
-            map=transaction.getMap();
             return transaction;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Transaction setAndGetTransaction(HashMap<String, Object> map) {
+        try {
+            transaction=new Transaction(map);
+            return transaction;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Transaction setAndGetTransaction(Collection collection) {
+        return transaction=new Transaction(collection);
     }
 
     public ModelMapper field(String field, String field2) {
@@ -38,8 +66,13 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper excluded(String field) {
+    public ModelMapper exclude(String field) {
         map.remove(field);
+        return this;
+    }
+
+    public ModelMapper excludeAll(String field) {
+        transaction.getExcludedField().add(field);
         return this;
     }
 
