@@ -240,6 +240,50 @@ public class Transaction {
         }
     }
 
+    public Object mapAllTo(Object o) {
+        if(absoluteNull) return null;
+        try {
+            for (Field field : o.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if(field.getAnnotation(Excluded.class) == null) {
+                    Object value = fields.get(field.getName());
+
+                    if(value instanceof Collection) {
+                        if(field.getType().equals(List.class)) {
+                            if(field.getGenericType() instanceof ParameterizedType) {
+                                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                value = mapList((Collection) value, parameter, false, classes);
+                            }
+                        } else {
+                            if(field.getGenericType() instanceof ParameterizedType) {
+                                ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                value = mapSet((Collection) value, parameter, false, classes);
+                            }
+                        }
+                        field.set(o, value);
+                    }else if (value != null) {
+                        if(!field.getType().equals(value.getClass())) {
+                            if(!TypeChecker.isPrimitive(field.getType())) {
+                                if(classes != null && classes.size() > 0) {
+                                    value = new Transaction(value, classes).mapTo(field.getType());
+                                } else {
+                                    value = new Transaction(value).mapTo(field.getType());
+                                }
+                            }
+                        }
+                        field.set(o, value);
+                    }
+                }
+            }
+            return o;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public <T> T mapTo(Class<T> c) {
         if(absoluteNull) return null;
         try {
@@ -256,6 +300,24 @@ public class Transaction {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public Object mapTo(Object o) {
+        if(absoluteNull) return null;
+        try {
+            for (Field field : o.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if(field.getAnnotation(Excluded.class) == null) {
+                    Object value = fields.get(field.getName());
+                    if (value != null)
+                        field.set(o, value);
+                }
+            }
+            return o;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return o;
         }
     }
 
