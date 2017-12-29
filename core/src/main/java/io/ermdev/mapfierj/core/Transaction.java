@@ -12,7 +12,7 @@ public class Transaction {
 
     private List<Object> col = new ArrayList<>();
 
-    private static List<String> excludedField = new ArrayList<>();
+    private List<String> excludedField = new ArrayList<>();
 
     private boolean absoluteNull;
 
@@ -58,9 +58,15 @@ public class Transaction {
                         }
                     } else {
                         if (classes.size() > 0) {
-                            fields.put(fieldName, new Transaction(value, classes).mapTo(maps.value()));
+                            Transaction transaction = new Transaction(value, classes);
+                            transaction.setExcludedField(getExcludedField());
+
+                            fields.put(fieldName, transaction.mapTo(maps.value()));
                         } else {
-                            fields.put(fieldName, new Transaction(value).mapTo(maps.value()));
+                            Transaction transaction = new Transaction(value);
+                            transaction.setExcludedField(getExcludedField());
+
+                            fields.put(fieldName, transaction.mapTo(maps.value()));
                         }
                     }
                 } else {
@@ -104,9 +110,15 @@ public class Transaction {
                         }
                     } else {
                         if (classes.size() > 0) {
-                            fields.put(fieldName, new Transaction(value, this.classes).mapTo(maps.value()));
+                            Transaction transaction = new Transaction(value, this.classes);
+                            transaction.setExcludedField(getExcludedField());
+
+                            fields.put(fieldName, transaction.mapTo(maps.value()));
                         } else {
-                            fields.put(fieldName, new Transaction(value).mapTo(maps.value()));
+                            Transaction transaction = new Transaction(value);
+                            transaction.setExcludedField(getExcludedField());
+
+                            fields.put(fieldName, transaction.mapTo(maps.value()));
                         }
                     }
                 } else {
@@ -126,11 +138,17 @@ public class Transaction {
             if (hasMapTo) {
                 for (Object o : collection) {
                     if (classes != null && classes.size() > 0) {
-                        T instance = new Transaction(o, classes).mapTo(c);
+                        Transaction transaction = new Transaction(o, classes);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapTo(c);
                         if (instance != null)
                             list.add(instance);
                     } else {
-                        T instance = new Transaction(o).mapTo(c);
+                        Transaction transaction = new Transaction(o);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapTo(c);
                         if (instance != null)
                             list.add(instance);
                     }
@@ -138,11 +156,17 @@ public class Transaction {
             } else {
                 for (Object o : collection) {
                     if (classes != null && classes.size() > 0) {
-                        T instance = new Transaction(o, classes).mapAllTo(c);
+                        Transaction transaction = new Transaction(o, classes);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapAllTo(c);
                         if (instance != null)
                             list.add(instance);
                     } else {
-                        T instance = new Transaction(o).mapAllTo(c);
+                        Transaction transaction = new Transaction(o);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapAllTo(c);
                         if (instance != null)
                             list.add(instance);
                     }
@@ -163,24 +187,35 @@ public class Transaction {
             if (hasMapTo) {
                 for (Object o : collection) {
                     if (classes != null && classes.size() > 0) {
-                        T instance = new Transaction(o, classes).mapTo(c);
+                        Transaction transaction = new Transaction(o, classes);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapTo(c);
                         if (instance != null)
                             set.add(instance);
                     } else {
-                        T instance = new Transaction(o).mapTo(c);
+                        Transaction transaction = new Transaction(o);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapTo(c);
                         if (instance != null)
                             set.add(instance);
                     }
-
                 }
             } else {
                 for (Object o : collection) {
                     if (classes != null && classes.size() > 0) {
-                        T instance = new Transaction(o, classes).mapAllTo(c);
+                        Transaction transaction = new Transaction(o, classes);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapAllTo(c);
                         if (instance != null)
                             set.add(instance);
                     } else {
-                        T instance = new Transaction(o).mapAllTo(c);
+                        Transaction transaction = new Transaction(o);
+                        transaction.setExcludedField(getExcludedField());
+
+                        T instance = transaction.mapAllTo(c);
                         if (instance != null)
                             set.add(instance);
                     }
@@ -221,9 +256,15 @@ public class Transaction {
                         if (!field.getType().equals(value.getClass())) {
                             if (!TypeChecker.isPrimitive(field.getType())) {
                                 if (classes != null && classes.size() > 0) {
-                                    value = new Transaction(value, classes).mapTo(field.getType());
+                                    Transaction transaction = new Transaction(value , classes);
+                                    transaction.setExcludedField(getExcludedField());
+
+                                    value = transaction.mapTo(field.getType());
                                 } else {
-                                    value = new Transaction(value).mapTo(field.getType());
+                                    Transaction transaction = new Transaction(value);
+                                    transaction.setExcludedField(getExcludedField());
+
+                                    value = transaction.mapTo(field.getType());
                                 }
                             }
                         }
@@ -265,9 +306,15 @@ public class Transaction {
                         if (!field.getType().equals(value.getClass())) {
                             if (!TypeChecker.isPrimitive(field.getType())) {
                                 if (classes != null && classes.size() > 0) {
-                                    value = new Transaction(value, classes).mapTo(field.getType());
+                                    Transaction transaction = new Transaction(value , classes);
+                                    transaction.setExcludedField(getExcludedField());
+
+                                    value = transaction.mapTo(field.getType());
                                 } else {
-                                    value = new Transaction(value).mapTo(field.getType());
+                                    Transaction transaction = new Transaction(value);
+                                    transaction.setExcludedField(getExcludedField());
+
+                                    value = transaction.mapTo(field.getType());
                                 }
                             }
                         }
@@ -339,7 +386,6 @@ public class Transaction {
         return classes != null && classes.parallelStream().anyMatch(item -> item.equals(c));
     }
 
-    @Deprecated
     private boolean isExcluded(Field field) {
         return field.getAnnotation(Excluded.class) != null || excludedField.parallelStream()
                 .anyMatch(item -> item.trim().equals(field.getName()));
