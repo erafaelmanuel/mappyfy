@@ -10,7 +10,7 @@ A simple mapping library that maps objects to another objects
 
 # How to use
 
-1) ### SimpleMapper
+### [SimpleMapper]()
 
 Person.java
 ```js
@@ -50,13 +50,14 @@ Add your object by calling the set method and that will give you a Transaction.
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
 ```js
- List<PersonDto> personList = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class); // or mapToSet
+ List<PersonDto> personList = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class);
 ```
-In order to map one or more fields to a different class. Follow the example [here](#maptovalueclass), or just simply use 'mapAllTo':
+In order to map one or more fields to a different class. Follow the example [here](#maptovalueclass), or just simply use 'mapAllTo'
 ```js
  PersonDto dto = mapper.set(person).mapAllTo(PersonDto.class);
 ```
-2) ### ModelMapper
+
+### [ModelMapper]()
 ```js
  ModelMapper mapper = new ModelMapepr();
 ```
@@ -71,30 +72,33 @@ In order to map different field between the two class:
 ```
 To ignore the field in both classes:
 ```js
- maper.set(dog)
-  .excluded("title")
-  .excluded("year")
+ maper.set(dog).exclude("title") ...
 ```
-Use a converter where mapper can't handle mapping an instance of a source object into a specific destination type.
+To ignore the field of object inside a collection:
+```js
+ maper.set(dogs).excludeAll("title") ...
+```
+Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
+ 
 ```js
  maper.set(dog)
   .converter("height", new IntegerStringConverter())
 ```
 
-3) #### Annotations
-## @Excluded
+### [Annotations]()
+#### @Excluded
 Exclude the field of your dto class
 ```js
   @Excluded
   private List<PetDto> pets = new ArrayList<>();
 ```
-## @FieldName
+#### @FieldName
 The field will map as the value of the annotation
 ```js
   @FieldName("petDto")
   private List<Pet> pets = new ArrayList<>();
 ```
-## @MapTo(value=[class])
+#### @MapTo(value=[class])
 Map one or more fields to a different class
 * value
 * collection
@@ -107,11 +111,59 @@ Map one or more fields to a different class
   @MapTo(value = PetDto.class, collection = true, type = List.class)
   private Set<Pet> pets = new HashSet<>(); // map to -> List<PetDto> pets = new ArrayList<>();
 ```
-## @NoRepeat
+#### @NoRepeat
 The mapper will ignore the recursive instances of a class
 ```js
   @NoRepeat
   public class Person { ...
+```
+
+### [Custom TypeConverter]()
+In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type
+```js
+  @TypeConverter
+  public class MyConverter extends TypeConverterAdapter<Long, Dog> { ...
+```
+You have to override and write your own implementations
+```js
+  @Override
+  public Dog convertTo(Long id) {
+     return dogRepository.findById(id);
+  }
+```
+```js
+  @Override
+  public Long convertFrom(Dog dog) {
+     return dog.getId();
+  }
+```
+```js
+  @Override
+  public Object convert(Object o) {
+     if(o instanceof Long)
+       return convertTo(o);
+     else
+       return convertFrom(o);
+  }
+```
+And that all, you just need to use your custom converter:
+```js
+  public class Person {
+    String name;
+    Long dogId;
+  }
+```
+```js
+  public class PersonDto {
+    String name;
+    Dog dog;
+  }
+```
+```js
+  mapper.set(person)
+    .field("dogId", "dog")
+    .converter("dog", new MyConverter())
+    .getTransaction().mapAllTo(PersonDto.class);
 ```
 
 # Download
