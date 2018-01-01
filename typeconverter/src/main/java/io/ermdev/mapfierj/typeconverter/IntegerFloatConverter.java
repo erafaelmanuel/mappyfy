@@ -5,15 +5,15 @@ import io.ermdev.mapfierj.core.TypeConverterAdapter;
 import io.ermdev.mapfierj.exception.TypeException;
 
 @TypeConverter
-public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {
+public class IntegerFloatConverter extends TypeConverterAdapter<Integer, Float> {
 
     @Override
     public Object convert(Object o) throws TypeException {
         if(o != null) {
-            if(o instanceof Double)
-                return convertTo((Double) o);
-            else if(o instanceof String)
-                return convertFrom((String) o);
+            if(o instanceof Integer)
+                return convertTo((Integer) o);
+            else if(o instanceof Float)
+                return convertFrom((Float) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -21,16 +21,12 @@ public class DoubleStringConverter extends TypeConverterAdapter<Double, String> 
     }
 
     @Override
-    public String convertTo(Double o) {
-        return String.valueOf(o);
+    public Float convertTo(Integer o) {
+        return o.floatValue();
     }
 
     @Override
-    public Double convertFrom(String o) {
-        try {
-            return Double.parseDouble(o);
-        } catch (NumberFormatException e) {
-            return 0d;
-        }
+    public Integer convertFrom(Float o) {
+        return o.intValue();
     }
 }
