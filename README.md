@@ -11,7 +11,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 
 ### [SimpleMapper]()
 
-It’s best to start with an example — suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
+Suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
 ```js
  public class Person {
   @FieldName("fullname")
@@ -28,7 +28,7 @@ In order to map between these classes, we’ll need to first create a mapper.
 ```js
  SimpleMapper mapper = new SimpleMapper();
 ```
-By default it will only map the same field name and skip the different data type
+By default it will only map the same field name and data type
 ```js
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
@@ -41,8 +41,12 @@ In order to map one or more fields to a different type. Follow the example [here
 ```
 
 ### [ModelMapper]()
+Basically, to use ModelMapper first instantiate it with or without base package of your custom converters
 ```js
  ModelMapper mapper = new ModelMapepr();
+```
+```js
+ ModelMapper mapper = new ModelMapepr("my.package");
 ```
 In order to map different field between the two class:
 ```js
@@ -52,17 +56,20 @@ In order to map different field between the two class:
 ```
 To explicitly exclude a field from mapping:
 ```js
- maper.set(dog).exclude("title") ...
+ maper.set(dog).exclude("title")
 ```
 To explicitly exclude a field (of object within a collection) from mapping:
 ```js
- maper.set(dogs).excludeAll("title") ...
+ maper.set(dogs).excludeAll("title")
 ```
 Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
  
 ```js
- maper.set(dog)
-  .converter("height", new IntegerStringConverter())
+ maper.set(dog).converter("height", new IntegerStringConverter())
+```
+or
+```js
+ maper.set(dog).convertFieldToType("height", String.class)
 ```
 
 ### [Annotations]()
@@ -87,8 +94,8 @@ Map one or more fields to a different class
   @MapTo(PetDto.class)
   private Pet pet;
 
-  @MapTo(value = PetDto.class, collection = true, type = List.class)
-  private Set<Pet> pets = new HashSet<>(); // map to -> List<PetDto> pets = new ArrayList<>();
+  @MapTo(value = PetDto.class, collection = true)
+  private Set<Pet> pets = new HashSet<>();
 ```
 #### @NoRepeat
 The mapper will ignore the recursive instances of a class
