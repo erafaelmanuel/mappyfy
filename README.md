@@ -2,57 +2,39 @@
 
 # Overview
 #### MapfierJ !!!
-A simple mapping library that maps objects to another objects
+A Reflection-based mappers library that maps objects to another objects. It can be very useful when developing multi-layered applications.
  
-* Reflection-based mappers
-* By default it will only map the same field name
-* Skip the field that same name, but different data type
+* Map complex and deeply structured objects
+* Create converters for complete control over the mapping of a specific set of objects anywhere in the object graph
 
-# How to use
+# Usage
 
 ### [SimpleMapper]()
 
-Person.java
+It’s best to start with an example — suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
 ```js
  public class Person {
-  private String name;
-  private int age;
+  String name;
+  int age;
+ }
  
-  //getter and setter
- }
-```
-
-PersonDto.java
-```js
  public class PersonDto {
-  private String name;
-  private int age;
-  
-  public PersonDto() {}
-  
-  //getter and setter
+  String name;
+  int age;
  }
 ```
-Create a SimpleMapper
+In order to map between these classes, we’ll need to first create a mapper.
 ```js
  SimpleMapper mapper = new SimpleMapper();
 ```
-Add your object by calling the set method and that will give you a Transaction.
-```js
- Transaction transaction = mapper.set(new Person("Foo", 3));
-```
-* getMap
-* mapTo
-* mapToList
-* mapToSet
-* mapAllTo
+By default it will only map the same field name and skip the different data type
 ```js
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
 ```js
  List<PersonDto> personList = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class);
 ```
-In order to map one or more fields to a different class. Follow the example [here](#maptovalueclass), or just simply use 'mapAllTo'
+In order to map one or more fields to a different type. Follow the example [here](#maptovalueclass), or just simply use 'mapAllTo'
 ```js
  PersonDto dto = mapper.set(person).mapAllTo(PersonDto.class);
 ```
@@ -182,7 +164,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.4.2a'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.5.0'
 }
 ```
 
@@ -202,7 +184,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.4.2a</version>
+    <version>v1.0-beta.5.0</version>
   </dependency>
 </dependencies>
 ```
