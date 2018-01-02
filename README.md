@@ -14,12 +14,13 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 It’s best to start with an example — suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
 ```js
  public class Person {
+  @FieldName("fullname")
   String name;
   int age;
  }
  
  public class PersonDto {
-  String name;
+  String fullname;
   int age;
  }
 ```
@@ -34,7 +35,7 @@ By default it will only map the same field name and skip the different data type
 ```js
  List<PersonDto> personList = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class);
 ```
-In order to map one or more fields to a different type. Follow the example [here](#maptovalueclass), or just simply use 'mapAllTo'
+In order to map one or more fields to a different type. Follow the example [here](#maptovalueclass), or just simply use:
 ```js
  PersonDto dto = mapper.set(person).mapAllTo(PersonDto.class);
 ```
@@ -43,20 +44,17 @@ In order to map one or more fields to a different type. Follow the example [here
 ```js
  ModelMapper mapper = new ModelMapepr();
 ```
-```js
- Dog dog = new Dog();
-```
 In order to map different field between the two class:
 ```js
  maper.set(dog)
   .field("name", "title")
   .field("age", "year")
 ```
-To ignore the field in both classes:
+To explicitly exclude a field from mapping:
 ```js
  maper.set(dog).exclude("title") ...
 ```
-To ignore the field of object inside a collection:
+To explicitly exclude a field (of object within a collection) from mapping:
 ```js
  maper.set(dogs).excludeAll("title") ...
 ```
@@ -88,8 +86,7 @@ Map one or more fields to a different class
 ```js
   @MapTo(PetDto.class)
   private Pet pet;
-```
-```js
+
   @MapTo(value = PetDto.class, collection = true, type = List.class)
   private Set<Pet> pets = new HashSet<>(); // map to -> List<PetDto> pets = new ArrayList<>();
 ```
@@ -112,14 +109,12 @@ You have to override and write your own implementations
   public Dog convertTo(Long id) {
      return dogRepository.findById(id);
   }
-```
-```js
+
   @Override
   public Long convertFrom(Dog dog) {
      return dog.getId();
   }
-```
-```js
+
   @Override
   public Object convert(Object o) {
      if(o instanceof Long)
@@ -128,14 +123,13 @@ You have to override and write your own implementations
        return convertFrom(o);
   }
 ```
-And that all, you just need to use your custom converter:
+And that's all, you just need to use your custom converter:
 ```js
   public class Person {
     String name;
     Long dogId;
   }
-```
-```js
+  
   public class PersonDto {
     String name;
     Dog dog;
