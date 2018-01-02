@@ -11,7 +11,7 @@ public class Sample {
     public void test() {
         ModelMapper mapper = new ModelMapper();
         PersonDto person = mapper.set(new Person("Rafael", 22, 55))
-                .autoConvert("height")
+                .convertFieldToType("height", Double.class)
                 .getTransaction().mapAllTo(PersonDto.class);
         System.out.println(person);
     }

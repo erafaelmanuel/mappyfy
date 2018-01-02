@@ -80,22 +80,21 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper autoConvert(String field) {
+    public ModelMapper convertFieldToType(String field, Class<?> type) {
         final Object o = map.get(field);
         if(o != null) {
             try {
                 Reflections reflections = new Reflections("io.ermdev.mapfierj.typeconverter");
                 Set<Class<? extends TypeConverterAdapter>> converters = reflections.getSubTypesOf(TypeConverterAdapter.class);
-                for(Class<? extends TypeConverterAdapter> c : converters) {
+                for(Class<? extends TypeConverterAdapter> converter : converters) {
                     try {
-                        TypeConverterAdapter adapter = c.newInstance();
-                        System.out.println(c);
+                        TypeConverterAdapter adapter = converter.newInstance();
                         Object instance = adapter.convert(o);
+                        if(!instance.getClass().equals(type))
+                            throw new TypeException("Type not match");
                         map.put(field, instance);
                         break;
-                    } catch (TypeException e) {
-                        //e.printStackTrace();
-                    }
+                    } catch (TypeException e) {}
                 }
             } catch (Exception e) {
                 e.printStackTrace();

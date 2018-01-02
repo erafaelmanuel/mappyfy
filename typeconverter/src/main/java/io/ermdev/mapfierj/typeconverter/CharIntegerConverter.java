@@ -21,12 +21,21 @@ public class CharIntegerConverter extends TypeConverterAdapter<Character, Intege
     }
 
     @Override
-    public Integer convertTo(Character o) {
-        return (int) o;
+    public Integer convertTo(Character o) throws TypeException {
+        try {
+            return (int) o;
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Character convertFrom(Integer o) {
-        return (char) (o + '0');
+    public Character convertFrom(Integer o) throws TypeException {
+        try {
+            return (char) (o + '0');
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
+
     }
 }

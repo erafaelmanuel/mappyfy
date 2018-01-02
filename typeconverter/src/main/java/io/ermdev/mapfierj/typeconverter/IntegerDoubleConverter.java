@@ -21,12 +21,20 @@ public class IntegerDoubleConverter extends TypeConverterAdapter<Integer, Double
     }
 
     @Override
-    public Double convertTo(Integer o) {
-        return o.doubleValue();
+    public Double convertTo(Integer o) throws TypeException {
+        try {
+            return o.doubleValue();
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Integer convertFrom(Double o) {
-        return o.intValue();
+    public Integer convertFrom(Double o) throws TypeException {
+        try {
+            return o.intValue();
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 }

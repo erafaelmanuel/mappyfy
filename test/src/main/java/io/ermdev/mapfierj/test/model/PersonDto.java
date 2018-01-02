@@ -4,7 +4,7 @@ public class PersonDto {
 
     public String name;
     public int age;
-    public String height;
+    public double height;
 
     @Override
     public String toString() {

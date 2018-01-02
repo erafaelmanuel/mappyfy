@@ -21,16 +21,20 @@ public class CharStringConverter extends TypeConverterAdapter<Character, String>
     }
 
     @Override
-    public String convertTo(Character o) {
-        return String.valueOf(o);
+    public String convertTo(Character o) throws TypeException {
+        try {
+            return String.valueOf(o);
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Character convertFrom(String o) {
+    public Character convertFrom(String o) throws TypeException {
         try {
             return (o.trim().charAt(0));
-        } catch (NullPointerException e) {
-            return 0;
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
         }
     }
 }

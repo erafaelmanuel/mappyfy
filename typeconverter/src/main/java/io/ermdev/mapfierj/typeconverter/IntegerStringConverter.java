@@ -21,16 +21,20 @@ public class IntegerStringConverter extends TypeConverterAdapter<Integer, String
     }
 
     @Override
-    public String convertTo(Integer o) {
-        return String.valueOf(o);
+    public String convertTo(Integer o) throws TypeException {
+        try {
+            return String.valueOf(o);
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Integer convertFrom(String o) {
+    public Integer convertFrom(String o) throws TypeException {
         try {
             return Integer.parseInt(o);
-        } catch (NumberFormatException e) {
-            return 0;
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
         }
     }
 }
