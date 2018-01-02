@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.test.cases;
+package io.ermdev.mapfierj.test.cases.typeconverter;
 
 import io.ermdev.mapfierj.typeconverter.IntegerDoubleConverter;
 import org.junit.Assert;

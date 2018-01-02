@@ -4,5 +4,14 @@ public class PersonDto {
 
     public String name;
     public int age;
-    public int height;
+    public String height;
+
+    @Override
+    public String toString() {
+        return "PersonDto{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", height='" + height + '\'' +
+                '}';
+    }
 }

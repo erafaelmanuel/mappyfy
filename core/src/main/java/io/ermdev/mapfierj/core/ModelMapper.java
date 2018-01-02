@@ -1,7 +1,11 @@
 package io.ermdev.mapfierj.core;
 
+import io.ermdev.mapfierj.exception.TypeException;
+import org.reflections.Reflections;
+
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 public class ModelMapper {
 
@@ -73,6 +77,31 @@ public class ModelMapper {
 
     public ModelMapper excludeAll(String field) {
         transaction.getExcludedField().add(field);
+        return this;
+    }
+
+    public ModelMapper autoConvert(String field) {
+        final Object o = map.get(field);
+        if(o != null) {
+            try {
+                Reflections reflections = new Reflections("io.ermdev.mapfierj.typeconverter");
+                Set<Class<? extends TypeConverterAdapter>> converters = reflections.getSubTypesOf(TypeConverterAdapter.class);
+                for(Class<? extends TypeConverterAdapter> c : converters) {
+                    try {
+                        TypeConverterAdapter adapter = c.newInstance();
+                        System.out.println(c);
+                        Object instance = adapter.convert(o);
+                        map.put(field, instance);
+                        break;
+                    } catch (TypeException e) {
+                        //e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                map.remove(field);
+            }
+        }
         return this;
     }
 
