@@ -21,12 +21,20 @@ public class FloatLongConverter extends TypeConverterAdapter<Float, Long> {
     }
 
     @Override
-    public Long convertTo(Float o) {
-        return o.longValue();
+    public Long convertTo(Float o) throws TypeException {
+        try {
+            return o.longValue();
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Float convertFrom(Long o) {
-        return o.floatValue();
+    public Float convertFrom(Long o) throws TypeException {
+        try {
+            return o.floatValue();
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 }

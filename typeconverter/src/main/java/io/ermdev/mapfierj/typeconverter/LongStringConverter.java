@@ -21,16 +21,20 @@ public class LongStringConverter extends TypeConverterAdapter<Long, String> {
     }
 
     @Override
-    public String convertTo(Long o) {
-        return String.valueOf(o);
+    public String convertTo(Long o) throws TypeException {
+        try {
+            return String.valueOf(o);
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Long convertFrom(String o) {
+    public Long convertFrom(String o) throws TypeException {
         try {
             return Long.parseLong(o);
-        } catch (NumberFormatException e) {
-            return 0L;
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
         }
     }
 }

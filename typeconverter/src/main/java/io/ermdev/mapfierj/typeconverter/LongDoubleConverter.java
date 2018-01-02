@@ -21,12 +21,20 @@ public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
     }
 
     @Override
-    public Double convertTo(Long o) {
-        return o.doubleValue();
+    public Double convertTo(Long o) throws TypeException {
+        try {
+            return o.doubleValue();
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Long convertFrom(Double o) {
-        return o.longValue();
+    public Long convertFrom(Double o) throws TypeException {
+        try {
+            return o.longValue();
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 }

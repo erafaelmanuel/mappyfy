@@ -21,16 +21,20 @@ public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
     }
 
     @Override
-    public String convertTo(Float o) {
-        return String.valueOf(o);
+    public String convertTo(Float o) throws TypeException {
+        try {
+            return String.valueOf(o);
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
+        }
     }
 
     @Override
-    public Float convertFrom(String o) {
+    public Float convertFrom(String o) throws TypeException {
         try {
             return Float.parseFloat(o);
-        } catch (NumberFormatException e) {
-            return 0f;
+        } catch (Exception e) {
+            throw new TypeException("Failed to convert");
         }
     }
 }

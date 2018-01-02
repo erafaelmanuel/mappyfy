@@ -4,7 +4,7 @@ public class PersonDto {
 
     public String name;
     public int age;
-    public double height;
+    public String height;
     public PetDto pet;
 
     @Override
