@@ -1,8 +1,8 @@
 package io.ermdev.mapfierj.typeconverter;
 
-import io.ermdev.mapfierj.core.TypeConverter;
-import io.ermdev.mapfierj.core.TypeConverterAdapter;
-import io.ermdev.mapfierj.exception.TypeException;
+import io.ermdev.mapfierj.TypeConverter;
+import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
 public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {

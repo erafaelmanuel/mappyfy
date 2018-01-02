@@ -1,6 +1,5 @@
-package io.ermdev.mapfierj.core;
+package io.ermdev.mapfierj;
 
-import io.ermdev.mapfierj.exception.TypeException;
 import org.reflections.Reflections;
 
 import java.util.Collection;

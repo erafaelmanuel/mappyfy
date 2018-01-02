@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.core;
+package io.ermdev.mapfierj;
 
 public class TypeChecker {
 

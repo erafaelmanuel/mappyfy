@@ -1,6 +1,4 @@
-package io.ermdev.mapfierj.core;
-
-import io.ermdev.mapfierj.exception.TypeException;
+package io.ermdev.mapfierj;
 
 public abstract class TypeConverterAdapter<T1, T2> {
 

@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.exception;
+package io.ermdev.mapfierj;
 
 public class TypeException extends Exception {
 

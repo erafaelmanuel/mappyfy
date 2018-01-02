@@ -1,6 +1,6 @@
 package io.ermdev.mapfierj.test.cases.core;
 
-import io.ermdev.mapfierj.core.ModelMapper;
+import io.ermdev.mapfierj.ModelMapper;
 import io.ermdev.mapfierj.test.model.Person;
 import io.ermdev.mapfierj.test.model.PersonDto;
 import org.junit.Test;

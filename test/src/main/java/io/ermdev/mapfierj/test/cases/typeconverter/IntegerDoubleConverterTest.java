@@ -1,6 +1,6 @@
 package io.ermdev.mapfierj.test.cases.typeconverter;
 
-import io.ermdev.mapfierj.exception.TypeException;
+import io.ermdev.mapfierj.TypeException;
 import io.ermdev.mapfierj.typeconverter.IntegerDoubleConverter;
 import org.junit.Assert;
 import org.junit.Test;
