@@ -4,12 +4,26 @@ import org.reflections.Reflections;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ModelMapper {
 
     private Transaction transaction;
     private HashMap<String, Object> map = new HashMap<>();
+    private final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
+
+    public ModelMapper() {
+        final String dir = "io.ermdev.mapfierj.typeconverter";
+        final Reflections reflections = new Reflections(dir);
+        converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+    }
+
+    public ModelMapper(String dir) {
+        this();
+        final Reflections reflections = new Reflections(dir);
+        converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+    }
 
     public ModelMapper set(Object o) {
         try {
@@ -83,17 +97,17 @@ public class ModelMapper {
         final Object o = map.get(field);
         if(o != null) {
             try {
-                Reflections reflections = new Reflections("io.ermdev.mapfierj.typeconverter");
-                Set<Class<? extends TypeConverterAdapter>> converters = reflections.getSubTypesOf(TypeConverterAdapter.class);
                 for(Class<? extends TypeConverterAdapter> converter : converters) {
                     try {
-                        TypeConverterAdapter adapter = converter.newInstance();
-                        Object instance = adapter.convert(o);
-                        if(!instance.getClass().equals(type))
-                            throw new TypeException("Type not match");
-                        map.put(field, instance);
-                        break;
-                    } catch (TypeException e) {}
+                        if(converter.getAnnotation(TypeConverter.class) != null) {
+                            TypeConverterAdapter adapter = converter.newInstance();
+                            Object instance = adapter.convert(o);
+                            if (!instance.getClass().equals(type))
+                                throw new TypeException("Type not match");
+                            map.put(field, instance);
+                            break;
+                        }
+                    } catch (Exception e) {}
                 }
             } catch (Exception e) {
                 e.printStackTrace();

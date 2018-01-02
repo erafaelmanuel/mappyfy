@@ -1,4 +1,27 @@
 package io.ermdev.mapfierj.test.model;
 
-public class GG {
+import io.ermdev.mapfierj.TypeConverter;
+import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeException;
+
+@TypeConverter
+public class GG extends TypeConverterAdapter<Integer, PetDto>{
+
+    @Override
+    public Object convert(Object o) throws TypeException {
+        if(o instanceof Integer)
+            return convertTo((Integer) o);
+        else
+            return convertFrom((PetDto) o);
+    }
+
+    @Override
+    public PetDto convertTo(Integer o) throws TypeException {
+        return new PetDto("Rafael", 22);
+    }
+
+    @Override
+    public Integer convertFrom(PetDto o) throws TypeException {
+        return 22;
+    }
 }
