@@ -2,87 +2,74 @@
 
 # Overview
 #### MapfierJ !!!
-A simple mapping library that maps objects to another objects
+A Reflection-based mappers library that maps objects to another objects. It can be very useful when developing multi-layered applications.
  
-* Reflection-based mappers
-* By default it will only map the same field name
-* Skip the field that same name, but different data type
+* Map complex and deeply structured objects
+* Create converters for complete control over the mapping of a specific set of objects anywhere in the object graph
 
-# How to use
+# Usage
 
 ### [SimpleMapper]()
 
-Person.java
+Suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
 ```js
  public class Person {
-  private String name;
-  private int age;
+  @FieldName("fullname")
+  String name;
+  int age;
+ }
  
-  //getter and setter
- }
-```
-
-PersonDto.java
-```js
  public class PersonDto {
-  private String name;
-  private int age;
-  
-  public PersonDto() {}
-  
-  //getter and setter
+  String fullname;
+  int age;
  }
 ```
-Create a SimpleMapper
+In order to map between these classes, we’ll need to first create a mapper.
 ```js
  SimpleMapper mapper = new SimpleMapper();
 ```
-Add your object by calling the set method and that will give you a Transaction.
-```js
- Transaction transaction = mapper.set(new Person("Foo", 3));
-```
-* getMap
-* mapTo
-* mapToList
-* mapToSet
-* mapAllTo
+By default it will only map the same field name and data type
 ```js
  PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
 ```
 ```js
  List<PersonDto> personList = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class);
 ```
-In order to map one or more fields to a different class. Follow the example [here](#maptovalueclass), or just simply use 'mapAllTo'
+In order to map one or more fields to a different type. Follow the example [here](#maptovalueclass), or just simply use:
 ```js
  PersonDto dto = mapper.set(person).mapAllTo(PersonDto.class);
 ```
 
 ### [ModelMapper]()
+Basically, to use ModelMapper first instantiate it with or without base package of your custom converters
 ```js
- ModelMapper mapper = new ModelMapepr();
+ ModelMapper mapper = new ModelMapper();
 ```
 ```js
- Dog dog = new Dog();
+ ModelMapper mapper = new ModelMaper("my.package");
 ```
 In order to map different field between the two class:
 ```js
- maper.set(dog)
+ mapper.set(dog)
   .field("name", "title")
   .field("age", "year")
 ```
-To ignore the field in both classes:
+To explicitly exclude a field from mapping:
 ```js
- maper.set(dog).exclude("title") ...
+ mapper.set(dog).exclude("title")
 ```
-To ignore the field of object inside a collection:
+To explicitly exclude a field (of object within a collection) from mapping:
 ```js
- maper.set(dogs).excludeAll("title") ...
+ mapper.set(dogs).excludeAll("title")
 ```
 Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
  
 ```js
- maper.set(dog)
-  .converter("height", new IntegerStringConverter())
+ mapper.set(dog).converter("height", new IntegerStringConverter())
+```
+or
+```js
+ mapper.set(dog).convertFieldToType("height", String.class)
 ```
 
 ### [Annotations]()
@@ -106,10 +93,9 @@ Map one or more fields to a different class
 ```js
   @MapTo(PetDto.class)
   private Pet pet;
-```
-```js
-  @MapTo(value = PetDto.class, collection = true, type = List.class)
-  private Set<Pet> pets = new HashSet<>(); // map to -> List<PetDto> pets = new ArrayList<>();
+
+  @MapTo(value = PetDto.class, collection = true)
+  private Set<Pet> pets = new HashSet<>();
 ```
 #### @NoRepeat
 The mapper will ignore the recursive instances of a class
@@ -130,14 +116,12 @@ You have to override and write your own implementations
   public Dog convertTo(Long id) {
      return dogRepository.findById(id);
   }
-```
-```js
+
   @Override
   public Long convertFrom(Dog dog) {
      return dog.getId();
   }
-```
-```js
+
   @Override
   public Object convert(Object o) {
      if(o instanceof Long)
@@ -146,24 +130,23 @@ You have to override and write your own implementations
        return convertFrom(o);
   }
 ```
-And that all, you just need to use your custom converter:
+And that's all, you just need to use your custom converter:
 ```js
   public class Person {
     String name;
     Long dogId;
   }
-```
-```js
+  
   public class PersonDto {
     String name;
     Dog dog;
   }
 ```
 ```js
-  mapper.set(person)
+  new ModelMapper("my.package.converter").set(person)
     .field("dogId", "dog")
-    .converter("dog", new MyConverter())
-    .getTransaction().mapAllTo(PersonDto.class);
+    .convertFieldToType("dog", MyConverter.class)
+    .getTransaction().mapTo(PersonDto.class);
 ```
 
 # Download
@@ -182,7 +165,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.4.2a'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.5.0'
 }
 ```
 
@@ -202,7 +185,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.4.2a</version>
+    <version>v1.0-beta.5.0</version>
   </dependency>
 </dependencies>
 ```
