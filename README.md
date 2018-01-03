@@ -67,7 +67,7 @@ Use a converters out of the box (or your own [custom](#custom-typeconverter) con
 ```js
  mapper.set(dog).converter("height", new IntegerStringConverter())
 ```
-or
+The code below will search the converter for the field that match the type and automatically convert it to the specific type. By default it will only look for built-in converters or the classes inside the package of ModelMapper you instantiated
 ```js
  mapper.set(dog).convertFieldToType("height", String.class)
 ```
@@ -143,7 +143,7 @@ And that's all, you just need to use your custom converter:
   }
 ```
 ```js
-  new ModelMapper("my.package.converter").set(person)
+  new ModelMapper("my.package").set(person)
     .field("dogId", "dog")
     .convertFieldToType("dog", MyConverter.class)
     .getTransaction().mapTo(PersonDto.class);
