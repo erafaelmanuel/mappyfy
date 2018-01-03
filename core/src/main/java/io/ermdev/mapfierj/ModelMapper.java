@@ -2,10 +2,9 @@ package io.ermdev.mapfierj;
 
 import org.reflections.Reflections;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class ModelMapper {
 
@@ -95,20 +94,98 @@ public class ModelMapper {
 
     public ModelMapper convertFieldToType(String field, Class<?> type) {
         final Object o = map.get(field);
-        map.remove(field);
+        final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
+
         if (o != null) {
             try {
-                for (Class<? extends TypeConverterAdapter> converter : converters) {
-                    try {
-                        if (converter.getAnnotation(TypeConverter.class) != null) {
-                            TypeConverterAdapter adapter = converter.newInstance();
-                            Object instance = adapter.convert(o);
-                            if (!instance.getClass().equals(type))
-                                throw new TypeException("Type not match");
-                            map.put(field, instance);
-                            break;
+                map.remove(field);
+                boolean isExists=converters.parallelStream()
+                        .filter(converter -> {
+                            boolean isMatch=false;
+                            Type types[] = (((ParameterizedType)
+                                    converter.getGenericSuperclass()).getActualTypeArguments());
+                            if(types.length == 2) {
+                                for (int i = 0; i < 2; i++) {
+                                    if (types[i].equals(type)) {
+                                        isMatch = true;
+                                        switch (i) {
+                                            case 0:
+                                                possibleTypes.put(types[i+1].toString(), converter);
+                                                break;
+                                            case 1:
+                                                possibleTypes.put(types[i-1].toString(), converter);
+                                                break;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                            return isMatch;
+                        })
+                        .filter(converter -> {
+                            boolean isMatch=false;
+                            Type types[] = (((ParameterizedType)
+                                    converter.getGenericSuperclass()).getActualTypeArguments());
+                            for(Type generic : types) {
+                                if(generic.equals(o.getClass())) {
+                                    isMatch=true;
+                                    break;
+                                }
+                            }
+                            return isMatch;
+                        })
+                        .anyMatch(converter->{
+                            try {
+                                if (converter.getAnnotation(TypeConverter.class) != null) {
+                                    TypeConverterAdapter adapter = converter.newInstance();
+                                    Object instance = adapter.convert(o);
+                                    if (!instance.getClass().equals(type))
+                                        throw new TypeException("Type not match");
+                                    map.put(field, instance);
+                                    return true;
+                                }
+                                throw new TypeException("No valid TypeConverter found");
+                            } catch (Exception e) {
+                                map.remove(field);
+                                return false;
+                            }
+                        });
+                if(!isExists) {
+                    converters.parallelStream().filter(converter -> {
+                        boolean isMatch=false;
+                        Type types[] = (((ParameterizedType)
+                                converter.getGenericSuperclass()).getActualTypeArguments());
+                        for(Type generic : types) {
+                            if(generic.equals(o.getClass())) {
+                                isMatch=true;
+                                break;
+                            }
                         }
-                    } catch (Exception e) {}
+                        return isMatch;
+                    })
+                    .forEach(converter -> {
+                        Type types[] = (((ParameterizedType)
+                                converter.getGenericSuperclass()).getActualTypeArguments());
+                        outer:for(Type generic : types) {
+                            Iterator iterator = possibleTypes.entrySet().iterator();
+                            for(Map.Entry entry : possibleTypes.entrySet()) {
+                                if (entry.getKey().equals(generic.toString())) {
+                                    try {
+                                        if (converter.getAnnotation(TypeConverter.class) != null) {
+                                            TypeConverterAdapter adapter1 = converter.newInstance();
+                                            TypeConverterAdapter adapter2 =
+                                                    (TypeConverterAdapter) ((Class<?>) entry.getValue()).newInstance();
+                                            Object instance = adapter2.convert(adapter1.convert(o));
+                                            map.put(field, instance);
+                                            break outer;
+                                        }
+                                    } catch (Exception e) {
+                                        map.remove(field);
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();

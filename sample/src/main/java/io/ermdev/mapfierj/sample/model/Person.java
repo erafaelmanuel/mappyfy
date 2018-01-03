@@ -4,10 +4,10 @@ public class Person {
 
     public String name;
     public short age;
-    public int height;
+    public Short height;
     public int petId;
 
-    public Person(String name, Short age, int height) {
+    public Person(String name, Short age, Short height) {
         this.name = name;
         this.age = age;
         this.height = height;
