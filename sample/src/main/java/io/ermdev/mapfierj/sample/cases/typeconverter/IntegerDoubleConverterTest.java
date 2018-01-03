@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.test.cases.typeconverter;
+package io.ermdev.mapfierj.sample.cases.typeconverter;
 
 import io.ermdev.mapfierj.TypeException;
 import io.ermdev.mapfierj.typeconverter.IntegerDoubleConverter;
