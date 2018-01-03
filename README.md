@@ -43,33 +43,33 @@ In order to map one or more fields to a different type. Follow the example [here
 ### [ModelMapper]()
 Basically, to use ModelMapper first instantiate it with or without base package of your custom converters
 ```js
- ModelMapper mapper = new ModelMapepr();
+ ModelMapper mapper = new ModelMapper();
 ```
 ```js
- ModelMapper mapper = new ModelMapepr("my.package");
+ ModelMapper mapper = new ModelMaper("my.package");
 ```
 In order to map different field between the two class:
 ```js
- maper.set(dog)
+ mapper.set(dog)
   .field("name", "title")
   .field("age", "year")
 ```
 To explicitly exclude a field from mapping:
 ```js
- maper.set(dog).exclude("title")
+ mapper.set(dog).exclude("title")
 ```
 To explicitly exclude a field (of object within a collection) from mapping:
 ```js
- maper.set(dogs).excludeAll("title")
+ mapper.set(dogs).excludeAll("title")
 ```
 Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
  
 ```js
- maper.set(dog).converter("height", new IntegerStringConverter())
+ mapper.set(dog).converter("height", new IntegerStringConverter())
 ```
 or
 ```js
- maper.set(dog).convertFieldToType("height", String.class)
+ mapper.set(dog).convertFieldToType("height", String.class)
 ```
 
 ### [Annotations]()
@@ -143,10 +143,10 @@ And that's all, you just need to use your custom converter:
   }
 ```
 ```js
-  mapper.set(person)
+  new ModelMapper("my.package.converter").set(person)
     .field("dogId", "dog")
-    .converter("dog", new MyConverter())
-    .getTransaction().mapAllTo(PersonDto.class);
+    .convertFieldToType("dog", MyConverter.class)
+    .getTransaction().mapTo(PersonDto.class);
 ```
 
 # Download
