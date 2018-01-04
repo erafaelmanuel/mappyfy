@@ -7,8 +7,6 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class GG extends TypeConverterAdapter<Integer, PetDto>{
 
-    public GG() {}
-
     public GG(Object obj) {
         super(obj);
     }

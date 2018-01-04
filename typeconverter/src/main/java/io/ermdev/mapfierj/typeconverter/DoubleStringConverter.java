@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {
 
+    public DoubleStringConverter() {
+        super(null);
+    }
+
     public DoubleStringConverter(Object obj) {
         super(obj);
     }

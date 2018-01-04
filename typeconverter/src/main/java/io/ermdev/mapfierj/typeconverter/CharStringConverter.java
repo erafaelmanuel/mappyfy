@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class CharStringConverter extends TypeConverterAdapter<Character, String> {
 
+    public CharStringConverter() {
+        super(null);
+    }
+
     public CharStringConverter(Object obj) {
         super(obj);
     }

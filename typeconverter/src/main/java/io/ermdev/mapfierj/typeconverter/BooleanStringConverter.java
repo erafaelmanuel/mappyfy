@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class BooleanStringConverter extends TypeConverterAdapter<Boolean, String> {
 
+    public BooleanStringConverter() {
+        super(null);
+    }
+
     public BooleanStringConverter(Object obj) {
         super(obj);
     }

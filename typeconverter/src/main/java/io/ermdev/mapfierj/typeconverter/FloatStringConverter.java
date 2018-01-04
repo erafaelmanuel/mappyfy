@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
 
+    public FloatStringConverter() {
+        super(null);
+    }
+
     public FloatStringConverter(Object obj) {
         super(obj);
     }

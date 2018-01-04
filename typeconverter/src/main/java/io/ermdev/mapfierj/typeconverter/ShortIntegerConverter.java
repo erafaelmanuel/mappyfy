@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class ShortIntegerConverter extends TypeConverterAdapter<Short, Integer> {
 
+    public ShortIntegerConverter() {
+        super(null);
+    }
+
     public ShortIntegerConverter(Object obj) {
         super(obj);
     }

@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
 
+    public LongDoubleConverter() {
+        super(null);
+    }
+
     public LongDoubleConverter(Object obj) {
         super(obj);
     }

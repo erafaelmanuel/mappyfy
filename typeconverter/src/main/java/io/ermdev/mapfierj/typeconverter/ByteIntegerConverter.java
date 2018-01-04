@@ -7,6 +7,10 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class ByteIntegerConverter extends TypeConverterAdapter<Byte, Integer> {
 
+    public ByteIntegerConverter() {
+        super(null);
+    }
+
     public ByteIntegerConverter(Object obj) {
         super(obj);
     }

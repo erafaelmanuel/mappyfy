@@ -4,8 +4,6 @@ public abstract class TypeConverterAdapter<T1, T2> {
 
     protected Object o;
 
-    public TypeConverterAdapter() {}
-
     public TypeConverterAdapter(Object obj) {
         o = obj;
     }
