@@ -200,13 +200,15 @@ public class ModelMapper {
         return this;
     }
 
-    @Deprecated
     public ModelMapper converter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
             try {
-                Object instance = adapter.getClass().getDeclaredConstructor(Object.class).newInstance(o).convert();
+                if(adapter.getObject() == null) {
+                    adapter.setObject(o);
+                }
+                Object instance = adapter.convert();
                 if (instance != null) {
                     map.put(field, instance);
                 }

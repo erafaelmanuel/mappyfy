@@ -4,7 +4,6 @@ import io.ermdev.mapfierj.ModelMapper;
 import io.ermdev.mapfierj.sample.model.GG;
 import io.ermdev.mapfierj.sample.model.Person;
 import io.ermdev.mapfierj.sample.model.PersonDto;
-import io.ermdev.mapfierj.sample.model.PetDto;
 import org.junit.Test;
 
 public class Sample {
@@ -16,7 +15,7 @@ public class Sample {
                 .field("petId", "pet")
                 //.exclude("pet")
                 //.exclude("age")
-                .converter("pet", GG.class)
+                .converter("pet", new GG())
                 .convertFieldToType("height", Double.class)
                 .convertFieldToType("age", Integer.class)
                 .getTransaction().mapTo(PersonDto.class);
