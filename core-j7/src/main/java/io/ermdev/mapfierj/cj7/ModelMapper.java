@@ -1,8 +1,5 @@
 package io.ermdev.mapfierj.cj7;
 
-import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
-import io.ermdev.mapfierj.TypeException;
 import org.reflections.Reflections;
 
 import java.lang.reflect.ParameterizedType;
