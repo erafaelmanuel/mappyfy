@@ -112,6 +112,19 @@ In order to create your own custom converter you need to extends the TypeConvert
 ```
 You have to override and write your own implementations
 ```js
+
+  public MyConverter(Object o) {
+    super(o);
+  }
+  
+  @Override
+  public Object convert() {
+     if(super.o instanceof Long)
+       return convertTo(super.o);
+     else
+       return convertFrom(super.o);
+  }
+  
   @Override
   public Dog convertTo(Long id) {
      return dogRepository.findById(id);
@@ -120,14 +133,6 @@ You have to override and write your own implementations
   @Override
   public Long convertFrom(Dog dog) {
      return dog.getId();
-  }
-
-  @Override
-  public Object convert(Object o) {
-     if(o instanceof Long)
-       return convertTo(o);
-     else
-       return convertFrom(o);
   }
 ```
 And that's all, you just need to use your custom converter:
@@ -143,9 +148,11 @@ And that's all, you just need to use your custom converter:
   }
 ```
 ```js
-  new ModelMapper("my.package").set(person)
+  ModelMappr mapper = new ModelMapper("my.package");
+  
+  mapper.set(person)
     .field("dogId", "dog")
-    .convertFieldToType("dog", MyConverter.class)
+    .convertFieldToType("dog", Dog.class)
     .getTransaction().mapTo(PersonDto.class);
 ```
 
