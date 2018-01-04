@@ -11,5 +11,12 @@
 
     <artifactId>core-j7</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.ermdev.mapfierj</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>

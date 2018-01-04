@@ -167,7 +167,6 @@ public class ModelMapper {
                         Type types[] = (((ParameterizedType)
                                 converter.getGenericSuperclass()).getActualTypeArguments());
                         outer:for(Type generic : types) {
-                            Iterator iterator = possibleTypes.entrySet().iterator();
                             for(Map.Entry entry : possibleTypes.entrySet()) {
                                 if (entry.getKey().equals(generic.toString())) {
                                     try {
@@ -179,6 +178,7 @@ public class ModelMapper {
                                             map.put(field, instance);
                                             break outer;
                                         }
+                                        throw new TypeException("No valid TypeConverter found");
                                     } catch (Exception e) {
                                         map.remove(field);
                                     }

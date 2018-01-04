@@ -19,6 +19,11 @@
 
         <dependency>
             <groupId>io.ermdev.mapfierj</groupId>
+            <artifactId>core-j7</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ermdev.mapfierj</groupId>
             <artifactId>typeconverter</artifactId>
         </dependency>
     </dependencies>

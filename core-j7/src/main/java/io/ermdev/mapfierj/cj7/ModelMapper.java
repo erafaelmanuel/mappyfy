@@ -1,5 +1,8 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.cj7;
 
+import io.ermdev.mapfierj.TypeConverter;
+import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeException;
 import org.reflections.Reflections;
 
 import java.lang.reflect.ParameterizedType;
@@ -94,76 +97,75 @@ public class ModelMapper {
 
     public ModelMapper convertFieldToType(String field, Class<?> type) {
         final Object o = map.get(field);
+        final Set<Class<? extends TypeConverterAdapter>> filteredConverter1 = new HashSet<>();
+        final Set<Class<? extends TypeConverterAdapter>> filteredConverter2 = new HashSet<>();
         final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
 
         if (o != null) {
             try {
                 map.remove(field);
-                boolean isExists=converters.parallelStream()
-                        .filter(converter -> {
-                            boolean isMatch=false;
-                            Type types[] = (((ParameterizedType)
-                                    converter.getGenericSuperclass()).getActualTypeArguments());
-                            if(types.length == 2) {
-                                for (int i = 0; i < 2; i++) {
-                                    if (types[i].equals(type)) {
-                                        isMatch = true;
-                                        switch (i) {
-                                            case 0:
-                                                possibleTypes.put(types[i+1].toString(), converter);
-                                                break;
-                                            case 1:
-                                                possibleTypes.put(types[i-1].toString(), converter);
-                                                break;
-                                        }
+                boolean isExists=false;
+                for(Class<? extends TypeConverterAdapter> converter: converters) {
+                    Type types[] = (((ParameterizedType)
+                            converter.getGenericSuperclass()).getActualTypeArguments());
+                    if (types.length == 2) {
+                        for (int i = 0; i < 2; i++) {
+                            if (types[i].equals(type)) {
+                                filteredConverter1.add(converter);
+                                switch (i) {
+                                    case 0:
+                                        possibleTypes.put(types[i + 1].toString(), converter);
                                         break;
-                                    }
+                                    case 1:
+                                        possibleTypes.put(types[i - 1].toString(), converter);
+                                        break;
                                 }
+                                break;
                             }
-                            return isMatch;
-                        })
-                        .filter(converter -> {
-                            boolean isMatch=false;
-                            Type types[] = (((ParameterizedType)
-                                    converter.getGenericSuperclass()).getActualTypeArguments());
-                            for(Type generic : types) {
-                                if(generic.equals(o.getClass())) {
-                                    isMatch=true;
-                                    break;
-                                }
-                            }
-                            return isMatch;
-                        })
-                        .anyMatch(converter->{
-                            try {
-                                if (converter.getAnnotation(TypeConverter.class) != null) {
-                                    TypeConverterAdapter adapter = converter.newInstance();
-                                    Object instance = adapter.convert(o);
-                                    if (!instance.getClass().equals(type))
-                                        throw new TypeException("Type not match");
-                                    map.put(field, instance);
-                                    return true;
-                                }
-                                throw new TypeException("No valid TypeConverter found");
-                            } catch (Exception e) {
-                                map.remove(field);
-                                return false;
-                            }
-                        });
+                        }
+                    }
+                }
+                for(Class<? extends TypeConverterAdapter> converter: filteredConverter1) {
+                    Type types[] = (((ParameterizedType)
+                            converter.getGenericSuperclass()).getActualTypeArguments());
+                    for(Type generic : types) {
+                        if(generic.equals(o.getClass())) {
+                            filteredConverter2.add(converter);
+                            break;
+                        }
+                    }
+                }
+                for(Class<? extends TypeConverterAdapter> converter: filteredConverter2) {
+                    try {
+                        if (converter.getAnnotation(TypeConverter.class) != null) {
+                            TypeConverterAdapter adapter = converter.newInstance();
+                            Object instance = adapter.convert(o);
+                            if (!instance.getClass().equals(type))
+                                throw new TypeException("Type not match");
+                            map.put(field, instance);
+                            isExists = true;
+                        }
+                    } catch (Exception e) {
+                        map.remove(field);
+                        isExists = false;
+                    }
+                }
+
                 if(!isExists) {
-                    converters.parallelStream().filter(converter -> {
-                        boolean isMatch=false;
+                    filteredConverter1.clear();
+                    filteredConverter2.clear();
+
+                    for(Class<? extends TypeConverterAdapter> converter: converters) {
                         Type types[] = (((ParameterizedType)
                                 converter.getGenericSuperclass()).getActualTypeArguments());
                         for(Type generic : types) {
                             if(generic.equals(o.getClass())) {
-                                isMatch=true;
+                                filteredConverter1.add(converter);
                                 break;
                             }
                         }
-                        return isMatch;
-                    })
-                    .forEach(converter -> {
+                    }
+                    for(Class<? extends TypeConverterAdapter> converter: filteredConverter1) {
                         Type types[] = (((ParameterizedType)
                                 converter.getGenericSuperclass()).getActualTypeArguments());
                         outer:for(Type generic : types) {
@@ -185,7 +187,7 @@ public class ModelMapper {
                                 }
                             }
                         }
-                    });
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

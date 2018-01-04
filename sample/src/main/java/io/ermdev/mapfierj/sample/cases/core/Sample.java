@@ -1,6 +1,6 @@
 package io.ermdev.mapfierj.sample.cases.core;
 
-import io.ermdev.mapfierj.ModelMapper;
+import io.ermdev.mapfierj.cj7.ModelMapper;
 import io.ermdev.mapfierj.sample.model.Person;
 import io.ermdev.mapfierj.sample.model.PersonDto;
 import io.ermdev.mapfierj.sample.model.PetDto;

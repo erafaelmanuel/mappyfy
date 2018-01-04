@@ -1,4 +1,6 @@
-package io.ermdev.mapfierj;
+package io.ermdev.mapfierj.cj7;
+
+import io.ermdev.mapfierj.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -78,7 +80,8 @@ public class Transaction {
 
     public Transaction(Object o, List<Class<?>> classes) throws Exception {
         if (o != null && !isRepeater(classes, o.getClass())) {
-            classes.parallelStream().forEach(this.repeaterClasses::add);
+            repeaterClasses.addAll(classes);
+
             if (o.getClass().getAnnotation(NoRepeat.class) != null) {
                 this.repeaterClasses.add(o.getClass());
             }
@@ -379,12 +382,23 @@ public class Transaction {
     }
 
     private boolean isRepeater(List<Class<?>> classes, Class<?> c) {
-        return classes != null && classes.parallelStream().anyMatch(item -> item.equals(c));
+        boolean anyMatch = false;
+        if(classes != null) {
+            for (Class<?> item : classes) {
+                if (item.equals(c))
+                    anyMatch = true;
+            }
+        }
+        return anyMatch;
     }
 
     private boolean isExcluded(Field field) {
-        return field.getAnnotation(Excluded.class) != null || excludedFields.parallelStream()
-                .anyMatch(item -> item.trim().equals(field.getName()));
+        boolean anyMatch = false;
+        for (String item : excludedFields) {
+            if (item.equals(field.getName()))
+                anyMatch = true;
+        }
+        return field.getAnnotation(Excluded.class) != null || anyMatch;
     }
 
     public HashMap<String, Object> getMap() {
