@@ -12,7 +12,6 @@
         <module>core</module>
         <module>typeconverter</module>
         <module>sample</module>
-        <module>core-j7</module>
     </modules>
 
     <dependencies>
@@ -34,12 +33,6 @@
             <dependency>
                 <groupId>io.ermdev.mapfierj</groupId>
                 <artifactId>core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.ermdev.mapfierj</groupId>
-                <artifactId>core-j7</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

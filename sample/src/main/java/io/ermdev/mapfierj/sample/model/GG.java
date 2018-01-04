@@ -7,8 +7,14 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class GG extends TypeConverterAdapter<Integer, PetDto>{
 
+    public GG() {}
+
+    public GG(Object obj) {
+        super(obj);
+    }
+
     @Override
-    public Object convert(Object o) throws TypeException {
+    public Object convert() throws TypeException {
         if(o instanceof Integer)
             return convertTo((Integer) o);
         else

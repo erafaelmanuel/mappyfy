@@ -137,8 +137,9 @@ public class ModelMapper {
                         .anyMatch(converter->{
                             try {
                                 if (converter.getAnnotation(TypeConverter.class) != null) {
-                                    TypeConverterAdapter adapter = converter.newInstance();
-                                    Object instance = adapter.convert(o);
+                                    TypeConverterAdapter adapter = converter
+                                            .getDeclaredConstructor(Object.class).newInstance(o);
+                                    Object instance = adapter.convert();
                                     if (!instance.getClass().equals(type))
                                         throw new TypeException("Type not match");
                                     map.put(field, instance);
@@ -171,10 +172,14 @@ public class ModelMapper {
                                 if (entry.getKey().equals(generic.toString())) {
                                     try {
                                         if (converter.getAnnotation(TypeConverter.class) != null) {
-                                            TypeConverterAdapter adapter1 = converter.newInstance();
+                                            TypeConverterAdapter adapter1 = converter
+                                                    .getDeclaredConstructor(Object.class)
+                                                    .newInstance(o);
                                             TypeConverterAdapter adapter2 =
-                                                    (TypeConverterAdapter) ((Class<?>) entry.getValue()).newInstance();
-                                            Object instance = adapter2.convert(adapter1.convert(o));
+                                                    (TypeConverterAdapter) ((Class<?>) entry.getValue())
+                                                            .getDeclaredConstructor(Object.class)
+                                                            .newInstance(adapter1.convert());
+                                            Object instance = adapter2.convert();
                                             map.put(field, instance);
                                             break outer;
                                         }
@@ -195,12 +200,13 @@ public class ModelMapper {
         return this;
     }
 
+    @Deprecated
     public ModelMapper converter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
             try {
-                Object instance = adapter.convert(o);
+                Object instance = adapter.getClass().getDeclaredConstructor(Object.class).newInstance(o).convert();
                 if (instance != null) {
                     map.put(field, instance);
                 }
@@ -216,8 +222,8 @@ public class ModelMapper {
         map.remove(field);
         if (o != null) {
             try {
-                TypeConverterAdapter adapter = c.newInstance();
-                Object instance = adapter.convert(o);
+                TypeConverterAdapter adapter = c.getDeclaredConstructor(Object.class).newInstance(o);
+                Object instance = adapter.convert();
                 if (instance != null) {
                     map.put(field, instance);
                 }

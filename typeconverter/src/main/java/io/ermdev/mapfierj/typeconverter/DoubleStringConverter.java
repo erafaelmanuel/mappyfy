@@ -7,8 +7,12 @@ import io.ermdev.mapfierj.TypeException;
 @TypeConverter
 public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {
 
+    public DoubleStringConverter(Object obj) {
+        super(obj);
+    }
+
     @Override
-    public Object convert(Object o) throws TypeException {
+    public Object convert() throws TypeException {
         if(o != null) {
             if(o instanceof Double)
                 return convertTo((Double) o);
