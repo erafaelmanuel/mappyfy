@@ -172,7 +172,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.5.0'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.5.3'
 }
 ```
 
@@ -192,7 +192,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.5.0</version>
+    <version>v1.0-beta.5.3</version>
   </dependency>
 </dependencies>
 ```
