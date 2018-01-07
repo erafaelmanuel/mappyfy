@@ -10,5 +10,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface ConvertTo {
 
-    Class<? extends TypeConverterAdapter> value();
+    Class<?> value();
+
+    Class<? extends TypeConverterAdapter> converter() default NoConverter.class;
+
+    String scanPackages() default "";
 }

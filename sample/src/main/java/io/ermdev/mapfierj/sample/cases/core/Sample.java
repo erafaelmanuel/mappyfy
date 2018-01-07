@@ -15,7 +15,7 @@ public class Sample {
                 .field("petId", "pet")
                 //.exclude("pet")
                 //.exclude("age")
-                .converter("pet", GG.class)
+                //.converter("pet", GG.class)
                 .convertFieldToType("height", Double.class)
                 .convertFieldToType("age", Integer.class)
                 .getTransaction().mapTo(PersonDto.class);

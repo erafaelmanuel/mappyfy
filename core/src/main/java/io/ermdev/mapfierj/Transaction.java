@@ -46,6 +46,8 @@ public class Transaction {
                     if(convertTo != null) {
                         try {
                             ModelMapper mapper = new ModelMapper();
+                            mapper.setTransaction(this);
+                            mapper.convertFieldToType(fieldName, convertTo.value());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
