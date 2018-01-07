@@ -45,9 +45,11 @@ public class Transaction {
                 if(value != null) {
                     if(convertTo != null) {
                         try {
-                            ModelMapper mapper = new ModelMapper();
-                            mapper.setTransaction(this);
-                            mapper.convertFieldToType(fieldName, convertTo.value());
+                            Converter converter = new Converter();
+                            converter.scanPackages(convertTo.scanPackages());
+                            if((value = converter.apply(value, convertTo.value())) != null) {
+                                fieldsToMap.put(fieldName, value);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -111,14 +113,18 @@ public class Transaction {
                     if (value instanceof Collection || maps.collection()) {
                         final Collection<?> collection = (Collection) value;
                         if (maps.type().equals(List.class))
-                            fieldsToMap.put(fieldName, mapList(collection, maps.value(), true, this.repeaterClasses));
+                            fieldsToMap.put(fieldName, mapList(collection, maps.value(),
+                                    true, this.repeaterClasses));
                         else if (maps.type().equals(Set.class))
-                            fieldsToMap.put(fieldName, mapSet(collection, maps.value(), true, this.repeaterClasses));
+                            fieldsToMap.put(fieldName, mapSet(collection, maps.value(),
+                                    true, this.repeaterClasses));
                         else {
                             if (field.getType().equals(List.class))
-                                fieldsToMap.put(fieldName, mapList(collection, maps.value(), true, this.repeaterClasses));
+                                fieldsToMap.put(fieldName, mapList(collection, maps.value(),
+                                        true, this.repeaterClasses));
                             else if (field.getType().equals(Set.class))
-                                fieldsToMap.put(fieldName, mapSet(collection, maps.value(), true, this.repeaterClasses));
+                                fieldsToMap.put(fieldName, mapSet(collection, maps.value(),
+                                        true, this.repeaterClasses));
                         }
                     } else {
                         if (classes.size() > 0) {

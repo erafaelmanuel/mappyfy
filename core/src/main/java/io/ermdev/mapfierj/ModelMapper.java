@@ -18,10 +18,12 @@ public class ModelMapper {
         converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
     }
 
-    public ModelMapper(final String dir) {
+    public ModelMapper(final String scanPackages) {
         this();
-        final Reflections reflections = new Reflections(dir);
-        converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+        if(!scanPackages.trim().isEmpty()) {
+            final Reflections reflections = new Reflections(scanPackages);
+            converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+        }
     }
 
     public ModelMapper set(Object o) {
@@ -242,5 +244,6 @@ public class ModelMapper {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
+        this.map = transaction.getMap();
     }
 }

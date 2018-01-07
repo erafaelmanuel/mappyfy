@@ -12,13 +12,13 @@ public class Sample {
     public void test() {
         ModelMapper mapper = new ModelMapper("io.ermdev.mapfierj.sample.model");
         PersonDto person = mapper.set(new Person("Rafael", (short) 22, (short) 5))
-                .field("petId", "pet")
+                //.field("petId", "pet")
                 //.exclude("pet")
                 //.exclude("age")
                 //.converter("pet", GG.class)
                 .convertFieldToType("height", Double.class)
                 .convertFieldToType("age", Integer.class)
-                .getTransaction().mapTo(PersonDto.class);
+                .getTransaction().mapAllTo(PersonDto.class);
         System.out.println(person);
     }
 }
