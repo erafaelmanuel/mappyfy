@@ -16,9 +16,9 @@ public class Sample {
                 //.exclude("pet")
                 //.exclude("age")
                 //.converter("pet", GG.class)
-                .convertFieldToType("height", Double.class)
-                .convertFieldToType("age", Integer.class)
-                .getTransaction().mapAllTo(PersonDto.class);
+//                .convertFieldToType("height", Double.class)
+//                .convertFieldToType("age", Integer.class)
+                .getTransaction().mapTo(PersonDto.class);
         System.out.println(person);
     }
 }

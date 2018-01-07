@@ -6,7 +6,11 @@ import io.ermdev.mapfierj.FieldName;
 public class Person {
 
     public String name;
+
+    @ConvertTo(value = Integer.class, scanPackages = "io.ermdev.mapfierj.sample.model")
     public short age;
+
+    @ConvertTo(value = Double.class, scanPackages = "io.ermdev.mapfierj.sample.model")
     public Short height;
 
     @FieldName("pet")
