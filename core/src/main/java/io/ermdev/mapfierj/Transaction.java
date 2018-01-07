@@ -45,9 +45,16 @@ public class Transaction {
                     if(convertToAnnotation != null) {
                         try {
                             Converter converter = new Converter();
-                            converter.scanPackages(convertToAnnotation.scanPackages());
-                            if((value = converter.apply(value, convertToAnnotation.value())) != null) {
-                                fieldsToMap.put(fieldName, value);
+                            if(convertToAnnotation.converter().equals(NoConverter.class)) {
+                                converter.scanPackages(convertToAnnotation.scanPackages());
+                                if ((value = converter.apply(value, convertToAnnotation.value())) != null) {
+                                    fieldsToMap.put(fieldName, value);
+                                }
+                            } else {
+                                if ((value = converter.applyWithConverter(value,
+                                        convertToAnnotation.converter())) != null) {
+                                    fieldsToMap.put(fieldName, value);
+                                }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -111,14 +118,17 @@ public class Transaction {
 
                 if (value != null) {
                     if(convertToAnnotation != null) {
-                        try {
-                            Converter converter = new Converter();
+                        Converter converter = new Converter();
+                        if(convertToAnnotation.converter().equals(NoConverter.class)) {
                             converter.scanPackages(convertToAnnotation.scanPackages());
-                            if((value = converter.apply(value, convertToAnnotation.value())) != null) {
+                            if ((value = converter.apply(value, convertToAnnotation.value())) != null) {
                                 fieldsToMap.put(fieldName, value);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } else {
+                            if ((value = converter.applyWithConverter(value,
+                                    convertToAnnotation.converter())) != null) {
+                                fieldsToMap.put(fieldName, value);
+                            }
                         }
                     }
                     if (mapToAnnotation != null) {

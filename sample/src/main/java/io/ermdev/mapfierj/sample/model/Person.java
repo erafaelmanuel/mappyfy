@@ -14,7 +14,7 @@ public class Person {
     public Short height;
 
     @FieldName("pet")
-    @ConvertTo(value = PetDto.class, scanPackages = "io.ermdev.mapfierj.sample.model")
+    @ConvertTo(value = PetDto.class, converter = GG.class)
     public int petId;
 
     public Person(String name, Short age, Short height) {

@@ -22,7 +22,6 @@ public class Converter {
     }
 
     public void scanPackages(String packages) {
-        final String dir = "io.ermdev.mapfierj.typeconverter";
         final Reflections reflections = new Reflections(packages);
         convertersScanned.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
     }
@@ -132,5 +131,20 @@ public class Converter {
             }
         }
         return newInstance;
+    }
+
+    public Object applyWithConverter(final Object o, Class<? extends TypeConverterAdapter> adapterClass) {
+        if(o != null && adapterClass != null) {
+            try {
+                TypeConverterAdapter adapter = adapterClass.getDeclaredConstructor(Object.class).newInstance(o);
+                newInstance = adapter.convert();
+                if (newInstance != null) {
+                    return newInstance;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
