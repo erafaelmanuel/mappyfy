@@ -14,5 +14,5 @@ public @interface ConvertTo {
 
     Class<? extends TypeConverterAdapter> converter() default NoConverter.class;
 
-    String scanPackages() default "";
+    String[] scanPackages() default "";
 }
