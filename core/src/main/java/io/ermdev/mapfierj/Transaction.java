@@ -171,15 +171,15 @@ public class Transaction {
         }
     }
 
-    private <T> List<T> mapList(Collection collection, Class<T> c, boolean hasMapTo, List<Class<?>> classes) {
+    private <T> List<T> mapList(Collection collection, Class<T> c, boolean hasMapTo, List<Class<?>> repeaterClasses) {
         List<T> list = new ArrayList<>();
         try {
             if (collection == null)
                 throw new RuntimeException("Collection must not null");
             if (hasMapTo) {
                 for (Object o : collection) {
-                    if (classes != null && classes.size() > 0) {
-                        Transaction transaction = new Transaction(o, classes);
+                    if (repeaterClasses != null && repeaterClasses.size() > 0) {
+                        Transaction transaction = new Transaction(o, repeaterClasses);
                         transaction.setExcludedField(getExcludedField());
 
                         T instance = transaction.mapTo(c);
@@ -196,8 +196,8 @@ public class Transaction {
                 }
             } else {
                 for (Object o : collection) {
-                    if (classes != null && classes.size() > 0) {
-                        Transaction transaction = new Transaction(o, classes);
+                    if (repeaterClasses != null && repeaterClasses.size() > 0) {
+                        Transaction transaction = new Transaction(o, repeaterClasses);
                         transaction.setExcludedField(getExcludedField());
 
                         T instance = transaction.mapAllTo(c);
@@ -220,15 +220,15 @@ public class Transaction {
         }
     }
 
-    private <T> Set<T> mapSet(Collection collection, Class<T> c, boolean hasMapTo, List<Class<?>> classes) {
+    private <T> Set<T> mapSet(Collection collection, Class<T> c, boolean hasMapTo, List<Class<?>> repeaterClasses) {
         Set<T> set = new HashSet<>();
         try {
             if (collection == null)
                 throw new RuntimeException("Collection must not null");
             if (hasMapTo) {
                 for (Object o : collection) {
-                    if (classes != null && classes.size() > 0) {
-                        Transaction transaction = new Transaction(o, classes);
+                    if (repeaterClasses != null && repeaterClasses.size() > 0) {
+                        Transaction transaction = new Transaction(o, repeaterClasses);
                         transaction.setExcludedField(getExcludedField());
 
                         T instance = transaction.mapTo(c);
@@ -245,8 +245,8 @@ public class Transaction {
                 }
             } else {
                 for (Object o : collection) {
-                    if (classes != null && classes.size() > 0) {
-                        Transaction transaction = new Transaction(o, classes);
+                    if (repeaterClasses != null && repeaterClasses.size() > 0) {
+                        Transaction transaction = new Transaction(o, repeaterClasses);
                         transaction.setExcludedField(getExcludedField());
 
                         T instance = transaction.mapAllTo(c);
@@ -266,6 +266,49 @@ public class Transaction {
         } catch (Exception e) {
             e.printStackTrace();
             return set;
+        }
+    }
+
+    private <T> Collection<T> mapCollection(final Collection collection, Class<T> c, boolean hasMapTo,
+                                            List<Class<?>> repeaterClasses, Class<? extends Collection> typeOfCollection) {
+        final Collection<T> list;
+        try {
+            switch (typeOfCollection.toString()) {
+                case TypeUtil.LIST :
+                    list = new ArrayList<>();
+                    break;
+                case TypeUtil.ARRAY_LIST :
+                    list = new ArrayList<>();
+                    break;
+                default:
+                        list = new ArrayList<>();
+            }
+            if (collection == null)
+                throw new RuntimeException("Collection must not null");
+
+            for (Object o : collection) {
+                final Transaction transaction;
+                final T instance;
+
+                if (repeaterClasses != null && repeaterClasses.size() > 0) {
+                    transaction = new Transaction(o, repeaterClasses);
+                    transaction.setExcludedField(getExcludedField());
+                } else {
+                    transaction = new Transaction(o);
+                    transaction.setExcludedField(getExcludedField());
+                }
+                if(hasMapTo) {
+                    instance = transaction.mapTo(c);
+                } else {
+                    instance = transaction.mapAllTo(c);
+                }
+                if (instance != null)
+                    list.add(instance);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -295,7 +338,7 @@ public class Transaction {
                         field.set(instance, value);
                     } else if (value != null) {
                         if (!field.getType().equals(value.getClass())) {
-                            if (!TypeChecker.isPrimitive(field.getType())) {
+                            if (!TypeUtil.isPrimitive(field.getType())) {
                                 if (repeaterClasses != null && repeaterClasses.size() > 0) {
                                     Transaction transaction = new Transaction(value , repeaterClasses);
                                     transaction.setExcludedField(getExcludedField());
@@ -345,7 +388,7 @@ public class Transaction {
                         field.set(o, value);
                     } else if (value != null) {
                         if (!field.getType().equals(value.getClass())) {
-                            if (!TypeChecker.isPrimitive(field.getType())) {
+                            if (!TypeUtil.isPrimitive(field.getType())) {
                                 if (repeaterClasses != null && repeaterClasses.size() > 0) {
                                     Transaction transaction = new Transaction(value , repeaterClasses);
                                     transaction.setExcludedField(getExcludedField());

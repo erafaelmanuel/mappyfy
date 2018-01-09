@@ -1,8 +1,13 @@
 package io.ermdev.mapfierj;
 
-public class TypeChecker {
+import java.util.List;
+
+public class TypeUtil {
 
     private static final String[] PRIMITIVE_TYPES = {"byte", "short", "int", "long", "float", "double","char", "boolean"};
+
+    public static final String LIST = "interface java.util.List";
+    public static final String ARRAY_LIST = "class java.util.ArrayList";
 
     public static boolean compare(Class<?> primitive, Class<?> reference) {
         if(primitive == null || reference == null) return false;
