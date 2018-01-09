@@ -6,6 +6,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
  
 * Map complex and deeply structured objects
 * Create converters for complete control over the mapping of a specific set of objects anywhere in the object graph
+* Easy to use
 
 # Usage
 
@@ -73,6 +74,18 @@ The code below will search the converter for the field that match the type and a
 ```
 
 ### [Annotations]()
+#### @ConvertTo(value=[class])
+Convert a field to a certain type
+* value
+* converter
+* scanPackages
+```js
+  @ConvertTo(Integer.class)
+  private Pet pet;
+
+  @ConvertTo(value = Pet.class, converter=IntegerPetConverter.class)
+  private int petId;
+```
 #### @Excluded
 Exclude the field of your dto class
 ```js
