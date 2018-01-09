@@ -21,9 +21,13 @@ public class Converter {
         converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
     }
 
-    public void scanPackages(String packages) {
-        final Reflections reflections = new Reflections(packages);
-        convertersScanned.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+    public void scanPackages(String... packages) {
+        for(String item : packages) {
+            if(item != null && !item.trim().isEmpty()) {
+                final Reflections reflections = new Reflections(item);
+                convertersScanned.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+            }
+        }
     }
 
     public Object apply(final Object o, Class<?> type) {
