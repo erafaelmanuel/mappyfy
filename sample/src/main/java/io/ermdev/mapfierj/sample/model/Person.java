@@ -2,6 +2,7 @@ package io.ermdev.mapfierj.sample.model;
 
 import io.ermdev.mapfierj.ConvertTo;
 import io.ermdev.mapfierj.FieldName;
+import io.ermdev.mapfierj.sample.cases.typeconverter.IntegerCarConverter;
 
 public class Person {
 
@@ -17,9 +18,14 @@ public class Person {
     @ConvertTo(value = PetDto.class, converter = GG.class)
     public int petId;
 
-    public Person(String name, Short age, Short height) {
+    @FieldName("car")
+    @ConvertTo(value = Car.class, converter = IntegerCarConverter.class)
+    public int carId;
+
+    public Person(String name, short age, Short height, int carId) {
         this.name = name;
         this.age = age;
         this.height = height;
+        this.carId = carId;
     }
 }

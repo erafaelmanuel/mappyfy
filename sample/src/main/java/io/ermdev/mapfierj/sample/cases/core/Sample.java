@@ -15,7 +15,7 @@ public class Sample {
     public void test() {
         System.out.println(ArrayList.class);
         ModelMapper mapper = new ModelMapper("io.ermdev.mapfierj.sample.model");
-        PersonDto person = mapper.set(new Person("Rafael", (short) 22, (short) 5))
+        PersonDto person = mapper.set(new Person("Rafael", (short) 22, (short) 5, (int) (Math.random() * 10) + 1))
                 //.field("petId", "pet")
                 //.exclude("pet")
                 //.exclude("age")
