@@ -1,8 +1,9 @@
 package io.ermdev.mapfierj;
 
-public class NoConverter extends TypeConverterAdapter<Object, Object> {
+@TypeConverter
+public class EmptyConverter extends TypeConverterAdapter<Object, Object> {
 
-    public NoConverter(Object obj) {
+    public EmptyConverter(Object obj) {
         super(obj);
     }
 

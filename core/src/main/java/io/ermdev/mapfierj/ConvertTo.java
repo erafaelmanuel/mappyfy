@@ -12,7 +12,7 @@ public @interface ConvertTo {
 
     Class<?> value();
 
-    Class<? extends TypeConverterAdapter> converter() default NoConverter.class;
+    Class<? extends TypeConverterAdapter> converter() default EmptyConverter.class;
 
     String[] scanPackages() default "";
 }

@@ -13,11 +13,11 @@ public class Converter {
 
     private final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
     private final Set<Class<? extends TypeConverterAdapter>> convertersScanned = new HashSet<>();
+    private final String BASE_PACKAGE = "io.ermdev.mapfierj.typeconverter";
     private Object newInstance;
 
     public Converter() {
-        final String packages = "io.ermdev.mapfierj.typeconverter";
-        final Reflections reflections = new Reflections(packages);
+        final Reflections reflections = new Reflections(BASE_PACKAGE);
         converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
     }
 
