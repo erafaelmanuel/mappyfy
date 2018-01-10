@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.sample.model;
+package io.ermdev.mapfierj.sample.sample1;
 
 public class Car {
 

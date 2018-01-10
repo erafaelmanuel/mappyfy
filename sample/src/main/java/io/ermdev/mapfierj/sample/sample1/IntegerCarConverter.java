@@ -1,10 +1,8 @@
-package io.ermdev.mapfierj.sample.cases.typeconverter;
+package io.ermdev.mapfierj.sample.sample1;
 
 import io.ermdev.mapfierj.TypeConverter;
 import io.ermdev.mapfierj.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
-import io.ermdev.mapfierj.sample.CarRepository;
-import io.ermdev.mapfierj.sample.model.Car;
 
 @TypeConverter
 public class IntegerCarConverter extends TypeConverterAdapter<Integer, Car>{

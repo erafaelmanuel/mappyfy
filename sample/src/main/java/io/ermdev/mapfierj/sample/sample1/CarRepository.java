@@ -1,6 +1,4 @@
-package io.ermdev.mapfierj.sample;
-
-import io.ermdev.mapfierj.sample.model.Car;
+package io.ermdev.mapfierj.sample.sample1;
 
 public class CarRepository {
 
@@ -9,7 +7,6 @@ public class CarRepository {
         try {
             return new Car(id, cars[id-1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
             return null;
         }
     }
