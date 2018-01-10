@@ -51,7 +51,8 @@ public class Transaction {
                                     fieldsToMap.put(fieldName, value);
                                 }
                             } else {
-                                if ((value = converter.set(value).adapter(cta.converter()).convert()) != null) {
+                                Converter.Session session = converter.openSession();
+                                if ((value = session.set(value).adapter(cta.converter()).convert()) != null) {
                                     fieldsToMap.put(fieldName, value);
                                 }
                             }
@@ -124,7 +125,8 @@ public class Transaction {
                                 fieldsToMap.put(fieldName, value);
                             }
                         } else {
-                            if ((value = converter.set(value).adapter(cta.converter()).convert()) != null) {
+                            Converter.Session session = converter.openSession();
+                            if ((value = session.set(value).adapter(cta.converter()).convert()) != null) {
                                 fieldsToMap.put(fieldName, value);
                             }
                         }

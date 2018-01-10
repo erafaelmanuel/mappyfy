@@ -14,9 +14,7 @@ public class Converter {
     private final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
     private final Set<Class<? extends TypeConverterAdapter>> convertersScanned = new HashSet<>();
     private final String BASE_PACKAGE = "io.ermdev.mapfierj.typeconverter";
-
     private Object o;
-    private TypeConverterAdapter adapter;
 
     public Converter() {
         final Reflections reflections = new Reflections(BASE_PACKAGE);
@@ -144,43 +142,52 @@ public class Converter {
         return this.o;
     }
 
-    public Converter set(Object newInstance) {
-        o = newInstance;
-        return this;
+    public Session openSession() {
+        return new Session();
     }
 
-    public Converter adapter(TypeConverterAdapter adapter) {
-        if(o != null) {
-            this.adapter = adapter;
-            this.adapter.setObject(o);
+    class Session {
+        private Object o;
+        private TypeConverterAdapter adapter;
+
+        public Session set(Object newInstance) {
+            o = newInstance;
+            return this;
         }
-        return this;
-    }
 
-    public Converter adapter(Class<? extends TypeConverterAdapter> adapterClass) {
-        if(o != null) {
-            try {
-                adapter = adapterClass.getDeclaredConstructor(Object.class).newInstance(o);
-                adapter.setObject(o);
-            } catch (Exception e) {
-                e.printStackTrace();
+        public Session adapter(TypeConverterAdapter adapter) {
+            if(o != null) {
+                this.adapter = adapter;
+                this.adapter.setObject(o);
             }
+            return this;
         }
-        return this;
-    }
 
-    public Object convert() {
-        if(adapter != null) {
-            try {
-                o = adapter.convert();
-                if (o != null) {
-                    return o;
+        public Session adapter(Class<? extends TypeConverterAdapter> adapterClass) {
+            if(o != null) {
+                try {
+                    adapter = adapterClass.getDeclaredConstructor(Object.class).newInstance(o);
+                    adapter.setObject(o);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            return this;
         }
-        adapter = null;
-        return null;
+
+        public Object convert() {
+            if(adapter != null) {
+                try {
+                    o = adapter.convert();
+                    if (o != null) {
+                        return o;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            adapter = null;
+            return null;
+        }
     }
 }
