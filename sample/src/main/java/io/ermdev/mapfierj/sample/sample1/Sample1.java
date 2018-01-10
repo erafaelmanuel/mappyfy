@@ -12,9 +12,10 @@ public class Sample1 {
 
     @Test
     public void simpleMapper() {
+        int carId = (int) (Math.random() * 10) + 1;
+
         SimpleMapper mapper = new SimpleMapper();
 
-        final int carId = (int) (Math.random() * 10) + 1;
         Person person = new Person("Rafael", 18, carId);
 
         PersonDto personDto = mapper.set(person).mapTo(PersonDto.class);
@@ -34,7 +35,7 @@ public class Sample1 {
         PersonDto personDto = mapper.set(person)
                 .field("name", "fullName")
                 .field("carId", "car")
-                .converter("car", IntegerCarConverter.class)
+                .convertFieldToType("car", Car.class)
                 .getTransaction().mapTo(PersonDto.class);
 
         logger.info("CAR ID : " + carId);

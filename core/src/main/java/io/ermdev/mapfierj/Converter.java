@@ -14,7 +14,9 @@ public class Converter {
     private final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
     private final Set<Class<? extends TypeConverterAdapter>> convertersScanned = new HashSet<>();
     private final String BASE_PACKAGE = "io.ermdev.mapfierj.typeconverter";
-    private Object newInstance;
+
+    private Object o;
+    private TypeConverterAdapter adapter;
 
     public Converter() {
         final Reflections reflections = new Reflections(BASE_PACKAGE);
@@ -30,15 +32,20 @@ public class Converter {
         }
     }
 
-    public Object apply(final Object o, Class<?> type) {
-        if(o != null) {
+    public Object convertTo(final Object obj, Class<?> type) {
+        if(obj != null) {
             final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
             final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
 
             converters.addAll(this.converters);
             converters.addAll(convertersScanned);
             try {
-                boolean isExists=converters.parallelStream()
+                if(obj.getClass().equals(type)) {
+                    return obj;
+                } else {
+                    o = null;
+                }
+                boolean isExists = converters.parallelStream()
                         .filter(converter -> {
                             boolean isMatch=false;
                             Type types[] = (((ParameterizedType)
@@ -66,7 +73,7 @@ public class Converter {
                             Type types[] = (((ParameterizedType)
                                     converter.getGenericSuperclass()).getActualTypeArguments());
                             for(Type generic : types) {
-                                if(generic.equals(o.getClass())) {
+                                if(generic.equals(obj.getClass())) {
                                     isMatch=true;
                                     break;
                                 }
@@ -78,14 +85,14 @@ public class Converter {
                                 if (converter.getAnnotation(TypeConverter.class) != null) {
                                     TypeConverterAdapter adapter = converter
                                             .getDeclaredConstructor(Object.class).newInstance(o);
-                                    newInstance = adapter.convert();
-                                    if (!newInstance.getClass().equals(type))
+                                    this.o = adapter.convert();
+                                    if (!this.o.getClass().equals(type))
                                         throw new TypeException("Type not match");
                                     return true;
                                 }
                                 throw new TypeException("No valid TypeConverter found");
                             } catch (Exception e) {
-                                newInstance = null;
+                                this.o = null;
                                 return false;
                             }
                         });
@@ -95,7 +102,7 @@ public class Converter {
                         Type types[] = (((ParameterizedType)
                                 converter.getGenericSuperclass()).getActualTypeArguments());
                         for(Type generic : types) {
-                            if(generic.equals(o.getClass())) {
+                            if(generic.equals(obj.getClass())) {
                                 isMatch=true;
                                 break;
                             }
@@ -112,17 +119,17 @@ public class Converter {
                                                 if (converter.getAnnotation(TypeConverter.class) != null) {
                                                     TypeConverterAdapter adapter1 = converter
                                                             .getDeclaredConstructor(Object.class)
-                                                            .newInstance(o);
+                                                            .newInstance(obj);
                                                     TypeConverterAdapter adapter2 =
                                                             (TypeConverterAdapter) ((Class<?>) entry.getValue())
                                                                     .getDeclaredConstructor(Object.class)
                                                                     .newInstance(adapter1.convert());
-                                                    newInstance = adapter2.convert();
+                                                    this.o = adapter2.convert();
                                                     break outer;
                                                 }
                                                 throw new TypeException("No valid TypeConverter found");
                                             } catch (Exception e) {
-                                                newInstance = null;
+                                                this.o = null;
                                             }
                                         }
                                     }
@@ -131,24 +138,49 @@ public class Converter {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                newInstance = null;
+                this.o = null;
             }
         }
-        return newInstance;
+        return this.o;
     }
 
-    public Object applyWithConverter(final Object o, Class<? extends TypeConverterAdapter> adapterClass) {
-        if(o != null && adapterClass != null) {
+    public Converter set(Object newInstance) {
+        o = newInstance;
+        return this;
+    }
+
+    public Converter adapter(TypeConverterAdapter adapter) {
+        if(o != null) {
+            this.adapter = adapter;
+            this.adapter.setObject(o);
+        }
+        return this;
+    }
+
+    public Converter adapter(Class<? extends TypeConverterAdapter> adapterClass) {
+        if(o != null) {
             try {
-                TypeConverterAdapter adapter = adapterClass.getDeclaredConstructor(Object.class).newInstance(o);
-                newInstance = adapter.convert();
-                if (newInstance != null) {
-                    return newInstance;
+                adapter = adapterClass.getDeclaredConstructor(Object.class).newInstance(o);
+                adapter.setObject(o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return this;
+    }
+
+    public Object convert() {
+        if(adapter != null) {
+            try {
+                o = adapter.convert();
+                if (o != null) {
+                    return o;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        adapter = null;
         return null;
     }
 }

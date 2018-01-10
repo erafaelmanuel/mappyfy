@@ -47,12 +47,11 @@ public class Transaction {
                             final Converter converter = new Converter();
                             if(cta.converter().equals(EmptyConverter.class)) {
                                 converter.scanPackages(cta.scanPackages());
-                                if ((value = converter.apply(value, cta.value())) != null) {
+                                if ((value = converter.convertTo(value, cta.value())) != null) {
                                     fieldsToMap.put(fieldName, value);
                                 }
                             } else {
-                                if ((value = converter.applyWithConverter(value,
-                                        cta.converter())) != null) {
+                                if ((value = converter.set(value).adapter(cta.converter()).convert()) != null) {
                                     fieldsToMap.put(fieldName, value);
                                 }
                             }
@@ -121,12 +120,11 @@ public class Transaction {
                         Converter converter = new Converter();
                         if(cta.converter().equals(EmptyConverter.class)) {
                             converter.scanPackages(cta.scanPackages());
-                            if ((value = converter.apply(value, cta.value())) != null) {
+                            if ((value = converter.convertTo(value, cta.value())) != null) {
                                 fieldsToMap.put(fieldName, value);
                             }
                         } else {
-                            if ((value = converter.applyWithConverter(value,
-                                    cta.converter())) != null) {
+                            if ((value = converter.set(value).adapter(cta.converter()).convert()) != null) {
                                 fieldsToMap.put(fieldName, value);
                             }
                         }

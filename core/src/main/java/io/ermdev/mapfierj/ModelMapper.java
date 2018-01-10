@@ -87,7 +87,7 @@ public class ModelMapper {
     }
 
     public ModelMapper convertFieldToType(String field, Class<?> type) {
-        final Object instance = converter.apply( map.get(field), type);
+        final Object instance = converter.convertTo( map.get(field), type);
         if(instance != null)
             map.put(field, instance);
         else
