@@ -95,6 +95,7 @@ public class ModelMapper {
         return this;
     }
 
+    @Deprecated
     public ModelMapper converter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         map.remove(field);
@@ -114,6 +115,7 @@ public class ModelMapper {
         return this;
     }
 
+    @Deprecated
     public ModelMapper converter(String field, Class<? extends TypeConverterAdapter> c) {
         final Object o = map.get(field);
         map.remove(field);
