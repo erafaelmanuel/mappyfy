@@ -31,10 +31,12 @@ In order to map between these classes, we’ll need to first create a mapper.
 ```
 By default it will only map the same field name and data type
 ```js
- PersonDto person = mapper.set(new Person("Foo", 3)).mapTo(PersonDto.class);
+ Person person = new Person("Foo", 3);
+ PersonDto dto = mapper.set(person).mapTo(PersonDto.class);
 ```
 ```js
- List<PersonDto> personList = mapper.set(new ArrayList<Animal>()).mapToList(PersonDto.class);
+ Collection<Person> persons = new HashSet<>();
+ List<PersonDto> personDtos = mapper.set(persons).mapToList(PersonDto.class);
 ```
 In order to map one or more fields to a different type. Follow the example [here](#maptovalueclass), or just simply use:
 ```js
