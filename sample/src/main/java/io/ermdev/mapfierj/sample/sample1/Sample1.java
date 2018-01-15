@@ -28,10 +28,10 @@ public class Sample1 {
         final String PACKAGE_NAME = getClass().getPackage().toString();
         int carId = (int) (Math.random() * 10) + 1;
 
-        ModelMapper mapper = new ModelMapper(PACKAGE_NAME);
-        CarRepository repository = new CarRepository();
-        Person person = new Person("Rafael", 18, carId);
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConverter().scanPackages(PACKAGE_NAME);
 
+        Person person = new Person("Rafael", 18, carId);
         PersonDto personDto = mapper.set(person)
                 .field("name", "fullName")
                 .field("carId", "car")

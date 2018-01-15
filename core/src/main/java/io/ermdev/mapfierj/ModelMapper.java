@@ -95,16 +95,16 @@ public class ModelMapper {
         return this;
     }
 
-    @Deprecated
     public ModelMapper converter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
             try {
-                if(adapter.getObject() == null) {
-                    adapter.setObject(o);
-                }
-                Object instance = adapter.convert();
+                final Converter.Session session = converter.openSession();
+                session.set(o);
+                session.adapter(adapter);
+
+                Object instance = session.convert();
                 if (instance != null) {
                     map.put(field, instance);
                 }
@@ -115,14 +115,18 @@ public class ModelMapper {
         return this;
     }
 
-    @Deprecated
     public ModelMapper converter(String field, Class<? extends TypeConverterAdapter> c) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
             try {
-                TypeConverterAdapter adapter = c.getDeclaredConstructor(Object.class).newInstance(o);
-                Object instance = adapter.convert();
+                final TypeConverterAdapter adapter = c.getDeclaredConstructor(Object.class).newInstance(o);
+                final Converter.Session session = converter.openSession();
+
+                session.set(o);
+                session.adapter(adapter);
+
+                Object instance = session.convert();
                 if (instance != null) {
                     map.put(field, instance);
                 }
@@ -140,5 +144,9 @@ public class ModelMapper {
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
         this.map = transaction.getMap();
+    }
+
+    public Converter getConverter() {
+        return converter;
     }
 }
