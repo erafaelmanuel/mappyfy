@@ -95,7 +95,7 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper converter(String field, TypeConverterAdapter adapter) {
+    public ModelMapper convertFieldByConverter(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
@@ -115,7 +115,7 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper converter(String field, Class<? extends TypeConverterAdapter> c) {
+    public ModelMapper convertFieldByConverter(String field, Class<? extends TypeConverterAdapter> c) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
