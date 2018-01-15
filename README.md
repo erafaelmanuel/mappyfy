@@ -68,9 +68,9 @@ To explicitly exclude a field (of object within a collection) from mapping:
 Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
  
 ```js
- mapper.set(dog).converter("height", new IntegerStringConverter())
+ mapper.set(dog).converterFieldByConverter("height", new IntegerStringConverter())
 ```
-The code below will search the converter for the field that match the type and automatically convert it to the specific type. By default it will only look for built-in converters or the classes inside the package of ModelMapper you instantiated
+It searchs the converter that match the type and automatically convert it to the specific type. By default it will only look for built-in converters or the classes inside the packages that you've scanned.
 ```js
  mapper.set(dog).convertFieldToType("height", String.class)
 ```
@@ -187,7 +187,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.5.3'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.6.0'
 }
 ```
 
@@ -207,7 +207,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.5.3</version>
+    <version>v1.0-beta.6.0</version>
   </dependency>
 </dependencies>
 ```
