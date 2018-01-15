@@ -2,7 +2,7 @@ package io.ermdev.mapfierj;
 
 import java.lang.reflect.Field;
 
-public class FieldHelper {
+public class FieldUtil {
 
     public static String fieldName(Field field) {
         if(field == null) return "";

@@ -37,7 +37,7 @@ public class Transaction {
                     continue;
                 }
                 Object value = field.get(o);
-                final String fieldName = FieldHelper.fieldName(field);
+                final String fieldName = FieldUtil.fieldName(field);
                 final MapTo mta = field.getAnnotation(MapTo.class);
                 final ConvertTo cta = field.getAnnotation(ConvertTo.class);
 
@@ -112,7 +112,7 @@ public class Transaction {
                     continue;
                 }
                 Object value = field.get(o);
-                final String fieldName = FieldHelper.fieldName(field);
+                final String fieldName = FieldUtil.fieldName(field);
                 final MapTo mta = field.getAnnotation(MapTo.class);
                 final ConvertTo cta = field.getAnnotation(ConvertTo.class);
 
