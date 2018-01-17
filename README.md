@@ -13,7 +13,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 ### [SimpleMapper]()
 
 Suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
-```js
+```java
  public class Person {
   @FieldName("fullname")
   String name;
@@ -26,52 +26,52 @@ Suppose we have some instances of class Person that we’d like to map to instan
  }
 ```
 In order to map between these classes, we’ll need to first create a mapper.
-```js
+```java
  SimpleMapper mapper = new SimpleMapper();
 ```
 By default it will only map the same field name and data type
-```js
+```java
  Person person = new Person("Foo", 3);
  PersonDto dto = mapper.set(person).mapTo(PersonDto.class);
 ```
-```js
+```java
  Collection<Person> persons = new HashSet<>();
  List<PersonDto> personDtos = mapper.set(persons).mapToList(PersonDto.class);
 ```
 In order to map one or more fields to a different type. Follow the example [here](#maptovalueclass), or just simply use:
-```js
+```java
  PersonDto dto = mapper.set(person).mapAllTo(PersonDto.class);
 ```
 
 ### [ModelMapper]()
 Basically, to use ModelMapper first instantiate it with or without base package of your custom converters
-```js
+```java
  ModelMapper mapper = new ModelMapper();
 ```
-```js
+```java
  ModelMapper mapper = new ModelMaper("my.package");
 ```
 In order to map different field between the two class:
-```js
+```java
  mapper.set(dog)
   .field("name", "title")
   .field("age", "year")
 ```
 To explicitly exclude a field from mapping:
-```js
+```java
  mapper.set(dog).exclude("title")
 ```
 To explicitly exclude a field (of object within a collection) from mapping:
-```js
+```java
  mapper.set(dogs).excludeAll("title")
 ```
 Use a converters out of the box (or your own [custom](#custom-typeconverter) converter) where the mapper can't handle mapping an instance of a source object into a specific destination type.
  
-```js
+```java
  mapper.set(dog).convertFieldByConverter("height", new IntegerStringConverter())
 ```
 It'll search the converter that match the type and automatically convert it to the specific type. By default it will only look for built-in converters or the classes inside the packages that you've scanned.
-```js
+```java
  mapper.set(dog).convertFieldToType("height", String.class)
 ```
 
@@ -81,7 +81,7 @@ Convert a field to a certain type
 * value
 * converter
 * scanPackages
-```js
+```java
   @ConvertTo(Integer.class)
   private Pet pet;
 
@@ -90,13 +90,13 @@ Convert a field to a certain type
 ```
 #### @Excluded
 Exclude the field of your dto class
-```js
+```java
   @Excluded
   private List<PetDto> pets = new ArrayList<>();
 ```
 #### @FieldName
 The field will map as the value of the annotation
-```js
+```java
   @FieldName("petDto")
   private List<Pet> pets = new ArrayList<>();
 ```
@@ -105,7 +105,7 @@ Map one or more fields to a different class
 * value
 * collection
 * type
-```js
+```java
   @MapTo(PetDto.class)
   private Pet pet;
 
@@ -114,19 +114,19 @@ Map one or more fields to a different class
 ```
 #### @NoRepeat
 The mapper will ignore the recursive instances of a class
-```js
+```java
   @NoRepeat
   public class Person { ...
 ```
 
 ### [Custom TypeConverter]()
 In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type
-```js
+```java
   @TypeConverter
   public class MyConverter extends TypeConverterAdapter<Long, Dog> { ...
 ```
 You have to override and write your own implementations
-```js
+```java
 
   public MyConverter(Object o) {
     super(o);
@@ -151,7 +151,7 @@ You have to override and write your own implementations
   }
 ```
 And that's all, you just need to use your custom converter:
-```js
+```java
   public class Person {
     String name;
     Long dogId;
@@ -162,7 +162,7 @@ And that's all, you just need to use your custom converter:
     Dog dog;
   }
 ```
-```js
+```java
   ModelMappr mapper = new ModelMapper("my.package");
   
   mapper.set(person)
