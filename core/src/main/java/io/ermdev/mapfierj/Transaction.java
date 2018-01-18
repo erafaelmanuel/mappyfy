@@ -269,6 +269,7 @@ public class Transaction {
         }
     }
 
+    @Deprecated
     private <T> Collection<T> mapCollection(final Collection collection, Class<T> c, boolean hasMapTo,
                                             List<Class<?>> repeaterClasses, Class<? extends Collection> typeOfCollection) {
         final Collection<T> list;
@@ -458,7 +459,8 @@ public class Transaction {
         return mapSet(collectionToMap, c, false, null);
     }
 
-    public Object mapToCollection(Class<?> c, Class<?> type) {
+    @Deprecated
+    public Object mapToCollection(Class<?> type, Class<?> c) {
         if (type.equals(List.class) || type.equals(ArrayList.class)) {
             return mapList(collectionToMap, c, false, null);
         } else {
