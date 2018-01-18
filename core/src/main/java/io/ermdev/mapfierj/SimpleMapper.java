@@ -30,4 +30,12 @@ public class SimpleMapper {
     public Transaction set(Collection collection) {
         return transaction=new Transaction(collection);
     }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
 }
