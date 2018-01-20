@@ -12,7 +12,7 @@ public @interface MapTo {
 
     Class<?> value();
 
-    boolean collection() default false;
+    boolean isCollection() default false;
 
     Class<?> type() default Object.class;
 }
