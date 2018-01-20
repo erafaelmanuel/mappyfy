@@ -2,7 +2,9 @@ package io.ermdev.mapfierj;
 
 public class TypeException extends Exception {
 
-    public TypeException() {}
+    public TypeException() {
+        super();
+    }
 
     public TypeException(final String message) {
         super(message);
