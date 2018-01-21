@@ -14,5 +14,19 @@ public @interface MapTo {
 
     Class<?> value();
 
-    Type type() default Type.SINGLE;
+    Strategy strategy() default Strategy.SINGLE;
+
+    Type type() default Type.DEFAULT;
+
+    enum Strategy {
+        SINGLE(1), COLLECTION(2);
+
+        int value;
+        Strategy(int value) {
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
 }

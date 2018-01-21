@@ -2,7 +2,7 @@ package io.ermdev.mapfierj;
 
 public enum Type {
 
-    SINGLE(1), COLLECTION(2);
+    DEFAULT(1), LIST(2), SET(3);
 
     int value;
     Type(int value) {
