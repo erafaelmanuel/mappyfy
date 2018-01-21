@@ -1,19 +1,19 @@
-package io.ermdev.mapfierj.sample.sample3;
+package io.ermdev.mapfierj.sample.sample4;
 
-import io.ermdev.mapfierj.SimpleMapper;
+import io.ermdev.mapfierj.ModelMapper;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class Sample3 {
+public class Sample4 {
 
-    Logger logger = Logger.getLogger(Sample3.class.getSimpleName());
+    Logger logger = Logger.getLogger(Sample4.class.getSimpleName());
 
     @Test
-    public void simpleMapper() {
-        SimpleMapper mapper = new SimpleMapper();
+    public void mappingWithLessAnnotation() {
+        ModelMapper mapper = new ModelMapper();
 
         List<Dog> dogs = new ArrayList<>();
 
@@ -26,8 +26,10 @@ public class Sample3 {
 
         //Create the owner of our dogs
         Person person = new Person("Rafael", dogs);
-
-        PetOwner petOwner = mapper.set(person).mapTo(PetOwner.class);
+        
+        PetOwner petOwner = mapper.set(person)
+                .field("dogs", "pets")
+                .getTransaction().mapAllTo(PetOwner.class);
 
         logger.info(petOwner.toString());
     }

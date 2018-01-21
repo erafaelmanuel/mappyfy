@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.sample.sample3;
+package io.ermdev.mapfierj.sample.sample4;
 
 import io.ermdev.mapfierj.FieldName;
 

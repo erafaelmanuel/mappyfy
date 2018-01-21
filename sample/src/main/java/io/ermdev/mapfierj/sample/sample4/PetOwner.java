@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.sample.sample3;
+package io.ermdev.mapfierj.sample.sample4;
 
 import java.util.ArrayList;
 import java.util.List;
