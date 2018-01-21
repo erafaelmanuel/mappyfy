@@ -2,7 +2,8 @@ package io.ermdev.mapfierj.sample.sample3;
 
 
 import io.ermdev.mapfierj.FieldName;
-import io.ermdev.mapfierj.MapTo;
+import io.ermdev.mapfierj.Type;
+import io.ermdev.mapfierj.v2.MapTo;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Person {
     String name;
 
     @FieldName("pets")
-    @MapTo(value = Pet.class, isCollection = true, type = List.class)
+    @MapTo(value = Pet.class, type = Type.LIST)
     List<Dog> dogs;
 
     public Person(String name, List<Dog> dogs) {

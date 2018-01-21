@@ -1,5 +1,7 @@
 package io.ermdev.mapfierj;
 
+import io.ermdev.mapfierj.v2.MapTo;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -41,11 +43,11 @@ public class Transaction {
                 final MapTo mta = field.getAnnotation(MapTo.class);
                 final ConvertTo cta = field.getAnnotation(ConvertTo.class);
 
-                if(value != null) {
-                    if(cta != null) {
+                if (value != null) {
+                    if (cta != null) {
                         try {
                             final Converter converter = new Converter();
-                            if(cta.converter().equals(EmptyConverter.class)) {
+                            if (cta.converter().equals(EmptyConverter.class)) {
                                 converter.scanPackages(cta.scanPackages());
                                 if ((value = converter.convertTo(value, cta.value())) != null) {
                                     fieldsToMap.put(fieldName, value);
@@ -62,20 +64,23 @@ public class Transaction {
                     } else if (mta != null) {
                         if (value instanceof Collection) {
                             final Collection collection = (Collection) value;
-                            if (mta.type().equals(List.class)) {
-                                fieldsToMap.put(fieldName, mapList(collection, mta.value(),
-                                        true, repeaterClasses));
-                            } else if (mta.type().equals(Set.class)) {
-                                fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
-                                        true, repeaterClasses));
-                            } else {
-                                if (field.getType().equals(List.class)) {
+                            switch (mta.type().getValue()) {
+                                case 2 :
                                     fieldsToMap.put(fieldName, mapList(collection, mta.value(),
-                                            true, repeaterClasses));
-                                } else if (field.getType().equals(Set.class)) {
+                                            true, this.repeaterClasses));
+                                    break;
+                                case 3 :
                                     fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
-                                            true, repeaterClasses));
-                                }
+                                            true, this.repeaterClasses));
+                                    break;
+                                default :
+                                    if (field.getType().equals(List.class))
+                                        fieldsToMap.put(fieldName, mapList(collection, mta.value(),
+                                                true, this.repeaterClasses));
+                                    else if (field.getType().equals(Set.class))
+                                        fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
+                                                true, this.repeaterClasses));
+                                    break;
                             }
                         } else {
                             if (repeaterClasses.size() > 0) {
@@ -117,9 +122,9 @@ public class Transaction {
                 final ConvertTo cta = field.getAnnotation(ConvertTo.class);
 
                 if (value != null) {
-                    if(cta != null) {
+                    if (cta != null) {
                         Converter converter = new Converter();
-                        if(cta.converter().equals(EmptyConverter.class)) {
+                        if (cta.converter().equals(EmptyConverter.class)) {
                             converter.scanPackages(cta.scanPackages());
                             if ((value = converter.convertTo(value, cta.value())) != null) {
                                 fieldsToMap.put(fieldName, value);
@@ -134,19 +139,23 @@ public class Transaction {
                     if (mta != null) {
                         if (value instanceof Collection) {
                             final Collection<?> collection = (Collection) value;
-                            if (mta.type().equals(List.class))
-                                fieldsToMap.put(fieldName, mapList(collection, mta.value(),
-                                        true, this.repeaterClasses));
-                            else if (mta.type().equals(Set.class))
-                                fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
-                                        true, this.repeaterClasses));
-                            else {
-                                if (field.getType().equals(List.class))
+                            switch (mta.type().getValue()) {
+                                case 2 :
                                     fieldsToMap.put(fieldName, mapList(collection, mta.value(),
                                             true, this.repeaterClasses));
-                                else if (field.getType().equals(Set.class))
+                                    break;
+                                case 3 :
                                     fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
                                             true, this.repeaterClasses));
+                                    break;
+                                default :
+                                    if (field.getType().equals(List.class))
+                                        fieldsToMap.put(fieldName, mapList(collection, mta.value(),
+                                                true, this.repeaterClasses));
+                                    else if (field.getType().equals(Set.class))
+                                        fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
+                                                true, this.repeaterClasses));
+                                    break;
                             }
                         } else {
                             if (classes.size() > 0) {
@@ -275,14 +284,14 @@ public class Transaction {
         final Collection<T> list;
         try {
             switch (typeOfCollection.toString()) {
-                case TypeUtil.LIST :
+                case TypeUtil.LIST:
                     list = new ArrayList<>();
                     break;
-                case TypeUtil.ARRAY_LIST :
+                case TypeUtil.ARRAY_LIST:
                     list = new ArrayList<>();
                     break;
                 default:
-                        list = new ArrayList<>();
+                    list = new ArrayList<>();
             }
             if (collection == null)
                 throw new RuntimeException("Collection must not null");
@@ -298,7 +307,7 @@ public class Transaction {
                     transaction = new Transaction(o);
                     transaction.setExcludedField(getExcludedField());
                 }
-                if(hasMapTo) {
+                if (hasMapTo) {
                     instance = transaction.mapTo(c);
                 } else {
                     instance = transaction.mapAllTo(c);
@@ -341,7 +350,7 @@ public class Transaction {
                         if (!field.getType().equals(value.getClass())) {
                             if (!TypeUtil.isPrimitive(field.getType())) {
                                 if (repeaterClasses != null && repeaterClasses.size() > 0) {
-                                    Transaction transaction = new Transaction(value , repeaterClasses);
+                                    Transaction transaction = new Transaction(value, repeaterClasses);
                                     transaction.setExcludedField(getExcludedField());
 
                                     value = transaction.mapTo(field.getType());
@@ -391,7 +400,7 @@ public class Transaction {
                         if (!field.getType().equals(value.getClass())) {
                             if (!TypeUtil.isPrimitive(field.getType())) {
                                 if (repeaterClasses != null && repeaterClasses.size() > 0) {
-                                    Transaction transaction = new Transaction(value , repeaterClasses);
+                                    Transaction transaction = new Transaction(value, repeaterClasses);
                                     transaction.setExcludedField(getExcludedField());
 
                                     value = transaction.mapTo(field.getType());
