@@ -1,8 +1,6 @@
 package io.ermdev.mapfierj.sample.sample3;
 
 import io.ermdev.mapfierj.SimpleMapper;
-import io.ermdev.mapfierj.sample.sample2.Person;
-import io.ermdev.mapfierj.sample.sample2.PersonDto;
 import org.junit.Test;
 
 import java.util.logging.Logger;
