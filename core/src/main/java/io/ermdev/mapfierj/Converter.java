@@ -9,28 +9,28 @@ import java.util.*;
 public class Converter {
 
     private final String BASE_PACKAGE = "io.ermdev.mapfierj.typeconverter";
-    private final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
-    private final Set<Class<? extends TypeConverterAdapter>> convertersScanned = new HashSet<>();
+    private final Set<Class<? extends TypeConverterAdapter>> PRIMITIVE_CONVERTERS = new HashSet<>();
+    private final Set<Class<? extends TypeConverterAdapter>> SCANNED_CONVERTERS = new HashSet<>();
     private final Set<TypeConverterAdapter> REGISTERED_CONVERTERS = new HashSet<>();
     private Object o;
 
     public Converter() {
         final Reflections reflections = new Reflections(BASE_PACKAGE);
-        converters.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+        PRIMITIVE_CONVERTERS.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
     }
 
     public void scanPackages(String... packages) {
         for (String item : packages) {
             if (item != null && !item.trim().isEmpty()) {
                 final Reflections reflections = new Reflections(item);
-                convertersScanned.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
+                SCANNED_CONVERTERS.addAll(reflections.getSubTypesOf(TypeConverterAdapter.class));
             }
         }
     }
 
     public void register(TypeConverterAdapter adapter) {
         REGISTERED_CONVERTERS.add(adapter);
-        convertersScanned.add(adapter.getClass());
+        SCANNED_CONVERTERS.add(adapter.getClass());
     }
 
     public Object convertTo(final Object obj, Class<?> type) {
@@ -38,8 +38,8 @@ public class Converter {
             final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
             final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
 
-            converters.addAll(this.converters);
-            converters.addAll(convertersScanned);
+            converters.addAll(PRIMITIVE_CONVERTERS);
+            converters.addAll(SCANNED_CONVERTERS);
             try {
                 if (obj.getClass().equals(type)) {
                     return obj;
@@ -90,16 +90,16 @@ public class Converter {
                                             .filter(item-> item.getClass().equals(converter))
                                             .findFirst().get();
 
-                                    adapter.setObject(o);
+                                    adapter.setObject(obj);
                                     if (!(o = adapter.convert()).getClass().equals(type))
                                         throw new TypeException("Type not match");
                                     return true;
                                 } else {
                                     if (converter.getAnnotation(TypeConverter.class) != null) {
                                         TypeConverterAdapter adapter = converter
-                                                .getDeclaredConstructor(Object.class).newInstance(o);
-                                        o = adapter.convert();
-                                        if (!o.getClass().equals(type))
+                                                .getDeclaredConstructor(Object.class).newInstance(obj);
+
+                                        if (!(o = adapter.convert()).getClass().equals(type))
                                             throw new TypeException("Type not match");
                                         return true;
                                     }
