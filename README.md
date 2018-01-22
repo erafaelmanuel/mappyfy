@@ -85,7 +85,7 @@ Convert a field to a certain type
   @ConvertTo(Integer.class)
   private Pet pet;
 
-  @ConvertTo(value = Pet.class, converter=IntegerPetConverter.class)
+  @ConvertTo(value = Pet.class, converter = IntegerPetConverter.class)
   private int petId;
 ```
 #### @Excluded
@@ -134,10 +134,10 @@ You have to override and write your own implementations
   
   @Override
   public Object convert() {
-     if(super.o instanceof Long)
-       return convertTo(super.o);
+     if(getObject() instanceof Long)
+       return convertTo((Long) getObject());
      else
-       return convertFrom(super.o);
+       return convertFrom((Dog) getObject());
   }
   
   @Override
