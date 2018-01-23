@@ -3,7 +3,7 @@ package io.ermdev.mapfierj.sample.sample3;
 
 import io.ermdev.mapfierj.FieldName;
 import io.ermdev.mapfierj.Type;
-import io.ermdev.mapfierj.v2.MapTo;
+import io.ermdev.mapfierj.MapTo;
 
 import java.util.List;
 

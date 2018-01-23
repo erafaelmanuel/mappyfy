@@ -1,7 +1,5 @@
 package io.ermdev.mapfierj;
 
-import io.ermdev.mapfierj.v2.MapTo;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
