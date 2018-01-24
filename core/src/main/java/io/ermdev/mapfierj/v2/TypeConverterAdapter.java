@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 public abstract class TypeConverterAdapter<A, B> {
 
     @SuppressWarnings("unchecked")
-    public Object convert(Object o) throws TypeException {
+    public <T> T convert(Object o) throws TypeException {
         if(o != null) {
             Type types[];
             try {
@@ -19,9 +19,9 @@ public abstract class TypeConverterAdapter<A, B> {
                 types[1] = Object.class;
             }
             if (types[0].equals(o.getClass())) {
-                return convertTo((A) o);
+                return (T) convertTo((A) o);
             } else if (types[1].equals(o.getClass())) {
-                return convertFrom((B) o);
+                return (T) convertFrom((B) o);
             } else {
                 throw new TypeException("Invalid Type");
             }
