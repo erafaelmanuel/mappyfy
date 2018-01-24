@@ -1,6 +1,7 @@
 package io.ermdev.mapfierj.sample.sample4;
 
 import io.ermdev.mapfierj.ModelMapper;
+import io.ermdev.mapfierj.TypeException;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -35,8 +36,9 @@ public class Sample4 {
     }
 
     @Test
-    public void dample() {
+    public void dample() throws TypeException {
         SampleConverter converter = new SampleConverter();
-        converter.convert("tae");
+        String num = (String) converter.convert(12);
+        System.out.println(num);
     }
 }

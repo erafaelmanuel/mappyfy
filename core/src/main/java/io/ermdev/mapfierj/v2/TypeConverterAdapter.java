@@ -7,11 +7,9 @@ import java.lang.reflect.Type;
 
 public abstract class TypeConverterAdapter<A, B> {
 
-    private Object object;
-
+    @SuppressWarnings("unchecked")
     public Object convert(Object o) throws TypeException {
         if(o != null) {
-            this.object = o;
             Type types[];
             try {
                 types = (((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments());
