@@ -33,4 +33,10 @@ public class Sample4 {
 
         logger.info(petOwner.toString());
     }
+
+    @Test
+    public void dample() {
+        SampleConverter converter = new SampleConverter();
+        converter.convert("tae");
+    }
 }
