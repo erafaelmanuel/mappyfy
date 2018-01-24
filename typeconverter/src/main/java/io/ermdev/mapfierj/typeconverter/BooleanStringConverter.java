@@ -17,15 +17,17 @@ public class BooleanStringConverter extends TypeConverterAdapter<Boolean, String
 
     @Override
     public Object convert() throws TypeException {
-        if(o != null) {
-            if(o instanceof Boolean)
+        if (o != null) {
+            if (o instanceof Boolean) {
                 return convertTo((Boolean) o);
-            else if(o instanceof String)
+            } else if (o instanceof String) {
                 return convertFrom((String) o);
-            else
+            } else {
                 throw new TypeException("Invalid Type");
+            }
+        } else {
+            throw new TypeException("You can't convert a null object");
         }
-        throw new TypeException("You can't convert a null object");
     }
 
     @Override
