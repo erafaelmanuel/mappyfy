@@ -1,5 +1,6 @@
 package io.ermdev.mapfierj.v2;
 
+import io.ermdev.mapfierj.MappingException;
 import io.ermdev.mapfierj.TypeConverter;
 import io.ermdev.mapfierj.TypeException;
 import org.reflections.Reflections;
@@ -38,11 +39,10 @@ public class Converter {
         SCANNED_CONVERTERS.add(adapter.getClass());
     }
 
-    public Object convertTo(final Object obj, Class<?> type) {
+    public Object convertTo(final Object obj, Class<?> type) throws MappingException {
         if (obj != null) {
             final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
             final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
-
             converters.addAll(PRIMITIVE_CONVERTERS);
             converters.addAll(SCANNED_CONVERTERS);
             try {
@@ -181,28 +181,28 @@ public class Converter {
             return this;
         }
 
-        public Session adapter(Class<? extends TypeConverterAdapter> adapterClass) {
+        public Session adapter(Class<? extends TypeConverterAdapter> adapterClass) throws MappingException {
             try {
                 typeConverter = adapterClass.getDeclaredConstructor(Object.class).newInstance();
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new MappingException("Failed to found a constructor without an arguments");
             }
             return this;
         }
 
-        public Object convert() {
-            if (typeConverter != null) {
-                try {
-                    o = typeConverter.convert(o);
-                    if (o != null) {
-                        return o;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        @SuppressWarnings("unchecked")
+        public <T> T convert() throws MappingException {
+            if (o == null) {
+                throw new MappingException("No object to convert");
             }
-            typeConverter = null;
-            return null;
+            if (typeConverter == null) {
+                throw new MappingException("TypeConverter is null");
+            }
+            try {
+                return (T) typeConverter.convert(o);
+            } catch (TypeException e) {
+                return null;
+            }
         }
     }
 }
