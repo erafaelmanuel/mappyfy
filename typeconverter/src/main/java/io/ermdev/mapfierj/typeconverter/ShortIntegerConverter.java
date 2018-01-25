@@ -1,14 +1,14 @@
-package io.ermdev.mapfierj.typeconverter.v2;
+package io.ermdev.mapfierj.typeconverter;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeException;
 import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class ByteIntegerConverter extends TypeConverterAdapter<Byte, Integer> {
+public class ShortIntegerConverter extends TypeConverterAdapter<Short, Integer> {
 
     @Override
-    public Integer convertTo(Byte o) throws TypeException {
+    public Integer convertTo(Short o) throws TypeException {
         try {
             return o.intValue();
         } catch (Exception e) {
@@ -17,9 +17,9 @@ public class ByteIntegerConverter extends TypeConverterAdapter<Byte, Integer> {
     }
 
     @Override
-    public Byte convertFrom(Integer o) throws TypeException {
+    public Short convertFrom(Integer o) throws TypeException {
         try {
-            return o.byteValue();
+            return o.shortValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

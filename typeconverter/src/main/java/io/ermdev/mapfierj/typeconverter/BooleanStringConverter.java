@@ -1,14 +1,14 @@
-package io.ermdev.mapfierj.typeconverter.v2;
+package io.ermdev.mapfierj.typeconverter;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeException;
 import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class CharStringConverter extends TypeConverterAdapter<Character, String> {
+public class BooleanStringConverter extends TypeConverterAdapter<Boolean, String> {
 
     @Override
-    public String convertTo(Character o) throws TypeException {
+    public String convertTo(Boolean o) throws TypeException {
         try {
             return String.valueOf(o);
         } catch (Exception e) {
@@ -17,10 +17,10 @@ public class CharStringConverter extends TypeConverterAdapter<Character, String>
     }
 
     @Override
-    public Character convertFrom(String o) throws TypeException {
+    public Boolean convertFrom(String o) throws TypeException {
         try {
-            return (o.trim().charAt(0));
-        } catch (Exception e) {
+            return Boolean.getBoolean(o);
+        } catch (NullPointerException e) {
             throw new TypeException("Failed to convert");
         }
     }

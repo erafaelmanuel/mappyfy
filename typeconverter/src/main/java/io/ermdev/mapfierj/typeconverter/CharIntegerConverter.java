@@ -1,27 +1,28 @@
-package io.ermdev.mapfierj.typeconverter.v2;
+package io.ermdev.mapfierj.typeconverter;
 
 import io.ermdev.mapfierj.TypeConverter;
 import io.ermdev.mapfierj.TypeException;
 import io.ermdev.mapfierj.TypeConverterAdapter;
 
 @TypeConverter
-public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
+public class CharIntegerConverter extends TypeConverterAdapter<Character, Integer> {
 
     @Override
-    public String convertTo(Float o) throws TypeException {
+    public Integer convertTo(Character o) throws TypeException {
         try {
-            return String.valueOf(o);
+            return (int) o;
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Float convertFrom(String o) throws TypeException {
+    public Character convertFrom(Integer o) throws TypeException {
         try {
-            return Float.parseFloat(o);
+            return (char) (o + '0');
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
+
     }
 }

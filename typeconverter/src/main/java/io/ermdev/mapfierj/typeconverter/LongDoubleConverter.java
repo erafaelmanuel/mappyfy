@@ -1,25 +1,25 @@
-package io.ermdev.mapfierj.typeconverter.v2;
+package io.ermdev.mapfierj.typeconverter;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeException;
 import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class FloatLongConverter extends TypeConverterAdapter<Float, Long> {
+public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
 
     @Override
-    public Long convertTo(Float o) throws TypeException {
+    public Double convertTo(Long o) throws TypeException {
         try {
-            return o.longValue();
+            return o.doubleValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Float convertFrom(Long o) throws TypeException {
+    public Long convertFrom(Double o) throws TypeException {
         try {
-            return o.floatValue();
+            return o.longValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
