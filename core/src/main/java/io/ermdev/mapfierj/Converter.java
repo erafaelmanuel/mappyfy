@@ -12,8 +12,11 @@ import java.util.Set;
 public class Converter {
 
     private final String BASE_PACKAGE = "io.ermdev.mapfierj.typeconverter";
+
     private final Set<Class<? extends TypeConverterAdapter>> PRIMITIVE_CONVERTERS = new HashSet<>();
+
     private final Set<Class<? extends TypeConverterAdapter>> SCANNED_CONVERTERS = new HashSet<>();
+
     private final Set<TypeConverterAdapter> REGISTERED_CONVERTERS = new HashSet<>();
 
     public Converter() {
@@ -72,9 +75,9 @@ public class Converter {
                             return isMatch;
                         })
                         .filter(converter -> {
+                            final Type types[] = (((ParameterizedType) converter
+                                    .getGenericSuperclass()).getActualTypeArguments());
                             boolean isMatch = false;
-                            Type types[] = (((ParameterizedType)
-                                    converter.getGenericSuperclass()).getActualTypeArguments());
                             for (Type generic : types) {
                                 if (generic.equals(o.getClass())) {
                                     isMatch = true;
@@ -92,9 +95,11 @@ public class Converter {
                                             .filter(item -> item.getClass().equals(converter))
                                             .findFirst()
                                             .get();
+
                                     objects.setObject(adapter.convert(o));
-                                    if (!objects.getObject().getClass().equals(type))
+                                    if (!objects.getObject().getClass().equals(type)) {
                                         throw new TypeException("Type not match");
+                                    }
                                     return true;
                                 } else {
                                     if (converter.getAnnotation(TypeConverter.class) != null) {
@@ -106,69 +111,71 @@ public class Converter {
                                                     "with no arguments");
                                         }
                                         objects.setObject(adapter.convert(o));
-                                        if (!objects.getObject().getClass().equals(type))
+                                        if (!objects.getObject().getClass().equals(type)) {
                                             throw new TypeException("Type not match");
+                                        }
                                         return true;
                                     }
                                 }
                                 throw new TypeException("No valid TypeConverter found");
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                if(objects.getObject() != null) {
+                                if (objects.getObject() != null) {
                                     objects.setObject(null);
                                 }
                                 return false;
                             }
                         });
                 if (!isExists) {
-                    converters.parallelStream().filter(converter -> {
-                        boolean isMatch = false;
-                        Type types[] = (((ParameterizedType)
-                                converter.getGenericSuperclass()).getActualTypeArguments());
-                        for (Type generic : types) {
-                            if (generic.equals(o.getClass())) {
-                                isMatch = true;
-                                break;
-                            }
-                        }
-                        return isMatch;
-                    })
-                    .forEach((Class<? extends TypeConverterAdapter> converter) -> {
-                        Type types[] = (((ParameterizedType)
-                                converter.getGenericSuperclass()).getActualTypeArguments());
-                        outer:
-                        for (Type generic : types) {
-                            for (Map.Entry entry : possibleTypes.entrySet()) {
-                                if (entry.getKey().equals(generic.toString())) {
-                                    if (converter.getAnnotation(TypeConverter.class) != null) {
-                                        try {
-                                            final TypeConverterAdapter adapter1;
-                                            final TypeConverterAdapter adapter2;
-                                            try {
-                                                adapter1 = converter.newInstance();
-                                                adapter2  = (TypeConverterAdapter)
-                                                        ((Class<?>) entry.getValue()).newInstance();
-                                            } catch (Exception e) {
-                                                throw new MappingException("Failed to found the constructor " +
-                                                        "with no arguments");
-                                            }
-                                            objects.setObject(adapter2.convert(adapter1.convert(o)));
-                                            break outer;
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            if(objects.getObject() != null) {
-                                                objects.setObject(null);
+                    converters.parallelStream()
+                            .filter(converter -> {
+                                boolean isMatch = false;
+                                Type types[] = (((ParameterizedType)
+                                        converter.getGenericSuperclass()).getActualTypeArguments());
+                                for (Type generic : types) {
+                                    if (generic.equals(o.getClass())) {
+                                        isMatch = true;
+                                        break;
+                                    }
+                                }
+                                return isMatch;
+                            })
+                            .forEach((Class<? extends TypeConverterAdapter> converter) -> {
+                                final Type types[] = (((ParameterizedType) converter
+                                        .getGenericSuperclass()).getActualTypeArguments());
+                                outer:
+                                for (Type generic : types) {
+                                    for (Map.Entry entry : possibleTypes.entrySet()) {
+                                        if (entry.getKey().equals(generic.toString())) {
+                                            if (converter.getAnnotation(TypeConverter.class) != null) {
+                                                try {
+                                                    final TypeConverterAdapter adapter1;
+                                                    final TypeConverterAdapter adapter2;
+                                                    try {
+                                                        adapter1 = converter.newInstance();
+                                                        adapter2 = (TypeConverterAdapter)
+                                                                ((Class<?>) entry.getValue()).newInstance();
+                                                    } catch (Exception e) {
+                                                        throw new MappingException("Failed to found the constructor " +
+                                                                "with no arguments");
+                                                    }
+                                                    objects.setObject(adapter2.convert(adapter1.convert(o)));
+                                                    break outer;
+                                                } catch (Exception e) {
+                                                    e.printStackTrace();
+                                                    if (objects.getObject() != null) {
+                                                        objects.setObject(null);
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                    });
+                            });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                if(objects.getObject() != null) {
+                if (objects.getObject() != null) {
                     objects.setObject(null);
                 }
             }
