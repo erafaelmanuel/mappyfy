@@ -18,7 +18,6 @@ public class Converter {
     private final Set<Class<? extends TypeConverterAdapter>> PRIMITIVE_CONVERTERS = new HashSet<>();
     private final Set<Class<? extends TypeConverterAdapter>> SCANNED_CONVERTERS = new HashSet<>();
     private final Set<TypeConverterAdapter> REGISTERED_CONVERTERS = new HashSet<>();
-    private Object o;
 
     public Converter() {
         final Reflections reflections = new Reflections(BASE_PACKAGE);
@@ -39,23 +38,23 @@ public class Converter {
         SCANNED_CONVERTERS.add(adapter.getClass());
     }
 
-    public Object convertTo(final Object obj, Class<?> type) throws MappingException {
-        if (obj != null) {
-            final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
-            final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
-            converters.addAll(PRIMITIVE_CONVERTERS);
-            converters.addAll(SCANNED_CONVERTERS);
+    public Object convertTo(final Object o, Class<?> type) throws MappingException {
+        final Set<Class<? extends TypeConverterAdapter>> converters = new HashSet<>();
+        final HashMap<String, Class<? extends TypeConverterAdapter>> possibleTypes = new HashMap<>();
+        final Objects objects = new Objects();
+
+        if (o != null) {
+            if (o.getClass().equals(type)) {
+                return o;
+            }
             try {
-                if (obj.getClass().equals(type)) {
-                    return obj;
-                } else {
-                    o = null;
-                }
+                converters.addAll(PRIMITIVE_CONVERTERS);
+                converters.addAll(SCANNED_CONVERTERS);
                 boolean isExists = converters.parallelStream()
                         .filter(converter -> {
-                            boolean isMatch = false;
-                            Type types[] = (((ParameterizedType)
+                            final Type types[] = (((ParameterizedType)
                                     converter.getGenericSuperclass()).getActualTypeArguments());
+                            boolean isMatch = false;
                             if (types.length == 2) {
                                 for (int i = 0; i < 2; i++) {
                                     if (types[i].equals(type)) {
@@ -79,7 +78,7 @@ public class Converter {
                             Type types[] = (((ParameterizedType)
                                     converter.getGenericSuperclass()).getActualTypeArguments());
                             for (Type generic : types) {
-                                if (generic.equals(obj.getClass())) {
+                                if (generic.equals(o.getClass())) {
                                     isMatch = true;
                                     break;
                                 }
@@ -89,28 +88,31 @@ public class Converter {
                         .anyMatch(converter -> {
                             try {
                                 final boolean isRegistered = REGISTERED_CONVERTERS
-                                        .parallelStream().anyMatch(item-> item.getClass().equals(converter));
-                                if(isRegistered) {
-                                    TypeConverterAdapter adapter = REGISTERED_CONVERTERS.parallelStream()
-                                            .filter(item-> item.getClass().equals(converter))
+                                        .parallelStream().anyMatch(item -> item.getClass().equals(converter));
+                                if (isRegistered) {
+                                    final TypeConverterAdapter adapter = REGISTERED_CONVERTERS.parallelStream()
+                                            .filter(item -> item.getClass().equals(converter))
                                             .findFirst().get();
-
-                                    if (!(o = adapter.convert(obj)).getClass().equals(type))
+                                    objects.setObject(adapter.convert(o));
+                                    if (!objects.getObject().getClass().equals(type))
                                         throw new TypeException("Type not match");
                                     return true;
                                 } else {
                                     if (converter.getAnnotation(TypeConverter.class) != null) {
                                         TypeConverterAdapter adapter = converter
-                                                .getDeclaredConstructor(Object.class).newInstance(obj);
+                                                .getDeclaredConstructor(Object.class).newInstance(o);
 
-                                        if (!(o = adapter.convert(obj)).getClass().equals(type))
+                                        objects.setObject(adapter.convert(o));
+                                        if (!objects.getObject().getClass().equals(type))
                                             throw new TypeException("Type not match");
                                         return true;
                                     }
                                 }
                                 throw new TypeException("No valid TypeConverter found");
                             } catch (Exception e) {
-                                o = null;
+                                if(objects.getObject() != null) {
+                                    objects.setObject(null);
+                                }
                                 return false;
                             }
                         });
@@ -120,47 +122,45 @@ public class Converter {
                         Type types[] = (((ParameterizedType)
                                 converter.getGenericSuperclass()).getActualTypeArguments());
                         for (Type generic : types) {
-                            if (generic.equals(obj.getClass())) {
+                            if (generic.equals(o.getClass())) {
                                 isMatch = true;
                                 break;
                             }
                         }
                         return isMatch;
                     })
-                    .forEach(converter -> {
-                        Type types[] = (((ParameterizedType)
-                                converter.getGenericSuperclass()).getActualTypeArguments());
-                        outer:
-                        for (Type generic : types) {
-                            for (Map.Entry entry : possibleTypes.entrySet()) {
-                                if (entry.getKey().equals(generic.toString())) {
-                                    try {
-                                        if (converter.getAnnotation(TypeConverter.class) != null) {
-                                            TypeConverterAdapter adapter1 = converter
-                                                    .getDeclaredConstructor(Object.class)
-                                                    .newInstance();
-                                            TypeConverterAdapter adapter2 =
-                                                    (TypeConverterAdapter) ((Class<?>) entry.getValue())
-                                                            .getDeclaredConstructor(Object.class)
-                                                            .newInstance();
-                                            this.o = adapter2.convert(adapter1.convert(obj));
-                                            break outer;
+                            .forEach((Class<? extends TypeConverterAdapter> converter) -> {
+                                Type types[] = (((ParameterizedType)
+                                        converter.getGenericSuperclass()).getActualTypeArguments());
+                                outer:
+                                for (Type generic : types) {
+                                    for (Map.Entry entry : possibleTypes.entrySet()) {
+                                        if (entry.getKey().equals(generic.toString())) {
+                                            if (converter.getAnnotation(TypeConverter.class) != null) {
+                                                try {
+                                                    TypeConverterAdapter adapter1 = converter.newInstance();
+                                                    TypeConverterAdapter adapter2 =
+                                                            (TypeConverterAdapter) ((Class<?>) entry.getValue()).newInstance();
+                                                    objects.setObject(adapter2.convert(adapter1.convert(o)));
+                                                    break outer;
+                                                } catch (Exception e) {
+                                                    if(objects.getObject() != null) {
+                                                        objects.setObject(null);
+                                                    }
+                                                }
+                                            }
                                         }
-                                        throw new TypeException("No valid TypeConverter found");
-                                    } catch (Exception e) {
-                                        this.o = null;
                                     }
                                 }
-                            }
-                        }
-                    });
+                            });
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                this.o = null;
+                if(objects.getObject() != null) {
+                    objects.setObject(null);
+                }
             }
         }
-        return this.o;
+        return objects.getObject();
     }
 
     public Session openSession() {
@@ -183,9 +183,9 @@ public class Converter {
 
         public Session adapter(Class<? extends TypeConverterAdapter> adapterClass) throws MappingException {
             try {
-                typeConverter = adapterClass.getDeclaredConstructor(Object.class).newInstance();
+                typeConverter = adapterClass.newInstance();
             } catch (Exception e) {
-                throw new MappingException("Failed to found a constructor without an arguments");
+                throw new MappingException("Failed to found the constructor with no arguments");
             }
             return this;
         }
@@ -203,6 +203,19 @@ public class Converter {
             } catch (TypeException e) {
                 return null;
             }
+        }
+    }
+
+    class Objects {
+
+        Object object;
+
+        public Object getObject() {
+            return object;
+        }
+
+        public void setObject(Object object) {
+            this.object = object;
         }
     }
 }
