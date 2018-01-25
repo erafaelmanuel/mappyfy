@@ -2,7 +2,6 @@ package io.ermdev.mapfierj.sample.sample2;
 
 import io.ermdev.mapfierj.ConvertTo;
 import io.ermdev.mapfierj.FieldName;
-import io.ermdev.mapfierj.sample.sample1.IntegerCarConverter;
 
 public class Person {
 
