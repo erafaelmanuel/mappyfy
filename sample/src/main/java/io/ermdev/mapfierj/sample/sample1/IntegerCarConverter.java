@@ -10,16 +10,20 @@ public class IntegerCarConverter extends TypeConverterAdapter<Integer, Car> {
     private CarRepository carRepository;
 
     public IntegerCarConverter() {
+        carRepository = new CarRepository();
     }
 
     public IntegerCarConverter(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
-
     @Override
     public Car convertTo(Integer o) throws TypeException {
-        return carRepository.getById(o);
+        try {
+            return carRepository.getById(o);
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     @Override

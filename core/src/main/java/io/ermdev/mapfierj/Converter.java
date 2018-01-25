@@ -228,13 +228,13 @@ public class Converter {
 
     protected class Objects {
 
-        Object object;
+        volatile Object object;
 
-        public Object getObject() {
+        public synchronized Object getObject() {
             return object;
         }
 
-        public void setObject(Object object) {
+        public synchronized void setObject(Object object) {
             this.object = object;
         }
     }

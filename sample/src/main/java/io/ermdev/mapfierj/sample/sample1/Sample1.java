@@ -11,8 +11,8 @@ public class Sample1 {
 
     @Test
     public void modelMapper() {
-        final String PACKAGE_NAME = getClass().getPackage().toString();
-        int carId = (int) (Math.random() * 10) + 1;
+        final String PACKAGE_NAME = "io.ermdev.mapfierj.sample.sample1";
+        int carId = (int) (Math.random() * 8) + 1;
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConverter().scanPackages(PACKAGE_NAME);
