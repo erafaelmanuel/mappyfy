@@ -1,33 +1,21 @@
 package io.ermdev.mapfierj.sample.sample1;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class IntegerCarConverter extends TypeConverterAdapter<Integer, Car>{
+public class IntegerCarConverter extends TypeConverterAdapter<Integer, Car> {
 
     private CarRepository carRepository;
 
-    public IntegerCarConverter(Object obj) {
-        super(obj);
-        carRepository = new CarRepository();
+    public IntegerCarConverter() {
     }
 
-    public IntegerCarConverter(Object obj, CarRepository carRepository) {
-        this(obj);
+    public IntegerCarConverter(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
-    @Override
-    public Object convert() throws TypeException {
-        if(getObject() instanceof Integer)
-            return convertTo((Integer) getObject());
-        else if(getObject() instanceof Car)
-            return convertFrom((Car) getObject());
-        else
-            return null;
-    }
 
     @Override
     public Car convertTo(Integer o) throws TypeException {
