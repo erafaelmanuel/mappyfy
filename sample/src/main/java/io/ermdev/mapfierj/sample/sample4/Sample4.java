@@ -1,7 +1,9 @@
 package io.ermdev.mapfierj.sample.sample4;
 
+import io.ermdev.mapfierj.MappingException;
 import io.ermdev.mapfierj.ModelMapper;
 import io.ermdev.mapfierj.TypeException;
+import io.ermdev.mapfierj.v2.Converter;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -40,5 +42,13 @@ public class Sample4 {
         SampleConverter converter = new SampleConverter();
         String num = converter.convert(12);
         System.out.println(num);
+    }
+
+    @Test
+    public void converterTest() throws MappingException {
+        Converter converter = new Converter();
+        final int num = 1;
+        Character c = converter.convertTo( num, Character.class);
+        System.out.println(c);
     }
 }

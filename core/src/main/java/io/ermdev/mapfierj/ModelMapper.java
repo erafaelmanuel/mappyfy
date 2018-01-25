@@ -1,5 +1,8 @@
 package io.ermdev.mapfierj;
 
+import io.ermdev.mapfierj.v2.Converter;
+import io.ermdev.mapfierj.v2.TypeConverterAdapter;
+
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -87,11 +90,15 @@ public class ModelMapper {
     }
 
     public ModelMapper convertFieldToType(String field, Class<?> type) {
-        final Object instance = converter.convertTo( map.get(field), type);
-        if(instance != null)
-            map.put(field, instance);
-        else
-            map.remove(field);
+        try {
+            final Object instance = converter.convertTo(map.get(field), type);
+            if (instance != null)
+                map.put(field, instance);
+            else
+                map.remove(field);
+        } catch (MappingException e) {
+            e.printStackTrace();
+        }
         return this;
     }
 
@@ -120,13 +127,12 @@ public class ModelMapper {
         map.remove(field);
         if (o != null) {
             try {
-                final TypeConverterAdapter adapter = c.getDeclaredConstructor(Object.class).newInstance(o);
+                final TypeConverterAdapter adapter = c.newInstance();
                 final Converter.Session session = converter.openSession();
-
                 session.set(o);
                 session.adapter(adapter);
 
-                Object instance = session.convert();
+                final Object instance = session.convert();
                 if (instance != null) {
                     map.put(field, instance);
                 }
