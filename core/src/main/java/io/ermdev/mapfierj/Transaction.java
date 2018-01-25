@@ -1,6 +1,6 @@
 package io.ermdev.mapfierj;
 
-import io.ermdev.mapfierj.legacy.Converter;
+import io.ermdev.mapfierj.Converter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
