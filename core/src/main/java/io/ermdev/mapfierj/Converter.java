@@ -97,7 +97,7 @@ public class Converter {
                                             .get();
 
                                     objects.setObject(adapter.convert(o));
-                                    if (!objects.getObject().getClass().equals(type)) {
+                                    if (objects.getObject() == null || !objects.getObject().getClass().equals(type)) {
                                         throw new TypeException("Type not match");
                                     }
                                     return true;
@@ -111,7 +111,8 @@ public class Converter {
                                                     "with no arguments");
                                         }
                                         objects.setObject(adapter.convert(o));
-                                        if (!objects.getObject().getClass().equals(type)) {
+                                        if (objects.getObject() == null || !objects
+                                                .getObject().getClass().equals(type)) {
                                             throw new TypeException("Type not match");
                                         }
                                         return true;
