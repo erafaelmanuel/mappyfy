@@ -3,7 +3,7 @@ package io.ermdev.mapfierj.sample.sample4;
 import io.ermdev.mapfierj.MappingException;
 import io.ermdev.mapfierj.ModelMapper;
 import io.ermdev.mapfierj.TypeException;
-import io.ermdev.mapfierj.v2.Converter;
+import io.ermdev.mapfierj.Converter;
 import org.junit.Test;
 
 import java.util.ArrayList;

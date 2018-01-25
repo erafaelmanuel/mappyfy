@@ -1,7 +1,7 @@
 package io.ermdev.mapfierj.sample.sample4;
 
 import io.ermdev.mapfierj.TypeException;
-import io.ermdev.mapfierj.v2.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeConverterAdapter;
 
 public class SampleConverter extends TypeConverterAdapter<Integer, String> {
 

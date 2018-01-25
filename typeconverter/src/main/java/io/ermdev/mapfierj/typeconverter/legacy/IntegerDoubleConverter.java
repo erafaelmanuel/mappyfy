@@ -1,25 +1,25 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
+public class IntegerDoubleConverter extends TypeConverterAdapter<Integer, Double> {
 
-    public LongDoubleConverter() {
+    public IntegerDoubleConverter() {
         super(null);
     }
 
-    public LongDoubleConverter(Object obj) {
+    public IntegerDoubleConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Long)
-                return convertTo((Long) o);
+            if(o instanceof Integer)
+                return convertTo((Integer) o);
             else if(o instanceof Double)
                 return convertFrom((Double) o);
             else
@@ -29,7 +29,7 @@ public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
     }
 
     @Override
-    public Double convertTo(Long o) throws TypeException {
+    public Double convertTo(Integer o) throws TypeException {
         try {
             return o.doubleValue();
         } catch (Exception e) {
@@ -38,9 +38,9 @@ public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
     }
 
     @Override
-    public Long convertFrom(Double o) throws TypeException {
+    public Integer convertFrom(Double o) throws TypeException {
         try {
-            return o.longValue();
+            return o.intValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

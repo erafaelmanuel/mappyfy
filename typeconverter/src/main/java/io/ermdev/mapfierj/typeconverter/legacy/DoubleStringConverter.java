@@ -1,25 +1,25 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class IntegerStringConverter extends TypeConverterAdapter<Integer, String> {
+public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {
 
-    public IntegerStringConverter() {
+    public DoubleStringConverter() {
         super(null);
     }
 
-    public IntegerStringConverter(Object obj) {
+    public DoubleStringConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Integer)
-                return convertTo((Integer) o);
+            if(o instanceof Double)
+                return convertTo((Double) o);
             else if(o instanceof String)
                 return convertFrom((String) o);
             else
@@ -29,7 +29,7 @@ public class IntegerStringConverter extends TypeConverterAdapter<Integer, String
     }
 
     @Override
-    public String convertTo(Integer o) throws TypeException {
+    public String convertTo(Double o) throws TypeException {
         try {
             return String.valueOf(o);
         } catch (Exception e) {
@@ -38,9 +38,9 @@ public class IntegerStringConverter extends TypeConverterAdapter<Integer, String
     }
 
     @Override
-    public Integer convertFrom(String o) throws TypeException {
+    public Double convertFrom(String o) throws TypeException {
         try {
-            return Integer.parseInt(o);
+            return Double.parseDouble(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

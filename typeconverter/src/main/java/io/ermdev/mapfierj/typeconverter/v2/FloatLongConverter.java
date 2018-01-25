@@ -2,7 +2,7 @@ package io.ermdev.mapfierj.typeconverter.v2;
 
 import io.ermdev.mapfierj.TypeConverter;
 import io.ermdev.mapfierj.TypeException;
-import io.ermdev.mapfierj.v2.TypeConverterAdapter;
+import io.ermdev.mapfierj.TypeConverterAdapter;
 
 @TypeConverter
 public class FloatLongConverter extends TypeConverterAdapter<Float, Long> {

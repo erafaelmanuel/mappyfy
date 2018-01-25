@@ -1,27 +1,27 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class CharIntegerConverter extends TypeConverterAdapter<Character, Integer> {
+public class IntegerLongConverter extends TypeConverterAdapter<Integer, Long> {
 
-    public CharIntegerConverter() {
+    public IntegerLongConverter() {
         super(null);
     }
 
-    public CharIntegerConverter(Object obj) {
+    public IntegerLongConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Character)
-                return convertTo((Character) o);
-            else if(o instanceof Integer)
-                return convertFrom((Integer) o);
+            if(o instanceof Integer)
+                return convertTo((Integer) o);
+            else if(o instanceof Long)
+                return convertFrom((Long) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -29,21 +29,20 @@ public class CharIntegerConverter extends TypeConverterAdapter<Character, Intege
     }
 
     @Override
-    public Integer convertTo(Character o) throws TypeException {
+    public Long convertTo(Integer o) throws TypeException {
         try {
-            return (int) o;
+            return o.longValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Character convertFrom(Integer o) throws TypeException {
+    public Integer convertFrom(Long o) throws TypeException {
         try {
-            return (char) (o + '0');
+            return o.intValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
-
     }
 }

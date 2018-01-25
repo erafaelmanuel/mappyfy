@@ -1,27 +1,27 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class FloatLongConverter extends TypeConverterAdapter<Float, Long> {
+public class LongStringConverter extends TypeConverterAdapter<Long, String> {
 
-    public FloatLongConverter() {
+    public LongStringConverter() {
         super(null);
     }
 
-    public FloatLongConverter(Object obj) {
+    public LongStringConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Float)
-                return convertTo((Float) o);
-            else if(o instanceof Long)
-                return convertFrom((Long) o);
+            if(o instanceof Long)
+                return convertTo((Long) o);
+            else if(o instanceof String)
+                return convertFrom((String) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -29,18 +29,18 @@ public class FloatLongConverter extends TypeConverterAdapter<Float, Long> {
     }
 
     @Override
-    public Long convertTo(Float o) throws TypeException {
+    public String convertTo(Long o) throws TypeException {
         try {
-            return o.longValue();
+            return String.valueOf(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Float convertFrom(Long o) throws TypeException {
+    public Long convertFrom(String o) throws TypeException {
         try {
-            return o.floatValue();
+            return Long.parseLong(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

@@ -1,5 +1,7 @@
 package io.ermdev.mapfierj;
 
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

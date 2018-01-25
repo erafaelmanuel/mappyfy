@@ -1,27 +1,27 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class IntegerDoubleConverter extends TypeConverterAdapter<Integer, Double> {
+public class ByteIntegerConverter extends TypeConverterAdapter<Byte, Integer> {
 
-    public IntegerDoubleConverter() {
+    public ByteIntegerConverter() {
         super(null);
     }
 
-    public IntegerDoubleConverter(Object obj) {
+    public ByteIntegerConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Integer)
-                return convertTo((Integer) o);
-            else if(o instanceof Double)
-                return convertFrom((Double) o);
+            if(o instanceof Byte)
+                return convertTo((Byte) o);
+            else if(o instanceof Integer)
+                return convertFrom((Integer) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -29,18 +29,18 @@ public class IntegerDoubleConverter extends TypeConverterAdapter<Integer, Double
     }
 
     @Override
-    public Double convertTo(Integer o) throws TypeException {
+    public Integer convertTo(Byte o) throws TypeException {
         try {
-            return o.doubleValue();
+            return o.intValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Integer convertFrom(Double o) throws TypeException {
+    public Byte convertFrom(Integer o) throws TypeException {
         try {
-            return o.intValue();
+            return o.byteValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

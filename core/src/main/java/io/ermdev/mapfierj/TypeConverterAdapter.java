@@ -1,22 +1,32 @@
 package io.ermdev.mapfierj;
 
-public abstract class TypeConverterAdapter<T1, T2> {
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
-    protected Object o;
+public abstract class TypeConverterAdapter<A, B> {
 
-    public TypeConverterAdapter(Object obj) {
-        o = obj;
+    @SuppressWarnings("unchecked")
+    public <T> T convert(Object o) throws TypeException {
+        if (o != null) {
+            Type types[];
+            try {
+                types = (((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments());
+                if (types[0].equals(o.getClass())) {
+                    return (T) convertTo((A) o);
+                } else if (types[1].equals(o.getClass())) {
+                    return (T) convertFrom((B) o);
+                } else {
+                    throw new TypeException("Invalid Type");
+                }
+            } catch (ClassCastException e) {
+                throw new TypeException("Failed to get the types");
+            }
+        } else {
+            throw new TypeException("You can't convert a null object");
+        }
     }
 
-    public abstract Object convert() throws TypeException;
-    public abstract T2 convertTo(T1 o) throws TypeException;
-    public abstract T1 convertFrom(T2 o) throws TypeException;
+    public abstract B convertTo(A o) throws TypeException;
 
-    public Object getObject() {
-        return o;
-    }
-
-    public void setObject(Object o) {
-        this.o = o;
-    }
+    public abstract A convertFrom(B o) throws TypeException;
 }

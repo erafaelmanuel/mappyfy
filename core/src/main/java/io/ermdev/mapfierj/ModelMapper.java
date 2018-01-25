@@ -1,8 +1,5 @@
 package io.ermdev.mapfierj;
 
-import io.ermdev.mapfierj.v2.Converter;
-import io.ermdev.mapfierj.v2.TypeConverterAdapter;
-
 import java.util.Collection;
 import java.util.HashMap;
 

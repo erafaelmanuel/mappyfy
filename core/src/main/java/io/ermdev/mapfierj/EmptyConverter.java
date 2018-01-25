@@ -1,5 +1,7 @@
 package io.ermdev.mapfierj;
 
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
+
 @TypeConverter
 public class EmptyConverter extends TypeConverterAdapter<Object, Object> {
 

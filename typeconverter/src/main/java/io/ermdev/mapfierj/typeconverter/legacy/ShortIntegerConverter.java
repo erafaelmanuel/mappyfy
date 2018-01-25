@@ -1,27 +1,27 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class IntegerFloatConverter extends TypeConverterAdapter<Integer, Float> {
+public class ShortIntegerConverter extends TypeConverterAdapter<Short, Integer> {
 
-    public IntegerFloatConverter() {
+    public ShortIntegerConverter() {
         super(null);
     }
 
-    public IntegerFloatConverter(Object obj) {
+    public ShortIntegerConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Integer)
-                return convertTo((Integer) o);
-            else if(o instanceof Float)
-                return convertFrom((Float) o);
+            if(o instanceof Short)
+                return convertTo((Short) o);
+            else if(o instanceof Integer)
+                return convertFrom((Integer) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -29,18 +29,18 @@ public class IntegerFloatConverter extends TypeConverterAdapter<Integer, Float> 
     }
 
     @Override
-    public Float convertTo(Integer o) throws TypeException {
+    public Integer convertTo(Short o) throws TypeException {
         try {
-            return o.floatValue();
+            return o.intValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Integer convertFrom(Float o) throws TypeException {
+    public Short convertFrom(Integer o) throws TypeException {
         try {
-            return o.intValue();
+            return o.shortValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

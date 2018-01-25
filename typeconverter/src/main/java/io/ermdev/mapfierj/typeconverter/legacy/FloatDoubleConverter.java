@@ -1,27 +1,27 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class DoubleStringConverter extends TypeConverterAdapter<Double, String> {
+public class FloatDoubleConverter extends TypeConverterAdapter<Float, Double> {
 
-    public DoubleStringConverter() {
+    public FloatDoubleConverter() {
         super(null);
     }
 
-    public DoubleStringConverter(Object obj) {
+    public FloatDoubleConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Double)
-                return convertTo((Double) o);
-            else if(o instanceof String)
-                return convertFrom((String) o);
+            if(o instanceof Float)
+                return convertTo((Float) o);
+            else if(o instanceof Double)
+                return convertFrom((Double) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -29,18 +29,18 @@ public class DoubleStringConverter extends TypeConverterAdapter<Double, String> 
     }
 
     @Override
-    public String convertTo(Double o) throws TypeException {
+    public Double convertTo(Float o) throws TypeException{
         try {
-            return String.valueOf(o);
+            return o.doubleValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Double convertFrom(String o) throws TypeException {
+    public Float convertFrom(Double o) throws TypeException {
         try {
-            return Double.parseDouble(o);
+            return o.floatValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

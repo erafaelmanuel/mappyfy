@@ -1,27 +1,27 @@
-package io.ermdev.mapfierj.typeconverter;
+package io.ermdev.mapfierj.typeconverter.legacy;
 
 import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
+import io.ermdev.mapfierj.legacy.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class ShortIntegerConverter extends TypeConverterAdapter<Short, Integer> {
+public class IntegerStringConverter extends TypeConverterAdapter<Integer, String> {
 
-    public ShortIntegerConverter() {
+    public IntegerStringConverter() {
         super(null);
     }
 
-    public ShortIntegerConverter(Object obj) {
+    public IntegerStringConverter(Object obj) {
         super(obj);
     }
 
     @Override
     public Object convert() throws TypeException {
         if(o != null) {
-            if(o instanceof Short)
-                return convertTo((Short) o);
-            else if(o instanceof Integer)
-                return convertFrom((Integer) o);
+            if(o instanceof Integer)
+                return convertTo((Integer) o);
+            else if(o instanceof String)
+                return convertFrom((String) o);
             else
                 throw new TypeException("Invalid Type");
         }
@@ -29,18 +29,18 @@ public class ShortIntegerConverter extends TypeConverterAdapter<Short, Integer> 
     }
 
     @Override
-    public Integer convertTo(Short o) throws TypeException {
+    public String convertTo(Integer o) throws TypeException {
         try {
-            return o.intValue();
+            return String.valueOf(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Short convertFrom(Integer o) throws TypeException {
+    public Integer convertFrom(String o) throws TypeException {
         try {
-            return o.shortValue();
+            return Integer.parseInt(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
