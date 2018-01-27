@@ -119,12 +119,11 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper convertFieldByConverter(String field, Class<? extends TypeConverterAdapter> c) {
+    public ModelMapper convertFieldByConverter(String field, Class<? extends TypeConverterAdapter> adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
             try {
-                final TypeConverterAdapter adapter = c.newInstance();
                 final Converter.Session session = converter.openSession();
                 session.set(o);
                 session.adapter(adapter);
