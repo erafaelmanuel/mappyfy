@@ -4,10 +4,7 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Converter {
 
@@ -87,45 +84,43 @@ public class Converter {
                             return isMatch;
                         })
                         .anyMatch(converter -> {
-                            try {
-                                final boolean isRegistered = REGISTERED_CONVERTERS.parallelStream()
-                                        .anyMatch(item -> item.getClass().equals(converter));
-                                if (isRegistered) {
-                                    final TypeConverterAdapter adapter = REGISTERED_CONVERTERS.parallelStream()
-                                            .filter(item -> item.getClass().equals(converter))
-                                            .findFirst()
-                                            .get();
-
-                                    objects.setObject(adapter.convert(o));
-                                    if (objects.getObject() == null || !objects.getObject().getClass().equals(type)) {
-                                        throw new TypeException("Type not match");
-                                    }
-                                    return true;
-                                } else {
-                                    if (converter.getAnnotation(TypeConverter.class) != null) {
-                                        final TypeConverterAdapter adapter;
-                                        try {
-                                            adapter = converter.newInstance();
-                                        } catch (Exception e) {
-                                            throw new MappingException("Failed to found the constructor " +
-                                                    "with no arguments");
-                                        }
-                                        objects.setObject(adapter.convert(o));
-                                        if (objects.getObject() == null || !objects
-                                                .getObject().getClass().equals(type)) {
-                                            throw new TypeException("Type not match");
-                                        }
-                                        return true;
-                                    }
-                                }
-                                throw new TypeException("No valid TypeConverter found");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                if (objects.getObject() != null) {
+                            final boolean isRegistered =
+                                    REGISTERED_CONVERTERS.parallelStream()
+                                            .anyMatch(item -> item.getClass().equals(converter));
+                            if (isRegistered) {
+                                Optional<TypeConverterAdapter> optional = REGISTERED_CONVERTERS.parallelStream()
+                                        .filter(item -> item.getClass().equals(converter))
+                                        .findFirst();
+                                TypeConverterAdapter adapter = optional.get();
+                                try {
+                                    final Object instance = adapter.convert(o);
+                                    objects.setObject(instance);
+                                    return objects.getObject().getClass().equals(type);
+                                } catch (TypeException e) {
+                                    e.printStackTrace();
                                     objects.setObject(null);
+                                    return false;
                                 }
-                                return false;
+                            } else {
+                                if (converter.getAnnotation(TypeConverter.class) != null) {
+                                    final TypeConverterAdapter adapter;
+                                    try {
+                                        adapter = converter.newInstance();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        return false;
+                                    }
+                                    try {
+                                        final Object instance = adapter.convert(o);
+                                        objects.setObject(instance);
+                                        return objects.getObject().getClass().equals(type);
+                                    } catch (TypeException e) {
+                                        e.printStackTrace();
+                                        return false;
+                                    }
+                                }
                             }
+                            return false;
                         });
                 if (!isExists) {
                     converters.parallelStream()
