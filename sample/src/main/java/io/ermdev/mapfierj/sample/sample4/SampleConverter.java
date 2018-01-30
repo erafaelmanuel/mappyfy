@@ -5,6 +5,8 @@ import io.ermdev.mapfierj.TypeConverterAdapter;
 
 public class SampleConverter extends TypeConverterAdapter<Integer, String> {
 
+    public SampleConverter(String s) {}
+
     @Override
     public String convertTo(Integer o) throws TypeException {
         try {
