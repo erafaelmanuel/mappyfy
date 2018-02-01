@@ -125,7 +125,7 @@ In order to create your own custom converter you need to extends the TypeConvert
   @TypeConverter
   public class MyConverter extends TypeConverterAdapter<Long, Dog> { ...
 ```
-You have to override and write your own implementations
+You've to override and write your own implementations
 ```java 
   @Override
   public Dog convertTo(Long id) {
@@ -137,7 +137,7 @@ You have to override and write your own implementations
      return dog.getId();
   }
 ```
-And that's all, you just need to use your custom converter:
+Use your custom type converter:
 ```java
   public class Person {
     String name;
@@ -151,11 +151,17 @@ And that's all, you just need to use your custom converter:
 ```
 ```java
   ModelMappr mapper = new ModelMapper("my.package");
-  
+```
+```java
   mapper.set(person)
     .field("dogId", "dog")
     .convertFieldToType("dog", Dog.class)
-    .getTransaction().mapTo(PersonDto.class);
+```
+or
+```java
+  mapper.set(person)
+    .field("dogId", "dog")
+    .convertFieldByConverter("dog", new MyConverter())
 ```
 
 # Download
@@ -174,7 +180,7 @@ allprojects {
 
 ```js
 dependencies {
-   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.6.0'
+   compile 'com.github.erafaelmanuel:mapfierJ:v1.0-beta.6.2'
 }
 ```
 
@@ -194,7 +200,7 @@ dependencies {
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.6.0</version>
+    <version>v1.0-beta.6.2</version>
   </dependency>
 </dependencies>
 ```
