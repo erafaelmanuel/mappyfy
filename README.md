@@ -126,20 +126,7 @@ In order to create your own custom converter you need to extends the TypeConvert
   public class MyConverter extends TypeConverterAdapter<Long, Dog> { ...
 ```
 You have to override and write your own implementations
-```java
-
-  public MyConverter(Object o) {
-    super(o);
-  }
-  
-  @Override
-  public Object convert() {
-     if(getObject() instanceof Long)
-       return convertTo((Long) getObject());
-     else
-       return convertFrom((Dog) getObject());
-  }
-  
+```java 
   @Override
   public Dog convertTo(Long id) {
      return dogRepository.findById(id);
