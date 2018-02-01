@@ -5,15 +5,11 @@ import io.ermdev.mapfierj.TypeConverterAdapter;
 import io.ermdev.mapfierj.TypeException;
 
 @TypeConverter
-public class IntegerCarConverter extends TypeConverterAdapter<Integer, Car> {
+public class CarConverter extends TypeConverterAdapter<Integer, Car> {
 
     private CarRepository carRepository;
 
-    public IntegerCarConverter() {
-        carRepository = new CarRepository();
-    }
-
-    public IntegerCarConverter(CarRepository carRepository) {
+    public CarConverter(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
