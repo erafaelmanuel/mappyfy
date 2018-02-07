@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Converter {
 
-    private final String BASE_PACKAGE = "io.ermdev.mapfierj.typeconverter";
+    private final String BASE_PACKAGE = "mapfierj.converter";
 
     private final Set<Class<? extends TypeConverterAdapter>> PRIMITIVE_CONVERTERS = new HashSet<>();
 
