@@ -109,7 +109,7 @@ Map one or more fields to a different class
   @MapTo(PetDto.class)
   private Pet pet;
 
-  @MapTo(value = PetDto.class, collection = true)
+  @MapTo(value = PetDto.class, strategy = MapTo.Strategy.COLLECTION)
   private Set<Pet> pets = new HashSet<>();
 ```
 #### @NoRepeat
