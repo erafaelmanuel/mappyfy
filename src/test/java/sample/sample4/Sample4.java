@@ -1,9 +1,9 @@
-package io.ermdev.mapfierj.sample.sample4;
+package sample.sample4;
 
-import io.ermdev.mapfierj.MappingException;
-import io.ermdev.mapfierj.ModelMapper;
-import io.ermdev.mapfierj.TypeException;
-import io.ermdev.mapfierj.Converter;
+import mapfierj.Converter;
+import mapfierj.MappingException;
+import mapfierj.ModelMapper;
+import mapfierj.TypeException;
 import org.junit.Test;
 
 import java.util.ArrayList;

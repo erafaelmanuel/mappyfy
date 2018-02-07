@@ -1,9 +1,8 @@
-package io.ermdev.mapfierj.sample.sample2;
+package sample.sample2;
 
-import io.ermdev.mapfierj.SimpleMapper;
+import mapfierj.SimpleMapper;
 import org.junit.Test;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class Sample2 {

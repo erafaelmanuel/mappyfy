@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.sample.sample4;
+package sample.sample3;
 
 public class Pet {
 

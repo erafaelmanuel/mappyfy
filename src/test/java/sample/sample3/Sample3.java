@@ -1,6 +1,6 @@
-package io.ermdev.mapfierj.sample.sample3;
+package sample.sample3;
 
-import io.ermdev.mapfierj.SimpleMapper;
+import mapfierj.SimpleMapper;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.sample.sample1;
+package sample.sample1;
 
 public class Person {
 

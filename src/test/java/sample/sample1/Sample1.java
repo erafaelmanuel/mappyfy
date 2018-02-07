@@ -1,6 +1,6 @@
-package io.ermdev.mapfierj.sample.sample1;
+package sample.sample1;
 
-import io.ermdev.mapfierj.ModelMapper;
+import mapfierj.ModelMapper;
 import org.junit.Test;
 
 import java.util.logging.Logger;

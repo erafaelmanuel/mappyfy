@@ -1,4 +1,4 @@
-package io.ermdev.mapfierj.sample.sample2;
+package sample.sample2;
 
 public class PersonDto {
 

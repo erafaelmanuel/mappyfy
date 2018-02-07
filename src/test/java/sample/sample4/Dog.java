@@ -1,6 +1,6 @@
-package io.ermdev.mapfierj.sample.sample4;
+package sample.sample4;
 
-import io.ermdev.mapfierj.FieldName;
+import mapfierj.FieldName;
 
 public class Dog {
 

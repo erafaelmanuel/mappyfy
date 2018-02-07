@@ -1,11 +1,17 @@
-package io.ermdev.mapfierj.sample.sample4;
+package sample.sample3;
 
+import mapfierj.FieldName;
+import mapfierj.MapTo;
+import mapfierj.Type;
 
 import java.util.List;
 
 public class Person {
 
     String name;
+
+    @FieldName("pets")
+    @MapTo(value = Pet.class, type = Type.LIST)
     List<Dog> dogs;
 
     public Person(String name, List<Dog> dogs) {

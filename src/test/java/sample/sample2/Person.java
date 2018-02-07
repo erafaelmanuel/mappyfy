@@ -1,7 +1,7 @@
-package io.ermdev.mapfierj.sample.sample2;
+package sample.sample2;
 
-import io.ermdev.mapfierj.ConvertTo;
-import io.ermdev.mapfierj.FieldName;
+import mapfierj.ConvertTo;
+import mapfierj.FieldName;
 
 public class Person {
 
