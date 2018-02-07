@@ -1,8 +1,8 @@
 package mapfierj.converter;
 
-import io.ermdev.mapfierj.TypeConverter;
-import io.ermdev.mapfierj.TypeConverterAdapter;
-import io.ermdev.mapfierj.TypeException;
+import mapfierj.TypeConverter;
+import mapfierj.TypeConverterAdapter;
+import mapfierj.TypeException;
 
 @TypeConverter
 public class IntegerLongConverter extends TypeConverterAdapter<Integer, Long> {
