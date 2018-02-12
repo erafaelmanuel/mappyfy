@@ -1,9 +1,4 @@
-package mapfierj.converter;
-
-import mapfierj.Converter;
-import mapfierj.MappingException;
-import mapfierj.Transaction;
-import mapfierj.TypeConverterAdapter;
+package mapfierj;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -126,11 +121,6 @@ public class Mapper {
 
     public Transaction getTransaction() {
         return transaction;
-    }
-
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-        this.map = transaction.getMap();
     }
 
     public Converter getConverter() {
