@@ -39,11 +39,51 @@ Suppose we have some instances of class Person that we’d like to map to instan
   String fullname;
   int age;
  }
- ```
- ```java
+```
+```java
   Mapper mapper = new Mapper();
   
   Person person = new Person("Foo", 3);
   PersonDto dto = mapper.set(person).field("name", "fullname").mapTo(PersonDto.class);
  ```
+ ### Converters and Custom Converters
+Use converters where the mapper can't handle mapping an instance of a source object into a specific destination type.
+```java
+ public class Dog {
+  String name;
+  Date bod;
+ }
+ 
+ public class Pet {
+  String name;
+  int age;
+ }
+```
+```java
+  Mapper mapper = new Mapper();
+  mapper.getConverter().register(new MyConverter());
+``` 
+```java
+  Dog dog = new Dog("Bar", new Date());
+  Pet pet = mapper.set(dog)
+                  .field("bod", "age")
+                  .convertFieldToType("age", Integer.class)
+                  .mapTo(Pet.class);
+ ```
+In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type
+```java
+ @TypeConverter
+ public class MyConverter extends TypeConverterAdapter<Integer, Date> {
+ 
+  @Override
+  public Date convertTo(Long o) {
+     // implementations
+  }
+
+  @Override
+  public Long convertFrom(Date o) {
+     // implementations
+  }
+ }
+```
 
