@@ -32,7 +32,6 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 Suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
 ```java
  public class Person {
-  @FieldName("fullname")
   String name;
   int age;
  }
@@ -41,5 +40,13 @@ Suppose we have some instances of class Person that we’d like to map to instan
   String fullname;
   int age;
  }
+ ```
+ ```java
+  ModelMapper mapper = new ModelMapper();
+  Person person = new Person("Foo", 3);
+  PersonDto dto = mapper.set(person)
+                     .field("name","fullname")
+                     .mapTo(PersonDto.class);
+ 
  ```
 
