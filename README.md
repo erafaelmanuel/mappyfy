@@ -43,6 +43,7 @@ Suppose we have some instances of class Person that we’d like to map to instan
  ```
  ```java
   ModelMapper mapper = new ModelMapper();
+  
   Person person = new Person("Foo", 3);
   PersonDto dto = mapper.set(person)
                      .field("name","fullname")
