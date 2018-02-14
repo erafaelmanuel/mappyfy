@@ -1,5 +1,10 @@
 package mapfierj;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
 public class Mapper {
 
     private Converter converter = new Converter();
@@ -18,11 +23,35 @@ public class Mapper {
         return new Session(o);
     }
 
+    public Session set(Collection o) {
+        return new Session(o);
+    }
+
+    public Session set(HashMap<String, Object> o) {
+        return new Session(o);
+    }
+
     public class Session {
 
         private Transaction transaction;
 
         public Session(Object o) {
+            try {
+                transaction = new Transaction(o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public Session(Collection o) {
+            try {
+                transaction = new Transaction(o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        public Session(HashMap<String, Object> o) {
             try {
                 transaction = new Transaction(o);
             } catch (Exception e) {
@@ -89,6 +118,22 @@ public class Mapper {
                 return o;
             } else {
                 return transaction.mapAllTo(c);
+            }
+        }
+
+        public <T> List<T> mapToList(Class<T> c) {
+            try {
+                return transaction.mapToList(c);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        public <T> Set<T> mapToSet(Class<T> c) {
+            try {
+                return transaction.mapToSet(c);
+            } catch (Exception e) {
+                return null;
             }
         }
     }
