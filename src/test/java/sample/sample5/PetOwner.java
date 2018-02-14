@@ -6,13 +6,13 @@ import java.util.List;
 public class PetOwner {
 
     String name;
-    List<Pet> pets = new ArrayList<>();
+    List<Pet> pet = new ArrayList<>();
 
     @Override
     public String toString() {
         return "PetOwner{" +
                 "name='" + name + '\'' +
-                ", pets=" + pets +
+                ", pet=" + pet +
                 '}';
     }
 }

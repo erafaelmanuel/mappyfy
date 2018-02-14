@@ -3,7 +3,7 @@ package sample.sample5;
 import mapfierj.Converter;
 import mapfierj.MappingException;
 import mapfierj.TypeException;
-import mapfierj.Mapper;
+import mapfierj.v2.Mapper;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class Sample5 {
         //Create the owner of our dogs
         Person person = new Person("Rafael", dogs);
         
-        PetOwner petOwner = mapper.set(person).field("dogs", "pets").mapTo(PetOwner.class);
+        PetOwner petOwner = mapper.set(person).field("dog", "pet").mapTo(PetOwner.class);
 
         logger.info(petOwner.toString());
     }
@@ -48,5 +48,20 @@ public class Sample5 {
         final int num = 1;
         Character c = converter.convertTo( num, Character.class);
         System.out.println(c);
+    }
+
+    @Test
+    public void wannabe() {
+        Mapper mapper = new Mapper();
+        SuperMan superMan = new SuperMan();
+        superMan.name = "Rafael";
+        superMan.age = 15;
+
+        BatMan batMan = mapper.set(superMan)
+                .field("name", "fullname")
+                .convertField("age", Long.class)
+                .mapTo(BatMan.class);
+
+        System.out.println(batMan);
     }
 }
