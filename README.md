@@ -5,7 +5,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
  
 * Map complex and deeply structured objects
 * Create converters for complete control over the mapping of a specific set of objects anywhere in the object graph
-* Easy to use
+* Easy-to-use
 
 ### Download
 ```html
@@ -22,7 +22,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.0-beta.6.3</version>
+    <version>v1.x</version>
   </dependency>
 </dependencies>
 ```
@@ -52,7 +52,7 @@ Use converters where the mapper can't handle mapping an instance of a source obj
 ```java
  public class Dog {
   String name;
-  Date bod;
+  Date dob;
  }
  
  public class Pet {
@@ -67,7 +67,7 @@ Use converters where the mapper can't handle mapping an instance of a source obj
 ```java
   Dog dog = new Dog("Bar", new Date());
   Pet pet = mapper.set(dog)
-                    .field("bod", "age")
+                    .field("dob", "age")
                     .convertField("age", Integer.class)
                     .mapTo(Pet.class);
  ```
@@ -87,4 +87,3 @@ In order to create your own custom converter you need to extends the TypeConvert
   }
  }
 ```
-
