@@ -42,7 +42,8 @@ Suppose we have some instances of class Person that we’d like to map to instan
 ```
 ```java
   Mapper mapper = new Mapper();
-  
+```
+```java
   Person person = new Person("Foo", 3);
   PersonDto dto = mapper.set(person).field("name", "fullname").mapTo(PersonDto.class);
  ```
@@ -66,9 +67,9 @@ Use converters where the mapper can't handle mapping an instance of a source obj
 ```java
   Dog dog = new Dog("Bar", new Date());
   Pet pet = mapper.set(dog)
-                  .field("bod", "age")
-                  .convertFieldToType("age", Integer.class)
-                  .mapTo(Pet.class);
+                    .field("bod", "age")
+                    .convertField("age", Integer.class)
+                    .mapTo(Pet.class);
  ```
 In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type
 ```java
