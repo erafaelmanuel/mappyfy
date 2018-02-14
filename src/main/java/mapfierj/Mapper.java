@@ -30,16 +30,6 @@ public class Mapper {
             }
         }
 
-        public Session exclude(String f) {
-            transaction.getMap().remove(f);
-            return this;
-        }
-
-        public Session excludeAll(String f) {
-            transaction.getExcludedField().add(f);
-            return this;
-        }
-
         public Session convertField(String f, Class<?> t) {
             try {
                 final Object o = converter.convertTo(transaction.getMap().get(f), t);
@@ -54,7 +44,7 @@ public class Mapper {
             return this;
         }
 
-        public Session convertField(String f, TypeConverterAdapter c) {
+        public Session convertFieldBy(String f, TypeConverterAdapter c) {
             final Object o = transaction.getMap().get(f);
             transaction.getMap().remove(f);
             if (o != null) {
@@ -71,6 +61,16 @@ public class Mapper {
                     e.printStackTrace();
                 }
             }
+            return this;
+        }
+
+        public Session exclude(String f) {
+            transaction.getMap().remove(f);
+            return this;
+        }
+
+        public Session excludeAll(String f) {
+            transaction.getExcludedField().add(f);
             return this;
         }
 
