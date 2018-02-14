@@ -2,6 +2,18 @@ package mapfierj;
 
 public class Mapper {
 
+    private Converter converter = new Converter();
+
+    public Mapper(){}
+
+    public Mapper(String... packages) {
+        converter.scanPackages(packages);
+    }
+
+    public Converter getConverter() {
+        return converter;
+    }
+
     public Session set(Object o) {
         return new Session(o);
     }
@@ -9,7 +21,6 @@ public class Mapper {
     public class Session {
 
         private Transaction transaction;
-        private Converter converter = new Converter();
 
         public Session(Object o) {
             try {
