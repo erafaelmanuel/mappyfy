@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/erafaelmanuel/mapfierJ.svg)](https://jitpack.io/#erafaelmanuel/mapfierJ)
+[![](https://jitpack.io/v/erafaelmanuel/mapfierj.svg)](https://jitpack.io/#erafaelmanuel/mapfierj)
 
 ### Overview
 A Reflection-based mappers library that maps objects to another objects. It can be very useful when developing multi-layered applications.
@@ -71,7 +71,7 @@ Use converters where the mapper can't handle mapping an instance of a source obj
                .convertField("age", Integer.class)
                .mapTo(Pet.class);
  ```
-In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type
+In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type.
 ```java
  @TypeConverter
  public class MyConverter extends TypeConverterAdapter<Integer, Date> {
@@ -85,5 +85,5 @@ In order to create your own custom converter you need to extends the TypeConvert
   public Long convertFrom(Date o) {
      // Your implementation
   }
-  ...
+}
 ```
