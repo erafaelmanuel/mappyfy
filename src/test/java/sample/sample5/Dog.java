@@ -1,12 +1,13 @@
 package sample.sample5;
 
-import mapfierj.FieldName;
+import mapfierj.xyz.Field;
 
 public class Dog {
 
-    @FieldName("petName")
+    @Field(name = "petName")
     String name;
 
+    @Field(name = "petSize")
     Integer size;
 
     public Dog(String name, Integer size) {
