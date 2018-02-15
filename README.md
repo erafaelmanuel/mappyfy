@@ -78,12 +78,12 @@ In order to create your own custom converter you need to extends the TypeConvert
  
   @Override
   public Date convertTo(Long o) {
-     // Implementation
+     // Your implementation
   }
 
   @Override
   public Long convertFrom(Date o) {
-     // Implementation
+     // Your implementation
   }
- ...
+  ...
 ```
