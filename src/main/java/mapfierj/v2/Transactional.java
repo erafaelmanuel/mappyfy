@@ -12,7 +12,11 @@ public abstract class Transactional {
         return loads;
     }
 
-    abstract  <T> T mapTo(Class<T> c);
+    abstract <T> T mapTo(Class<T> c);
 
-    abstract  <T> List<T> mapToList(Class<T> c);
+    abstract <T> List<T> mapToList(Class<T> c);
+
+    abstract <T> Set<T> mapToSet(Class<T> c);
+
+    abstract <T> T[] mapToArray(Class<T> c);
 }
