@@ -1,7 +1,9 @@
 package mapfierj.v2;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LazyWorker extends Transactional {
 
@@ -17,7 +19,7 @@ public class LazyWorker extends Transactional {
 
     LazyWorker(Object... os) {
         try {
-            for(Object o : os) {
+            for (Object o : os) {
                 loads.add(new Load(o));
             }
         } catch (Exception e) {
@@ -44,9 +46,28 @@ public class LazyWorker extends Transactional {
     @Override
     <T> List<T> mapToList(Class<T> c) {
         List<T> list = new ArrayList<>();
-        for(Load load : loads) {
+        for (Load load : loads) {
             list.add(new InstanceCreator<T>(load, c).newInstance());
         }
         return list;
+    }
+
+    @Override
+    <T> Set<T> mapToSet(Class<T> c) {
+        Set<T> set = new HashSet<>();
+        for (Load load : loads) {
+            set.add(new InstanceCreator<T>(load, c).newInstance());
+        }
+        return set;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    <T> T[] mapToArray(Class<T> c) {
+        Object[] array = new Object[loads.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = new InstanceCreator<T>(loads.get(i), c).newInstance();
+        }
+        return (T[]) array;
     }
 }

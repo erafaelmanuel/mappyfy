@@ -1,14 +1,14 @@
 package mapfierj.v2;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public abstract class Transactional {
 
-    Set<Load> loads = new HashSet<>();
+    List<Load> loads = new ArrayList<>();
 
-    public Set<Load> getLoads() {
+    public List<Load> getLoads() {
         return loads;
     }
 
