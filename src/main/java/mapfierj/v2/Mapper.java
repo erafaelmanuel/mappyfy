@@ -22,7 +22,7 @@ public class Mapper {
 
     public class Session {
 
-        private LazyWorker worker;
+        private Transactional worker;
 
         private Session(Object o) {
             try {
@@ -97,6 +97,10 @@ public class Mapper {
 
         public <T> T mapTo(Class<T> c) {
             return worker.mapTo(c);
+        }
+
+        public Transactional transactional() {
+            return worker;
         }
     }
 }
