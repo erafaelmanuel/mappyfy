@@ -22,7 +22,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
     <artifactId>mapfierJ</artifactId>
-    <version>v1.x</version>
+    <version>v1.x.y</version>
   </dependency>
 </dependencies>
 ```
@@ -67,9 +67,9 @@ Use converters where the mapper can't handle mapping an instance of a source obj
 ```java
   Dog dog = new Dog("Bar", new Date());
   Pet pet = mapper.set(dog)
-                    .field("dob", "age")
-                    .convertField("age", Integer.class)
-                    .mapTo(Pet.class);
+               .field("dob", "age")
+               .convertField("age", Integer.class)
+               .mapTo(Pet.class);
  ```
 In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type
 ```java
@@ -78,12 +78,12 @@ In order to create your own custom converter you need to extends the TypeConvert
  
   @Override
   public Date convertTo(Long o) {
-     // implementations
+     // Implementation
   }
 
   @Override
   public Long convertFrom(Date o) {
-     // implementations
+     // Implementation
   }
- }
+ ...
 ```
