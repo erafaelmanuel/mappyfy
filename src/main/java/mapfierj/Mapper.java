@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+@Deprecated
 public class Mapper {
 
     private Converter converter = new Converter();
