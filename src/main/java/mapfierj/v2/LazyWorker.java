@@ -1,5 +1,6 @@
 package mapfierj.v2;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,7 @@ public class LazyWorker extends Transactional {
     }
 
     @Override
-    <T> List<T> mapToList(Class<T> c) {
+    public <T> List<T> mapToList(Class<T> c) {
         List<T> list = new ArrayList<>();
         for (Load load : loads) {
             list.add(new InstanceCreator<T>(load, c).newInstance());
@@ -53,7 +54,7 @@ public class LazyWorker extends Transactional {
     }
 
     @Override
-    <T> Set<T> mapToSet(Class<T> c) {
+    public <T> Set<T> mapToSet(Class<T> c) {
         Set<T> set = new HashSet<>();
         for (Load load : loads) {
             set.add(new InstanceCreator<T>(load, c).newInstance());
@@ -63,11 +64,16 @@ public class LazyWorker extends Transactional {
 
     @SuppressWarnings("unchecked")
     @Override
-    <T> T[] mapToArray(Class<T> c) {
-        Object[] array = new Object[loads.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = new InstanceCreator<T>(loads.get(i), c).newInstance();
+    public <T> T[] mapToArray(Class<T> c) {
+        try {
+            T array[] = (T[]) Array.newInstance(c, loads.size());
+            for (int i = 0; i < array.length; i++) {
+                array[i] = new InstanceCreator<T>(loads.get(i), c).newInstance();
+            }
+            return array;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return (T[]) array;
     }
 }

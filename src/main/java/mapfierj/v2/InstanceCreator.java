@@ -1,5 +1,6 @@
 package mapfierj.v2;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -49,13 +50,18 @@ public class InstanceCreator<T> {
 
     @SuppressWarnings("unchecked")
     private <E> E[] mkArray(Object arg, Class<E> c) {
-        Object o[] = (Object[]) arg;
-        Object array[] = new Object[o.length];
+        try {
+            Object o[] = (Object[]) arg;
+            E array[] = (E[]) Array.newInstance(c, o.length);
 
-        for (int ctr = 0; ctr < o.length; ctr++) {
-            array[ctr] = new InstanceCreator<>(new Load(o[ctr]), c).newInstance();
+            for (int ctr = 0; ctr < o.length; ctr++) {
+                array[ctr] = new InstanceCreator<>(new Load(o[ctr]), c).newInstance();
+            }
+            return array;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return (E[]) array;
     }
 
     private <E> List<E> mkList(Object arg, Class<E> c) {

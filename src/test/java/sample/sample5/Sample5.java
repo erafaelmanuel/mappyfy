@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class Sample5 {
@@ -58,10 +59,10 @@ public class Sample5 {
         superMan.age = 15;
         superMan.enemy = new String[]{"Dog", "Cat", "Pink"};
 
-        BatMan batMan = mapper.set(superMan)
+        Set<BatMan> batMan = mapper.set(superMan)
                 .field("name", "fullname")
                 .convertField("age", Long.class)
-                .mapTo(BatMan.class);
+                .transactional().mapToSet(BatMan.class);
 
         System.out.println(batMan);
     }
