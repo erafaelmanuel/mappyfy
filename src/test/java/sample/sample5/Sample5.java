@@ -29,11 +29,16 @@ public class Sample5 {
         dogs.add(dog1);
         dogs.add(dog2);
 
-        Pet pet = mapper.set(dog1)
+        Pet pet[] = mapper.set(null)
                 .field("size", "petSize")
-                .mapTo(Pet.class);
+                .transactional().mapToArray(Pet.class);
 
-        System.out.println(pet);
+        for(Pet p : pet) {
+            System.out.println(p);
+        }
+        System.out.println(mapper.set(null)
+                .field("size", "petSize")
+                .transactional().mapTo(Pet.class));
 
         //Create the owner of our dogs
         Person person = new Person("Rafael", dogs);

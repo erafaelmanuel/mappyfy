@@ -9,22 +9,16 @@ import java.util.Set;
 public class LazyWorker extends Transactional {
 
     LazyWorker(Object o) {
-        try {
-            if (o != null) {
-                loads.add(new Load(o));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (o != null) {
+            loads.add(new Load(o));
         }
     }
 
-    LazyWorker(Object... os) {
-        try {
+    LazyWorker(Object[] os) {
+        if (os != null) {
             for (Object o : os) {
                 loads.add(new Load(o));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -32,14 +26,14 @@ public class LazyWorker extends Transactional {
     public <T> T mapTo(Class<T> c) {
         switch (loads.size()) {
             case 0: {
-                throw new RuntimeException("Invalid to map a null object");
+                throw new RuntimeException("No load to map!");
             }
             case 1: {
                 Load load = loads.iterator().next();
                 return new InstanceCreator<T>(load, c).newInstance();
             }
             default: {
-                throw new RuntimeException("Multiple objects is illegal");
+                throw new RuntimeException("Unable to use mapTo when the load is more than one");
             }
         }
     }

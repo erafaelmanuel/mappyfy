@@ -4,6 +4,8 @@ import mapfierj.Converter;
 import mapfierj.MappingException;
 import mapfierj.TypeConverterAdapter;
 
+import java.util.Collection;
+
 public class Mapper {
 
     private Converter converter = new Converter();
@@ -16,7 +18,7 @@ public class Mapper {
         return new Session(o);
     }
 
-    public Session set(Object... o) {
+    public Session set(Object[] o) {
         return new Session(o);
     }
 
@@ -26,13 +28,17 @@ public class Mapper {
 
         private Session(Object o) {
             try {
-                worker = new LazyWorker(o);
+                if(o instanceof Collection) {
+                    worker = new LazyWorker(((Collection) o).toArray());
+                } else {
+                    worker = new LazyWorker(o);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        private Session(Object... o) {
+        private Session(Object[] o) {
             try {
                 worker = new LazyWorker(o);
             } catch (Exception e) {
