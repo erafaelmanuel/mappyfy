@@ -1,5 +1,6 @@
 package mapfierj;
 
+@Deprecated
 public class MapConfigure {
 
     private MapConfigure instance;
