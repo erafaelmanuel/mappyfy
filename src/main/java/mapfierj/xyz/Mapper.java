@@ -14,44 +14,43 @@ public class Mapper {
         return converter;
     }
 
-    public Session set(Object o) {
-        return new Session(o);
+    public Transaction set(Object o) {
+        return new Transaction(o);
     }
 
-    public Session set(Object[] o) {
-        return new Session(o);
+    public Transaction set(Object[] o) {
+        return new Transaction(o);
     }
 
-    public class Session {
+    public class Transaction {
 
-        private Transactional worker;
+        private Transactional transactional;
 
-        private Session(Object o) {
+        private Transaction(Object o) {
             try {
                 if(o instanceof Collection) {
-                    worker = new LazyWorker(((Collection) o).toArray());
+                    transactional = new LazyWorker(((Collection) o).toArray());
                 } else {
-                    worker = new LazyWorker(o);
+                    transactional = new LazyWorker(o);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        private Session(Object[] o) {
+        private Transaction(Object[] o) {
             try {
-                worker = new LazyWorker(o);
+                transactional = new LazyWorker(o);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        public Session convertField(String f, Class<?> t) {
+        public Transaction convertField(String f, Class<?> t) {
             try {
-                for (Load load : worker.getLoads()) {
+                for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
                     Object newObject = converter.convertTo(fieldValue, t);
-
                     if (newObject != null) {
                         load.getFields().put(f, newObject);
                     } else {
@@ -64,9 +63,9 @@ public class Mapper {
             return this;
         }
 
-        public Session convertFieldBy(String f, TypeConverterAdapter adapter) {
+        public Transaction convertFieldBy(String f, TypeConverterAdapter adapter) {
             try {
-                for (Load load : worker.getLoads()) {
+                for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
                     if (fieldValue != null) {
                         Converter.Session session = converter.openSession();
@@ -83,15 +82,15 @@ public class Mapper {
             return this;
         }
 
-        public Session exclude(String f) {
-            for (Load load : worker.getLoads()) {
+        public Transaction exclude(String f) {
+            for (Load load : transactional.getLoads()) {
                 load.getFields().remove(f);
             }
             return this;
         }
 
-        public Session field(String f1, String f2) {
-            for (Load load : worker.getLoads()) {
+        public Transaction field(String f1, String f2) {
+            for (Load load : transactional.getLoads()) {
                 Object fieldValue = load.getFields().get(f1);
                 if (fieldValue != null) {
                     load.getFields().put(f2, fieldValue);
@@ -102,11 +101,11 @@ public class Mapper {
         }
 
         public <T> T mapTo(Class<T> c) {
-            return worker.mapTo(c);
+            return transactional.mapTo(c);
         }
 
-        public Transactional transactional() {
-            return worker;
+        public Transactional transact() {
+            return transactional;
         }
     }
 }

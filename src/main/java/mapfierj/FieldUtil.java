@@ -2,6 +2,7 @@ package mapfierj;
 
 import java.lang.reflect.Field;
 
+@Deprecated
 public class FieldUtil {
 
     public static String fieldName(Field field) {

@@ -6,6 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
+@Deprecated
 public class Converter {
 
     private final String BASE_PACKAGE = "mapfierj.converter";
