@@ -56,6 +56,7 @@ public class Sample5 {
         SuperMan superMan = new SuperMan();
         superMan.name = "Rafael";
         superMan.age = 15;
+        superMan.enemy = new String[]{"Dog", "Cat", "Pink"};
 
         BatMan batMan = mapper.set(superMan)
                 .field("name", "fullname")
