@@ -7,7 +7,6 @@ public class Dog {
     @FieldName("petName")
     String name;
 
-    @FieldName("petSize")
     Integer size;
 
     public Dog(String name, Integer size) {

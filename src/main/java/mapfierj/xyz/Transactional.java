@@ -1,4 +1,4 @@
-package mapfierj.v2;
+package mapfierj.xyz;
 
 import java.util.ArrayList;
 import java.util.List;

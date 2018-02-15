@@ -1,4 +1,4 @@
-package mapfierj.v2;
+package mapfierj.xyz;
 
 import mapfierj.FieldName;
 
