@@ -68,7 +68,7 @@ public class InstanceCreator<T> {
         List<E> list = new ArrayList<>();
         for (Object o : (Collection) arg) {
             Load load = new Load(o);
-            list.add(new InstanceCreator<E>(load, c).newInstance);
+            list.add(new InstanceCreator<>(load, c).newInstance);
         }
         return list;
     }
@@ -77,7 +77,7 @@ public class InstanceCreator<T> {
         Set<E> set = new HashSet<>();
         for (Object o : (Collection) arg) {
             Load load = new Load(o);
-            set.add(new InstanceCreator<E>(load, c).newInstance);
+            set.add(new InstanceCreator<>(load, c).newInstance);
         }
         return set;
     }
