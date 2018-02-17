@@ -7,9 +7,9 @@ import java.util.Collection;
 
 public class Mapper {
 
-    private Converter converter = new Converter();
+    private Parser converter = new Parser();
 
-    public Converter getConverter() {
+    public Parser getConverter() {
         return converter;
     }
 
@@ -66,8 +66,9 @@ public class Mapper {
             try {
                 for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
+                    Object newObject = converter.set(fieldValue).convertBy(adapter);
                     if (fieldValue != null) {
-                        load.getFields().put(f, converter.set(fieldValue).convertBy(adapter));
+                        load.getFields().put(f, newObject);
                     } else {
                         load.getFields().remove(f);
                     }

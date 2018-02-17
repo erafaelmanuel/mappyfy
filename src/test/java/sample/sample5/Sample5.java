@@ -4,6 +4,7 @@ import mapfierj.Converter;
 import mapfierj.MappingException;
 import mapfierj.TypeException;
 import mapfierj.xyz.Mapper;
+import mapfierj.xyz.Parser;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class Sample5 {
 
     @Test
     public void thinking() throws MappingException {
-        mapfierj.xyz.Converter converter = new mapfierj.xyz.Converter();
+        Parser converter = new Parser();
         short num = converter.set("5").convertTo(Short.class);
         System.out.println(num + 1);
     }
