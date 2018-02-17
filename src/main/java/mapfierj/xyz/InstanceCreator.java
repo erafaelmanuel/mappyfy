@@ -85,4 +85,13 @@ public class InstanceCreator<T> {
     public T newInstance() {
         return newInstance;
     }
+
+    public static <E> E create(Class<E> c) {
+        try {
+            return c.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
