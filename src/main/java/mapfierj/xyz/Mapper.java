@@ -1,6 +1,5 @@
 package mapfierj.xyz;
 
-import mapfierj.Converter;
 import mapfierj.MappingException;
 import mapfierj.TypeConverterAdapter;
 
@@ -46,11 +45,11 @@ public class Mapper {
             }
         }
 
-        public Transaction convertField(String f, Class<?> t) {
+        public Transaction convertField(String f, Class<?> type) {
             try {
                 for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
-                    Object newObject = converter.convertTo(fieldValue, t);
+                    Object newObject = converter.set(fieldValue).convertTo(type);
                     if (newObject != null) {
                         load.getFields().put(f, newObject);
                     } else {
@@ -68,10 +67,7 @@ public class Mapper {
                 for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
                     if (fieldValue != null) {
-                        Converter.Session session = converter.openSession();
-                        session.set(fieldValue);
-                        session.adapter(adapter);
-                        load.getFields().put(f, session.convert());
+                        load.getFields().put(f, converter.set(fieldValue).convertBy(adapter));
                     } else {
                         load.getFields().remove(f);
                     }
