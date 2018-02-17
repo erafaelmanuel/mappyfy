@@ -76,4 +76,11 @@ public class Sample5 {
 
         System.out.println(batMan);
     }
+
+    @Test
+    public void thinking() throws MappingException {
+        mapfierj.xyz.Converter converter = new mapfierj.xyz.Converter();
+        short num = converter.set("5").convertTo(Short.class);
+        System.out.println(num + 1);
+    }
 }
