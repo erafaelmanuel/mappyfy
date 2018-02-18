@@ -21,8 +21,8 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 <dependencies>
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
-    <artifactId>mapfierJ</artifactId>
-    <version>v1.x.y</version>
+    <artifactId>mapfierj</artifactId>
+    <version>x.y.z</version>
   </dependency>
 </dependencies>
 ```
@@ -85,5 +85,4 @@ In order to create your own custom converter you need to extends the TypeConvert
   public Long convertFrom(Date o) {
      // Your implementation
   }
-}
 ```
