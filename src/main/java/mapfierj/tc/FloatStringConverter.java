@@ -1,25 +1,25 @@
-package mapfierj.converter;
+package mapfierj.tc;
 
 import mapfierj.TypeConverter;
 import mapfierj.TypeConverterAdapter;
 import mapfierj.TypeException;
 
 @TypeConverter
-public class LongDoubleConverter extends TypeConverterAdapter<Long, Double> {
+public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
 
     @Override
-    public Double convertTo(Long o) throws TypeException {
+    public String convertTo(Float o) throws TypeException {
         try {
-            return o.doubleValue();
+            return String.valueOf(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Long convertFrom(Double o) throws TypeException {
+    public Float convertFrom(String o) throws TypeException {
         try {
-            return o.longValue();
+            return Float.parseFloat(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

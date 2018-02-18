@@ -1,28 +1,27 @@
-package mapfierj.converter;
+package mapfierj.tc;
 
 import mapfierj.TypeConverter;
 import mapfierj.TypeConverterAdapter;
 import mapfierj.TypeException;
 
 @TypeConverter
-public class CharIntegerConverter extends TypeConverterAdapter<Character, Integer> {
+public class ShortIntegerConverter extends TypeConverterAdapter<Short, Integer> {
 
     @Override
-    public Integer convertTo(Character o) throws TypeException {
+    public Integer convertTo(Short o) throws TypeException {
         try {
-            return (int) o;
+            return o.intValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Character convertFrom(Integer o) throws TypeException {
+    public Short convertFrom(Integer o) throws TypeException {
         try {
-            return (char) (o + '0');
+            return o.shortValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
-
     }
 }

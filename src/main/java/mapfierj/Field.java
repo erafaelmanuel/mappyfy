@@ -1,4 +1,4 @@
-package mapfierj.re;
+package mapfierj;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

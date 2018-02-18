@@ -1,6 +1,5 @@
 package mapfierj;
 
-import mapfierj.re.UnrealConverter;
 import org.reflections.Reflections;
 
 import java.lang.reflect.ParameterizedType;

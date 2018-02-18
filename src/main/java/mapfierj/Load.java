@@ -1,4 +1,4 @@
-package mapfierj.re;
+package mapfierj;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -13,8 +13,8 @@ public class Load {
                 Field variables[] = o.getClass().getDeclaredFields();
                 for (Field var : variables) {
                     var.setAccessible(true);
-                    if (var.getAnnotation(mapfierj.re.Field.class) != null) {
-                        String name = var.getAnnotation(mapfierj.re.Field.class).name();
+                    if (var.getAnnotation(mapfierj.Field.class) != null) {
+                        String name = var.getAnnotation(mapfierj.Field.class).name();
                         fields.put(name, var.get(o));
                     } else {
                         fields.put(var.getName(), var.get(o));

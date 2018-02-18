@@ -1,25 +1,25 @@
-package mapfierj.converter;
+package mapfierj.tc;
 
 import mapfierj.TypeConverter;
 import mapfierj.TypeConverterAdapter;
 import mapfierj.TypeException;
 
 @TypeConverter
-public class IntegerDoubleConverter extends TypeConverterAdapter<Integer, Double> {
+public class IntegerStringConverter extends TypeConverterAdapter<Integer, String> {
 
     @Override
-    public Double convertTo(Integer o) throws TypeException {
+    public String convertTo(Integer o) throws TypeException {
         try {
-            return o.doubleValue();
+            return String.valueOf(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Integer convertFrom(Double o) throws TypeException {
+    public Integer convertFrom(String o) throws TypeException {
         try {
-            return o.intValue();
+            return Integer.parseInt(o);
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

@@ -1,14 +1,14 @@
-package mapfierj.converter;
+package mapfierj.tc;
 
 import mapfierj.TypeConverter;
 import mapfierj.TypeConverterAdapter;
 import mapfierj.TypeException;
 
 @TypeConverter
-public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
+public class BooleanStringConverter extends TypeConverterAdapter<Boolean, String> {
 
     @Override
-    public String convertTo(Float o) throws TypeException {
+    public String convertTo(Boolean o) throws TypeException {
         try {
             return String.valueOf(o);
         } catch (Exception e) {
@@ -17,10 +17,10 @@ public class FloatStringConverter extends TypeConverterAdapter<Float, String> {
     }
 
     @Override
-    public Float convertFrom(String o) throws TypeException {
+    public Boolean convertFrom(String o) throws TypeException {
         try {
-            return Float.parseFloat(o);
-        } catch (Exception e) {
+            return Boolean.getBoolean(o);
+        } catch (NullPointerException e) {
             throw new TypeException("Failed to convert");
         }
     }

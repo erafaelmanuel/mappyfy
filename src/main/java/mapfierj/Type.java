@@ -1,5 +1,6 @@
 package mapfierj;
 
+@Deprecated
 public enum Type {
 
     DEFAULT(1), LIST(2), SET(3);

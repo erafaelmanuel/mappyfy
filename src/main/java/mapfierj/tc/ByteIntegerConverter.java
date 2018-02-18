@@ -1,25 +1,25 @@
-package mapfierj.converter;
+package mapfierj.tc;
 
 import mapfierj.TypeConverter;
 import mapfierj.TypeConverterAdapter;
 import mapfierj.TypeException;
 
 @TypeConverter
-public class FloatDoubleConverter extends TypeConverterAdapter<Float, Double> {
+public class ByteIntegerConverter extends TypeConverterAdapter<Byte, Integer> {
 
     @Override
-    public Double convertTo(Float o) throws TypeException {
+    public Integer convertTo(Byte o) throws TypeException {
         try {
-            return o.doubleValue();
+            return o.intValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
     }
 
     @Override
-    public Float convertFrom(Double o) throws TypeException {
+    public Byte convertFrom(Integer o) throws TypeException {
         try {
-            return o.floatValue();
+            return o.byteValue();
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }

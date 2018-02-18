@@ -1,12 +1,9 @@
 package mapfierj;
 
-import mapfierj.re.Transactional;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
-@Deprecated
 public class Transaction extends Transactional {
 
     private List<Class<?>> repeaterClasses = new ArrayList<>();

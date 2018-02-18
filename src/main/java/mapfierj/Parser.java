@@ -1,7 +1,5 @@
-package mapfierj.re;
+package mapfierj;
 
-import mapfierj.MappingException;
-import mapfierj.TypeConverterAdapter;
 import org.reflections.Reflections;
 
 import java.lang.reflect.ParameterizedType;
@@ -69,7 +67,7 @@ public class Parser implements UnrealConverter {
                 }
                 throw new MappingException("Unable to convert!");
             } else {
-                throw new MappingException("No converter match for your object!");
+                throw new MappingException("No tc match for your object!");
             }
         }
 

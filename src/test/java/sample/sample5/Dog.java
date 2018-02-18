@@ -1,6 +1,6 @@
 package sample.sample5;
 
-import mapfierj.re.Field;
+import mapfierj.Field;
 
 public class Dog {
 

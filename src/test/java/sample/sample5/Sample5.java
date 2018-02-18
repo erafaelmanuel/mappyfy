@@ -3,8 +3,9 @@ package sample.sample5;
 import mapfierj.Converter;
 import mapfierj.MappingException;
 import mapfierj.TypeException;
-import mapfierj.re.Mapper;
-import mapfierj.re.Parser;
+import mapfierj.Mapper;
+import mapfierj.Parser;
+import mapfierj.tc.IntegerStringConverter;
 import org.junit.Test;
 
 import java.util.ArrayList;

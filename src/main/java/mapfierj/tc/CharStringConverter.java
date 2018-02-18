@@ -1,14 +1,14 @@
-package mapfierj.converter;
+package mapfierj.tc;
 
 import mapfierj.TypeConverter;
 import mapfierj.TypeConverterAdapter;
 import mapfierj.TypeException;
 
 @TypeConverter
-public class LongStringConverter extends TypeConverterAdapter<Long, String> {
+public class CharStringConverter extends TypeConverterAdapter<Character, String> {
 
     @Override
-    public String convertTo(Long o) throws TypeException {
+    public String convertTo(Character o) throws TypeException {
         try {
             return String.valueOf(o);
         } catch (Exception e) {
@@ -17,9 +17,9 @@ public class LongStringConverter extends TypeConverterAdapter<Long, String> {
     }
 
     @Override
-    public Long convertFrom(String o) throws TypeException {
+    public Character convertFrom(String o) throws TypeException {
         try {
-            return Long.parseLong(o);
+            return (o.trim().charAt(0));
         } catch (Exception e) {
             throw new TypeException("Failed to convert");
         }
