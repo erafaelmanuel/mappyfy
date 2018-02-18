@@ -12,26 +12,24 @@ import java.util.Set;
 
 public class Parser implements UnrealConverter {
 
-    private Set<TypeConverterAdapter> adapters = new HashSet<>();
+    private final Set<TypeConverterAdapter> ADAPTERS = new HashSet<>();
 
     public Parser() {
-        final Reflections reflections = new Reflections(BASE_PACKAGE);
-        reflections.getSubTypesOf(TypeConverterAdapter.class)
-                .parallelStream().forEach((c -> adapters.add(InstanceCreator.create(c))));
+        new Reflections(BASE_PACKAGE).getSubTypesOf(TypeConverterAdapter.class)
+                .parallelStream().forEach((c -> ADAPTERS.add(InstanceCreator.create(c))));
     }
 
     public void scanPackages(String... packages) {
         for (String item : packages) {
             if (item != null && !item.trim().isEmpty()) {
-                final Reflections reflections = new Reflections(item);
-                reflections.getSubTypesOf(TypeConverterAdapter.class)
-                        .parallelStream().forEach((c -> adapters.add(InstanceCreator.create(c))));
+                new Reflections(item).getSubTypesOf(TypeConverterAdapter.class)
+                        .parallelStream().forEach((c -> ADAPTERS.add(InstanceCreator.create(c))));
             }
         }
     }
 
     public void register(TypeConverterAdapter adapter) {
-        adapters.add(adapter);
+        ADAPTERS.add(adapter);
     }
 
     public Transaction set(Object o) {
@@ -49,7 +47,7 @@ public class Parser implements UnrealConverter {
 
         @SuppressWarnings("unchecked")
         public <T> T convertTo(Class<T> c) throws MappingException {
-            adapters.parallelStream().filter(adapter -> {
+            ADAPTERS.parallelStream().filter(adapter -> {
                 final Type types[] = (((ParameterizedType)
                         adapter.getClass().getGenericSuperclass()).getActualTypeArguments());
                 return Arrays.asList(types).parallelStream()

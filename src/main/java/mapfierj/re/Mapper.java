@@ -7,10 +7,10 @@ import java.util.Collection;
 
 public class Mapper {
 
-    private Parser converter = new Parser();
+    private final Parser PARSER = new Parser();
 
     public Parser getConverter() {
-        return converter;
+        return PARSER;
     }
 
     public Transaction set(Object o) {
@@ -49,7 +49,7 @@ public class Mapper {
             try {
                 for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
-                    Object newObject = converter.set(fieldValue).convertTo(type);
+                    Object newObject = PARSER.set(fieldValue).convertTo(type);
                     if (newObject != null) {
                         load.getFields().put(f, newObject);
                     } else {
@@ -66,7 +66,7 @@ public class Mapper {
             try {
                 for (Load load : transactional.getLoads()) {
                     Object fieldValue = load.getFields().get(f);
-                    Object newObject = converter.set(fieldValue).convertBy(adapter);
+                    Object newObject = PARSER.set(fieldValue).convertBy(adapter);
                     if (fieldValue != null) {
                         load.getFields().put(f, newObject);
                     } else {
