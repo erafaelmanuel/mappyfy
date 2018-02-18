@@ -76,13 +76,13 @@ In order to create your own custom converter you need to extends the TypeConvert
  @TypeConverter
  public class MyConverter extends TypeConverterAdapter<Integer, Date> {
  
-  @Override
-  public Date convertTo(Long o) {
-     // Your implementation
-  }
+   @Override
+   public Date convertTo(Long o) {
+      // Your implementation
+   }
 
-  @Override
-  public Long convertFrom(Date o) {
-     // Your implementation
-  }
+   @Override
+   public Long convertFrom(Date o) {
+      // Your implementation
+   }
 ```
