@@ -1,11 +1,13 @@
 package mapfierj;
 
+import mapfierj.re.Transactional;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 @Deprecated
-public class Transaction {
+public class Transaction extends Transactional {
 
     private List<Class<?>> repeaterClasses = new ArrayList<>();
 
@@ -64,15 +66,15 @@ public class Transaction {
                         if (value instanceof Collection) {
                             final Collection collection = (Collection) value;
                             switch (mta.type().getValue()) {
-                                case 2 :
+                                case 2:
                                     fieldsToMap.put(fieldName, mapList(collection, mta.value(),
                                             true, this.repeaterClasses));
                                     break;
-                                case 3 :
+                                case 3:
                                     fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
                                             true, this.repeaterClasses));
                                     break;
-                                default :
+                                default:
                                     if (field.getType().equals(List.class))
                                         fieldsToMap.put(fieldName, mapList(collection, mta.value(),
                                                 true, this.repeaterClasses));
@@ -139,15 +141,15 @@ public class Transaction {
                         if (value instanceof Collection) {
                             final Collection<?> collection = (Collection) value;
                             switch (mta.type().getValue()) {
-                                case 2 :
+                                case 2:
                                     fieldsToMap.put(fieldName, mapList(collection, mta.value(),
                                             true, this.repeaterClasses));
                                     break;
-                                case 3 :
+                                case 3:
                                     fieldsToMap.put(fieldName, mapSet(collection, mta.value(),
                                             true, this.repeaterClasses));
                                     break;
-                                default :
+                                default:
                                     if (field.getType().equals(List.class))
                                         fieldsToMap.put(fieldName, mapList(collection, mta.value(),
                                                 true, this.repeaterClasses));
@@ -422,6 +424,7 @@ public class Transaction {
         }
     }
 
+    @Override
     public <T> T mapTo(Class<T> c) {
         if (invalidToMap) return null;
         try {
@@ -459,12 +462,20 @@ public class Transaction {
         }
     }
 
+    @Override
     public <T> List<T> mapToList(Class<T> c) {
         return mapList(collectionToMap, c, false, null);
     }
 
+    @Override
     public <T> Set<T> mapToSet(Class<T> c) {
         return mapSet(collectionToMap, c, false, null);
+    }
+
+    @Deprecated
+    @Override
+    public <T> T[] mapToArray(Class<T> c) {
+        return null;
     }
 
     @Deprecated

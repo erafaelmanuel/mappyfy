@@ -1,4 +1,4 @@
-package mapfierj.xyz;
+package mapfierj.re;
 
 import mapfierj.MappingException;
 import mapfierj.TypeConverterAdapter;

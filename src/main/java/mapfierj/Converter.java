@@ -1,15 +1,13 @@
 package mapfierj;
 
+import mapfierj.re.UnrealConverter;
 import org.reflections.Reflections;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
 
-@Deprecated
-public class Converter {
-
-    private final String BASE_PACKAGE = "mapfierj.converter";
+public class Converter implements UnrealConverter {
 
     private final Set<Class<? extends TypeConverterAdapter>> PRIMITIVE_CONVERTERS = new HashSet<>();
 

@@ -1,4 +1,4 @@
-package mapfierj.xyz;
+package mapfierj.re;
 
 import mapfierj.MappingException;
 import mapfierj.TypeConverterAdapter;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Parser implements Converter {
+public class Parser implements UnrealConverter {
 
     private Set<TypeConverterAdapter> adapters = new HashSet<>();
 

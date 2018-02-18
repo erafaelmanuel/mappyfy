@@ -3,8 +3,8 @@ package sample.sample5;
 import mapfierj.Converter;
 import mapfierj.MappingException;
 import mapfierj.TypeException;
-import mapfierj.xyz.Mapper;
-import mapfierj.xyz.Parser;
+import mapfierj.re.Mapper;
+import mapfierj.re.Parser;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class Sample5 {
     @Test
     public void dample() throws TypeException {
         SampleConverter converter = new SampleConverter("");
-        String num = converter.convert(12);
+        String num = (String) converter.convert(12);
         System.out.println(num);
     }
 

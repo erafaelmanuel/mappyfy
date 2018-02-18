@@ -1,4 +1,4 @@
-package mapfierj.xyz;
+package mapfierj.re;
 
 import java.util.List;
 import java.util.Set;

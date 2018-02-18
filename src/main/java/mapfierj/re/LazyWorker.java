@@ -1,4 +1,4 @@
-package mapfierj.xyz;
+package mapfierj.re;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

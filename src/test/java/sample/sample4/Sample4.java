@@ -40,7 +40,7 @@ public class Sample4 {
     @Test
     public void dample() throws TypeException {
         SampleConverter converter = new SampleConverter("");
-        String num = converter.convert(12);
+        String num = (String) converter.convert(12);
         System.out.println(num);
     }
 
