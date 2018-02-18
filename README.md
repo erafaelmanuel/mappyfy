@@ -85,4 +85,5 @@ In order to create your own custom converter you need to extends the TypeConvert
    public Long convertFrom(Date o) {
       // Your implementation
    }
+}   
 ```
