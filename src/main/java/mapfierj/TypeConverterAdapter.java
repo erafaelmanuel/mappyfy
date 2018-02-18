@@ -6,20 +6,20 @@ import java.lang.reflect.Type;
 public abstract class TypeConverterAdapter<A, B> {
 
     @SuppressWarnings("unchecked")
-    public <T> T convert(Object o) throws TypeException {
+    public Object convert(Object o) throws TypeException {
         if (o != null) {
-            Type types[];
+
             try {
-                types = (((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments());
+                Type types[] = (((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments());
                 if (types[0].equals(o.getClass())) {
-                    return (T) convertTo((A) o);
-                } else if (types[1].equals(o.getClass())) {
-                    return (T) convertFrom((B) o);
-                } else {
-                    throw new TypeException("Invalid Type");
+                    return convertTo((A) o);
                 }
-            } catch (ClassCastException e) {
-                throw new TypeException("Failed to get the types");
+                if (types[1].equals(o.getClass())) {
+                    return convertFrom((B) o);
+                }
+                throw new Exception();
+            } catch (Exception e) {
+                throw new TypeException("Unable to parse the object");
             }
         } else {
             throw new TypeException("You can't convert a null object");
