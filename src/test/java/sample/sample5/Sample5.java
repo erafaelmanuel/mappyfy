@@ -1,11 +1,6 @@
 package sample.sample5;
 
-import mapfierj.Converter;
-import mapfierj.MappingException;
-import mapfierj.TypeException;
-import mapfierj.Mapper;
-import mapfierj.Parser;
-import mapfierj.tc.IntegerStringConverter;
+import mapfierj.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -32,12 +27,16 @@ public class Sample5 {
         dogs.add(dog2);
 
         Pet pet[] = mapper.set(dogs)
-                .transact().mapToArray(Pet.class);
+                .transactional()
+                .mapToArray(Pet.class);
 
-        for(Pet p : pet) {
+        for (Pet p : pet) {
             System.out.println(p);
         }
-        System.out.println(mapper.set(dog1).transact().mapTo(Pet.class));
+        System.out.println(mapper
+                .set(dog1)
+                .transactional()
+                .mapTo(Pet.class));
 
         //Create the owner of our dogs
         Person person = new Person("Rafael", dogs);
@@ -73,7 +72,7 @@ public class Sample5 {
         Set<BatMan> batMan = mapper.set(superMan)
                 .field("name", "fullname")
                 .convertField("age", Long.class)
-                .transact()
+                .transactional()
                 .mapToSet(BatMan.class);
 
         System.out.println(batMan);

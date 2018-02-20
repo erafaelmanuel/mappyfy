@@ -24,17 +24,21 @@ public class LazyWorker extends Transactional {
 
     @Override
     public <T> T mapTo(Class<T> c) {
-        switch (loads.size()) {
-            case 0: {
-                throw new RuntimeException("No load to map!");
+        try {
+            switch (loads.size()) {
+                case 0: {
+                    throw new RuntimeException("No load to map!");
+                }
+                case 1: {
+                    Load load = loads.iterator().next();
+                    return new InstanceCreator<>(load, c).newInstance();
+                }
+                default: {
+                    throw new RuntimeException("Unable to use mapTo when the load is more than one");
+                }
             }
-            case 1: {
-                Load load = loads.iterator().next();
-                return new InstanceCreator<>(load, c).newInstance();
-            }
-            default: {
-                throw new RuntimeException("Unable to use mapTo when the load is more than one");
-            }
+        } catch (RuntimeException e) {
+            return null;
         }
     }
 

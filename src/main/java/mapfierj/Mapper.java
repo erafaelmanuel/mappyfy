@@ -24,7 +24,7 @@ public class Mapper {
 
         private Transaction(Object o) {
             try {
-                if(o instanceof Collection) {
+                if (o instanceof Collection) {
                     transactional = new LazyWorker(((Collection) o).toArray());
                 } else {
                     transactional = new LazyWorker(o);
@@ -98,7 +98,7 @@ public class Mapper {
             return transactional.mapTo(c);
         }
 
-        public Transactional transact() {
+        public Transactional transactional() {
             return transactional;
         }
     }
