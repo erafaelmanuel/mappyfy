@@ -489,7 +489,7 @@ public class Transaction extends Transactional {
     }
 
     private boolean isNotExcluded(Field field) {
-        return !(field.getAnnotation(Excluded.class) != null || excludedFields.parallelStream()
+        return !(field.getAnnotation(Exclude.class) != null || excludedFields.parallelStream()
                 .anyMatch(item -> item.trim().equals(field.getName())));
     }
 
