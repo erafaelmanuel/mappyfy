@@ -6,21 +6,19 @@ import java.util.HashMap;
 public class ModelMapper {
 
     private Transaction transaction;
+
     private HashMap<String, Object> map = new HashMap<>();
+
     private final Converter converter;
 
     public ModelMapper() {
         converter = new Converter();
     }
 
-    public ModelMapper(final String... scanPackages) {
-        this();
-        converter.scanPackages(scanPackages);
-    }
-
     public ModelMapper set(Object o) {
         try {
-            map = setAndGetTransaction(o).getMap();
+            transaction = new Transaction(o);
+            map = transaction.getMap();
             return this;
         } catch (Exception e) {
             e.printStackTrace();
@@ -28,9 +26,10 @@ public class ModelMapper {
         }
     }
 
-    public ModelMapper set(HashMap<String, Object> map) {
+    public ModelMapper set(HashMap<String, Object> o) {
         try {
-            this.map = setAndGetTransaction(map).getMap();
+            transaction = new Transaction(o);
+            map = transaction.getMap();
             return this;
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,33 +37,10 @@ public class ModelMapper {
         }
     }
 
-    public ModelMapper set(Collection collection) {
-        map = setAndGetTransaction(collection).getMap();
+    public ModelMapper set(Collection o) {
+        transaction = new Transaction(o);
+        map = transaction.getMap();
         return this;
-    }
-
-    public Transaction setAndGetTransaction(Object obj) {
-        try {
-            transaction = new Transaction(obj);
-            return transaction;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Transaction setAndGetTransaction(HashMap<String, Object> map) {
-        try {
-            transaction = new Transaction(map);
-            return transaction;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Transaction setAndGetTransaction(Collection collection) {
-        return transaction = new Transaction(collection);
     }
 
     public ModelMapper field(String field, String field2) {
@@ -86,7 +62,7 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper convertFieldToType(String field, Class<?> type) {
+    public ModelMapper convertField(String field, Class<?> type) {
         try {
             final Object instance = converter.convertTo(map.get(field), type);
             if (instance != null)
@@ -99,7 +75,7 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper convertFieldByConverter(String field, TypeConverterAdapter adapter) {
+    public ModelMapper convertFieldBy(String field, TypeConverterAdapter adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
@@ -119,7 +95,7 @@ public class ModelMapper {
         return this;
     }
 
-    public ModelMapper convertFieldByConverter(String field, Class<? extends TypeConverterAdapter> adapter) {
+    public ModelMapper convertFieldBy(String field, Class<? extends TypeConverterAdapter> adapter) {
         final Object o = map.get(field);
         map.remove(field);
         if (o != null) {
@@ -139,13 +115,16 @@ public class ModelMapper {
         return this;
     }
 
-    public Transaction getTransaction() {
-        return transaction;
+    public <T> T mapTo(Class<T> c) {
+        try {
+            return transaction.mapTo(c);
+        } catch (Exception e) {
+            return transaction.mapAllTo(c);
+        }
     }
 
-    public void setTransaction(Transaction transaction) {
-        this.transaction = transaction;
-        this.map = transaction.getMap();
+    public Transaction transactional() {
+        return transaction;
     }
 
     public Converter getConverter() {

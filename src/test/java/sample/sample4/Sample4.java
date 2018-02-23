@@ -32,7 +32,7 @@ public class Sample4 {
         
         PetOwner petOwner = mapper.set(person)
                 .field("dogs", "pets")
-                .getTransaction().mapAllTo(PetOwner.class);
+                .mapTo(PetOwner.class);
 
         logger.info(petOwner.toString());
     }

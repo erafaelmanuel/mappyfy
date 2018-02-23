@@ -23,8 +23,8 @@ public class Sample1 {
         PersonDto personDto = mapper.set(person)
                 .field("name", "fullName")
                 .field("carId", "car")
-                .convertFieldToType("car", Car.class)
-                .getTransaction().mapTo(PersonDto.class);
+                .convertField("car", Car.class)
+                .mapTo(PersonDto.class);
 
         logger.info("CAR ID : " + carId);
         logger.info(personDto.toString());
