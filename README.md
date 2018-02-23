@@ -27,7 +27,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 </dependencies>
 ```
 
-### Brief Example
+### How to use
 Suppose we have some instances of class Person that we’d like to map to instances of another class PersonDto.
 ```java
  public class Person {
