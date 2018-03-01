@@ -45,12 +45,13 @@ public class Mapper {
         public Transaction convertField(String f, Class<?> type) {
             try {
                 for (Load load : transactional.getLoads()) {
-                    Object fieldValue = load.getFields().get(f);
+                    Object fieldValue = load.getVariables().get(f).getValue();
                     Object newObject = PARSER.set(fieldValue).convertTo(type);
                     if (newObject != null) {
-                        load.getFields().put(f, newObject);
+                        /** TODO **/
+                        load.getVariables().put(f, new Variable("", newObject));
                     } else {
-                        load.getFields().remove(f);
+                        load.getVariables().remove(f);
                     }
                 }
             } catch (MappingException e) {
@@ -62,12 +63,13 @@ public class Mapper {
         public Transaction convertFieldBy(String f, TypeConverterAdapter adapter) {
             try {
                 for (Load load : transactional.getLoads()) {
-                    Object fieldValue = load.getFields().get(f);
+                    Object fieldValue = load.getVariables().get(f).getValue();
                     Object newObject = PARSER.set(fieldValue).convertBy(adapter);
                     if (fieldValue != null) {
-                        load.getFields().put(f, newObject);
+                        /** TODO **/
+                        load.getVariables().put(f, new Variable("", newObject));
                     } else {
-                        load.getFields().remove(f);
+                        load.getVariables().remove(f);
                     }
                 }
             } catch (Exception e) {
@@ -78,17 +80,18 @@ public class Mapper {
 
         public Transaction exclude(String f) {
             for (Load load : transactional.getLoads()) {
-                load.getFields().remove(f);
+                load.getVariables().remove(f);
             }
             return this;
         }
 
         public Transaction field(String f1, String f2) {
             for (Load load : transactional.getLoads()) {
-                Object fieldValue = load.getFields().get(f1);
+                Object fieldValue = load.getVariables().get(f1).getValue();
                 if (fieldValue != null) {
-                    load.getFields().put(f2, fieldValue);
-                    load.getFields().remove(f1);
+                    /** TODO **/
+                    load.getVariables().put(f2, new Variable("", fieldValue));
+                    load.getVariables().remove(f1);
                 }
             }
             return this;

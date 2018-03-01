@@ -18,11 +18,11 @@ public class InstanceCreator<T> {
                 field.setAccessible(true);
 
                 String name = field.getName();
-                Object o = load.getFields().get(name);
+                Variable variable = load.getVariables().get(name);
+                Object o = variable.getValue();
                 if (o != null) {
-                    System.out.println(field.getType().getTypeName() + " " + o.getClass().getTypeName());
-                    if (field.getType().getTypeName().equals(o.getClass().getTypeName())) {
-                        System.out.println(o);
+                    System.out.println(field.getType().getTypeName() + " " + variable.getType());
+                    if (field.getType().toString().equals(variable.getType())) {
                         field.set(newInstance, o);
                     } else if (o instanceof Object[]) {
                         field.set(newInstance, mkArray(o, field.getType()));
