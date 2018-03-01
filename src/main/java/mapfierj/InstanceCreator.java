@@ -19,9 +19,10 @@ public class InstanceCreator<T> {
 
                 String name = field.getName();
                 Object o = load.getFields().get(name);
-
                 if (o != null) {
-                    if (field.getType().equals(o.getClass())) {
+                    System.out.println(field.getType().getTypeName() + " " + o.getClass().getTypeName());
+                    if (field.getType().getTypeName().equals(o.getClass().getTypeName())) {
+                        System.out.println(o);
                         field.set(newInstance, o);
                     } else if (o instanceof Object[]) {
                         field.set(newInstance, mkArray(o, field.getType()));
@@ -40,6 +41,8 @@ public class InstanceCreator<T> {
                     } else {
                         field.set(newInstance, new InstanceCreator<>(new Load(o), field.getType()).newInstance());
                     }
+                } else {
+                    System.out.println("its null");
                 }
             }
         } catch (Exception e) {

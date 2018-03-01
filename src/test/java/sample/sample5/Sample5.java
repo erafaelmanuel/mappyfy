@@ -80,8 +80,10 @@ public class Sample5 {
 
     @Test
     public void thinking() throws MappingException {
-        Parser converter = new Parser();
-        short num = converter.set("5").convertTo(Short.class);
-        System.out.println(num + 1);
+//        Parser converter = new Parser();
+//        short num = converter.set("5").convertTo(Short.class);
+//        System.out.println(num + 1);
+
+        ClassHelper.compare(String.class, String.class);
     }
 }
