@@ -45,11 +45,11 @@ public class Mapper {
         public Transaction convertField(String f, Class<?> type) {
             try {
                 for (Load load : transactional.getLoads()) {
-                    Object fieldValue = load.getVariables().get(f).getValue();
-                    Object newObject = PARSER.set(fieldValue).convertTo(type);
-                    if (newObject != null) {
+                    final Variable variable = load.getVariables().get(f);
+                    final Object o = PARSER.set(variable.getValue()).convertTo(type);
+                    if (o != null) {
                         /** TODO **/
-                        load.getVariables().put(f, new Variable("", newObject));
+                        load.getVariables().put(f, new Variable(type.toString(), o));
                     } else {
                         load.getVariables().remove(f);
                     }
@@ -63,11 +63,11 @@ public class Mapper {
         public Transaction convertFieldBy(String f, TypeConverterAdapter adapter) {
             try {
                 for (Load load : transactional.getLoads()) {
-                    Object fieldValue = load.getVariables().get(f).getValue();
-                    Object newObject = PARSER.set(fieldValue).convertBy(adapter);
-                    if (fieldValue != null) {
+                    final Variable variable = load.getVariables().get(f);
+                    final Object o = PARSER.set(variable.getValue()).convertBy(adapter);
+                    if (o != null) {
                         /** TODO **/
-                        load.getVariables().put(f, new Variable("", newObject));
+                        load.getVariables().put(f, new Variable(o.getClass().toString(), o));
                     } else {
                         load.getVariables().remove(f);
                     }
@@ -87,10 +87,10 @@ public class Mapper {
 
         public Transaction field(String f1, String f2) {
             for (Load load : transactional.getLoads()) {
-                Object fieldValue = load.getVariables().get(f1).getValue();
-                if (fieldValue != null) {
+                Variable variable = load.getVariables().get(f1);
+                if (variable.getValue() != null) {
                     /** TODO **/
-                    load.getVariables().put(f2, new Variable("", fieldValue));
+                    load.getVariables().put(f2, new Variable(variable.getType(), variable.getValue()));
                     load.getVariables().remove(f1);
                 }
             }
