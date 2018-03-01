@@ -15,9 +15,9 @@ public class Load {
                     field.setAccessible(true);
                     if (field.getAnnotation(mapfierj.Field.class) != null) {
                         String name = field.getAnnotation(mapfierj.Field.class).name();
-                        variables.put(name, new Variable(field.getType(), field.get(o)));
+                        variables.put(name, new Variable(field.getType().toString(), field.get(o)));
                     } else {
-                        fields.put(var.getName(), var.get(o));
+                        variables.put(field.getName(), new Variable(field.getType().toString(), field.get(o)));
                     }
                 }
             }
@@ -26,7 +26,7 @@ public class Load {
         }
     }
 
-    public HashMap<String, Object> getVariables() {
+    public HashMap<String, Variable> getVariables() {
         return variables;
     }
 }
