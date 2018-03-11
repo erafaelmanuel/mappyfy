@@ -21,7 +21,6 @@ public class InstanceCreator<T> {
                 Variable variable = load.getVariables().get(name);
                 Object o = variable.getValue();
                 if (o != null) {
-                    System.out.println(field.getType().getTypeName() + " " + variable.getType());
                     if (field.getType().toString().equals(variable.getType())) {
                         field.set(newInstance, o);
                     } else if (o instanceof Object[]) {
