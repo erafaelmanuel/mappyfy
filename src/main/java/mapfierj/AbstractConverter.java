@@ -1,6 +1,6 @@
 package mapfierj;
 
-public interface UnrealConverter {
+public interface AbstractConverter {
 
     String BASE_PACKAGE = "mapfierj.tc";
 }

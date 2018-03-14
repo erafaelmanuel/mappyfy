@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Parser implements UnrealConverter {
+public class Parser implements AbstractConverter {
 
     private final Set<TypeConverterAdapter> ADAPTERS = new HashSet<>();
 
