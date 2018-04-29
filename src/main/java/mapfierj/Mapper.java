@@ -78,7 +78,7 @@ public class Mapper {
             return this;
         }
 
-        public Transaction exclude(String f) {
+        public Transaction ignore(String f) {
             for (Load load : transactional.getLoads()) {
                 load.getVariables().remove(f);
             }

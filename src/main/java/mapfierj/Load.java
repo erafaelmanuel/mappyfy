@@ -13,6 +13,9 @@ public class Load {
                 Field fields[] = o.getClass().getDeclaredFields();
                 for (Field field : fields) {
                     field.setAccessible(true);
+                    if (field.getAnnotation(Ignore.class) != null) {
+                        continue;
+                    }
                     if (field.getAnnotation(mapfierj.Field.class) != null) {
                         String name = field.getAnnotation(mapfierj.Field.class).name();
                         variables.put(name, new Variable(field.getType().toString(), field.get(o)));
