@@ -4,11 +4,7 @@ import java.util.Collection;
 
 public class Mapper {
 
-    private final Parser PARSER = new Parser();
-
-    public Parser getConverter() {
-        return PARSER;
-    }
+    private final Parser converter = new Parser();
 
     public Transaction set(Object o) {
         return new Transaction(o);
@@ -18,7 +14,11 @@ public class Mapper {
         return new Transaction(o);
     }
 
-    public class Transaction {
+    public Parser getConverter() {
+        return converter;
+    }
+
+    final public class Transaction {
 
         private Transactional transactional;
 
@@ -46,7 +46,7 @@ public class Mapper {
             try {
                 for (Load load : transactional.getLoads()) {
                     final Variable variable = load.getVariables().get(f);
-                    final Object o = PARSER.set(variable.getValue()).convertTo(type);
+                    final Object o = converter.set(variable.getValue()).convertTo(type);
                     if (o != null) {
                         /** TODO **/
                         load.getVariables().put(f, new Variable(type.toString(), o));
@@ -64,7 +64,7 @@ public class Mapper {
             try {
                 for (Load load : transactional.getLoads()) {
                     final Variable variable = load.getVariables().get(f);
-                    final Object o = PARSER.set(variable.getValue()).convertBy(adapter);
+                    final Object o = converter.set(variable.getValue()).convertBy(adapter);
                     if (o != null) {
                         /** TODO **/
                         load.getVariables().put(f, new Variable(o.getClass().toString(), o));
