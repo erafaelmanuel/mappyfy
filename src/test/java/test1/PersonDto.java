@@ -2,14 +2,14 @@ package test1;
 
 public class PersonDto {
 
-    String fullName;
+    String name;
 
     int age;
 
     @Override
     public String toString() {
         return "PersonDto{" +
-                "fullName='" + fullName + '\'' +
+                "fullName='" + name + '\'' +
                 ", age=" + age +
                 '}';
     }

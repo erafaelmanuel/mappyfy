@@ -2,7 +2,8 @@ package mapfierj;
 
 public class Variable {
 
-    public String type;
+    private String type;
+
     private Object value;
 
     public Variable(String type, Object value) {

@@ -13,10 +13,7 @@ public class Test1 {
     public void test() {
         Mapper mapper = new Mapper();
 
-        PersonDto dto = mapper
-                .set(new Person("Rafael", 18))
-                .field("name", "fullName")
-                .mapTo(PersonDto.class);
+        PersonDto dto = mapper.set(new Person("Rafael", 18)).mapTo(PersonDto.class);
 
         logger.info(dto.toString());
     }

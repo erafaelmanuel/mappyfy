@@ -17,31 +17,34 @@ public class InstanceHelper<T> {
             for (Field field : fields) {
                 field.setAccessible(true);
 
-                String name = field.getName();
-                Variable variable = load.getVariables().get(name);
-                Object o = variable.getValue();
-                if (o != null) {
-                    if (field.getType().toString().equals(variable.getType())) {
-                        field.set(newInstance, o);
-                    } else if (o instanceof Object[]) {
-                        field.set(newInstance, mkArray(o, field.getType()));
-                    } else if (o instanceof Collection) {
-                        if (field.getGenericType() instanceof ParameterizedType) {
+                final String name = field.getName();
+                final Variable variable = load.getVariables().get(name);
 
-                            final ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-                            final Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                if (variable != null) {
+                    final Object o = variable.getValue();
+                    if (o != null) {
+                        if (field.getType().toString().equals(variable.getType())) {
+                            field.set(newInstance, o);
+                        } else if (o instanceof Object[]) {
+                            field.set(newInstance, mkArray(o, field.getType()));
+                        } else if (o instanceof Collection) {
+                            if (field.getGenericType() instanceof ParameterizedType) {
 
-                            if (field.getType().equals(List.class)) {
-                                field.set(newInstance, mkList(o, parameter));
-                            } else {
-                                field.set(newInstance, mkSet(o, parameter));
+                                final ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                final Class<?> parameter = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+
+                                if (field.getType().equals(List.class)) {
+                                    field.set(newInstance, mkList(o, parameter));
+                                } else {
+                                    field.set(newInstance, mkSet(o, parameter));
+                                }
                             }
+                        } else {
+                            field.set(newInstance, new InstanceHelper<>(new Load(o), field.getType()).newInstance());
                         }
                     } else {
-                        field.set(newInstance, new InstanceHelper<>(new Load(o), field.getType()).newInstance());
+                        System.out.println("its null");
                     }
-                } else {
-                    System.out.println("its null");
                 }
             }
         } catch (Exception e) {
