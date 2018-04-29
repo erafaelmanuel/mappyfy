@@ -1,5 +1,6 @@
 package mapfierj;
 
+@Deprecated
 @TypeConverter
 public class EmptyConverter extends TypeConverterAdapter<Object, Object> {
 

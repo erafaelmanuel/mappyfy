@@ -1,5 +1,6 @@
 package mapfierj;
 
+@Deprecated
 public class TypeUtil {
 
     private static final String[] PRIMITIVE_TYPES = {"byte", "short", "int", "long", "float", "double","char", "boolean"};

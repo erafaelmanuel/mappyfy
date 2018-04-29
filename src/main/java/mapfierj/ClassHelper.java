@@ -2,6 +2,7 @@ package mapfierj;
 
 import java.lang.reflect.Type;
 
+@Deprecated
 public class ClassHelper {
 
     public static boolean compare(Type t1, Type t2) {
@@ -9,6 +10,4 @@ public class ClassHelper {
         System.out.println(t2);
         return false;
     }
-
-
 }

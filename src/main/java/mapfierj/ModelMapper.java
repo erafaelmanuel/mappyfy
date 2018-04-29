@@ -3,6 +3,7 @@ package mapfierj;
 import java.util.Collection;
 import java.util.HashMap;
 
+@Deprecated
 public class ModelMapper {
 
     private Transaction transaction;
