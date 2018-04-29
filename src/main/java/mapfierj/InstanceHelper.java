@@ -5,11 +5,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
-public class InstanceCreator<T> {
+public class InstanceHelper<T> {
 
     private T newInstance;
 
-    InstanceCreator(Load load, Class<T> c) {
+    InstanceHelper(Load load, Class<T> c) {
         try {
             newInstance = c.newInstance();
             final Field fields[] = newInstance.getClass().getDeclaredFields();
@@ -38,7 +38,7 @@ public class InstanceCreator<T> {
                             }
                         }
                     } else {
-                        field.set(newInstance, new InstanceCreator<>(new Load(o), field.getType()).newInstance());
+                        field.set(newInstance, new InstanceHelper<>(new Load(o), field.getType()).newInstance());
                     }
                 } else {
                     System.out.println("its null");
@@ -57,7 +57,7 @@ public class InstanceCreator<T> {
             E array[] = (E[]) Array.newInstance(c, o.length);
 
             for (int ctr = 0; ctr < o.length; ctr++) {
-                array[ctr] = new InstanceCreator<>(new Load(o[ctr]), c).newInstance();
+                array[ctr] = new InstanceHelper<>(new Load(o[ctr]), c).newInstance();
             }
             return array;
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class InstanceCreator<T> {
         List<E> list = new ArrayList<>();
         for (Object o : (Collection) arg) {
             Load load = new Load(o);
-            list.add(new InstanceCreator<>(load, c).newInstance);
+            list.add(new InstanceHelper<>(load, c).newInstance);
         }
         return list;
     }
@@ -79,7 +79,7 @@ public class InstanceCreator<T> {
         Set<E> set = new HashSet<>();
         for (Object o : (Collection) arg) {
             Load load = new Load(o);
-            set.add(new InstanceCreator<>(load, c).newInstance);
+            set.add(new InstanceHelper<>(load, c).newInstance);
         }
         return set;
     }

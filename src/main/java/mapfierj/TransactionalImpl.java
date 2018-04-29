@@ -6,16 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Deprecated
-public class PerfectWorker extends Transactional {
+public class TransactionalImpl extends Transactional {
 
-    PerfectWorker(Object o) {
+    TransactionalImpl(Object o) {
         if (o != null) {
             loads.add(new Load(o));
         }
     }
 
-    PerfectWorker(Object[] os) {
+    TransactionalImpl(Object[] os) {
         if (os != null) {
             for (Object o : os) {
                 loads.add(new Load(o));
@@ -32,7 +31,7 @@ public class PerfectWorker extends Transactional {
                 }
                 case 1: {
                     Load load = loads.iterator().next();
-                    return new InstanceCreator<>(load, c).newInstance();
+                    return new InstanceHelper<>(load, c).newInstance();
                 }
                 default: {
                     throw new RuntimeException("Unable to use mapTo when the load is more than one");
@@ -47,7 +46,7 @@ public class PerfectWorker extends Transactional {
     public <T> List<T> mapToList(Class<T> c) {
         List<T> list = new ArrayList<>();
         for (Load load : loads) {
-            list.add(new InstanceCreator<>(load, c).newInstance());
+            list.add(new InstanceHelper<>(load, c).newInstance());
         }
         return list;
     }
@@ -56,7 +55,7 @@ public class PerfectWorker extends Transactional {
     public <T> Set<T> mapToSet(Class<T> c) {
         Set<T> set = new HashSet<>();
         for (Load load : loads) {
-            set.add(new InstanceCreator<>(load, c).newInstance());
+            set.add(new InstanceHelper<>(load, c).newInstance());
         }
         return set;
     }
@@ -67,7 +66,7 @@ public class PerfectWorker extends Transactional {
         try {
             T array[] = (T[]) Array.newInstance(c, loads.size());
             for (int i = 0; i < array.length; i++) {
-                array[i] = new InstanceCreator<>(loads.get(i), c).newInstance();
+                array[i] = new InstanceHelper<>(loads.get(i), c).newInstance();
             }
             return array;
         } catch (Exception e) {

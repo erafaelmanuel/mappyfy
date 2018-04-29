@@ -8,24 +8,28 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Parser implements AbstractConverter {
+public class ConverterImpl implements Converter {
+
+    private final String BASE_PACKAGE = "mapfierj.tc";
 
     private final Set<TypeConverterAdapter> ADAPTERS = new HashSet<>();
 
-    public Parser() {
+    public ConverterImpl() {
         new Reflections(BASE_PACKAGE).getSubTypesOf(TypeConverterAdapter.class)
-                .parallelStream().forEach((c -> ADAPTERS.add(InstanceCreator.create(c))));
+                .parallelStream().forEach((c -> ADAPTERS.add(InstanceHelper.create(c))));
     }
 
+    @Override
     public void scanPackages(String... packages) {
         for (String item : packages) {
             if (item != null && !item.trim().isEmpty()) {
                 new Reflections(item).getSubTypesOf(TypeConverterAdapter.class)
-                        .parallelStream().forEach((c -> ADAPTERS.add(InstanceCreator.create(c))));
+                        .parallelStream().forEach((c -> ADAPTERS.add(InstanceHelper.create(c))));
             }
         }
     }
 
+    @Override
     public void register(TypeConverterAdapter adapter) {
         ADAPTERS.add(adapter);
     }
@@ -44,7 +48,7 @@ public class Parser implements AbstractConverter {
         }
 
         @SuppressWarnings("unchecked")
-        public <T> T convertTo(Class<T> c) throws MappingException {
+        public <T> T convertTo(Class<T> c) throws MapException {
             ADAPTERS.parallelStream().filter(adapter -> {
                 final Type types[] = (((ParameterizedType)
                         adapter.getClass().getGenericSuperclass()).getActualTypeArguments());
@@ -65,18 +69,18 @@ public class Parser implements AbstractConverter {
                         e.printStackTrace();
                     }
                 }
-                throw new MappingException("Unable to convert!");
+                throw new MapException("Unable to convert!");
             } else {
-                throw new MappingException("No tc match for your object!");
+                throw new MapException("No tc match for your object!");
             }
         }
 
         @SuppressWarnings("unchecked")
-        public <T> T convertBy(TypeConverterAdapter adapter) throws MappingException {
+        public <T> T convertBy(TypeConverterAdapter adapter) throws MapException {
             try {
                 return (T) adapter.convert(o);
             } catch (Exception e) {
-                throw new MappingException("Unable to convert!");
+                throw new MapException("Unable to convert!");
             }
         }
     }

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public class Mapper {
 
-    private final Parser converter = new Parser();
+    private final ConverterImpl converter = new ConverterImpl();
 
     public Transaction set(Object o) {
         return new Transaction(o);
@@ -14,7 +14,7 @@ public class Mapper {
         return new Transaction(o);
     }
 
-    public Parser getConverter() {
+    public ConverterImpl getConverter() {
         return converter;
     }
 
@@ -25,9 +25,9 @@ public class Mapper {
         private Transaction(Object o) {
             try {
                 if (o instanceof Collection) {
-                    transactional = new LazyWorker(((Collection) o).toArray());
+                    transactional = new TransactionalImpl(((Collection) o).toArray());
                 } else {
-                    transactional = new LazyWorker(o);
+                    transactional = new TransactionalImpl(o);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -36,7 +36,7 @@ public class Mapper {
 
         private Transaction(Object[] o) {
             try {
-                transactional = new LazyWorker(o);
+                transactional = new TransactionalImpl(o);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -54,7 +54,7 @@ public class Mapper {
                         load.getVariables().remove(f);
                     }
                 }
-            } catch (MappingException e) {
+            } catch (MapException e) {
                 e.printStackTrace();
             }
             return this;

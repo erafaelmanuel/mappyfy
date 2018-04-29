@@ -11,6 +11,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Field {
 
     String name();
-
-    String type() default "";
 }
