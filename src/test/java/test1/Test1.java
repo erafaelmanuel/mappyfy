@@ -1,6 +1,6 @@
 package test1;
 
-import mapfierj.Mapper;
+import com.rem.mappyfy.Mapper;
 import org.junit.Test;
 
 import java.util.logging.Logger;
@@ -13,8 +13,12 @@ public class Test1 {
     public void test() {
         Mapper mapper = new Mapper();
 
-        PersonDto dto = mapper.set(new Person("Rafael", 18)).mapTo(PersonDto.class);
+        PersonDto dto = new PersonDto();
+        mapper.set(new Person("Rafael", 18)).mapTo(dto);
+
+
 
         logger.info(dto.toString());
+        logger.info(mapper.set(new Person("Verile", 89)).ignore("name").mapTo(PersonDto.class).toString());
     }
 }

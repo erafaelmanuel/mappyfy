@@ -1,6 +1,6 @@
 package test1;
 
-import mapfierj.Ignore;
+import com.rem.mappyfy.Ignore;
 
 public class Person {
 

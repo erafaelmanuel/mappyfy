@@ -1,4 +1,4 @@
-package mapfierj;
+package com.rem.mappyfy;
 
 public class Variable {
 
