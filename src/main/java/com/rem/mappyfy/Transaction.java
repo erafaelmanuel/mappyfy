@@ -7,20 +7,23 @@ import java.util.*;
 
 public class Transaction<T> {
 
-    private T newInstance;
+    private Node node;
 
-    Transaction() {}
+    public Transaction(Node node) {
+        this.node = node;
+    }
 
-    Transaction(Node load, Class<T> c) {
+    public T mkInstance(Class<T> t) {
         try {
-            newInstance = c.newInstance();
+            T newInstance = t.newInstance();
+
             final Field fields[] = newInstance.getClass().getDeclaredFields();
 
             for (Field field : fields) {
                 field.setAccessible(true);
 
                 final String name = field.getName();
-                final Variable variable = load.getVariables().get(name);
+                final Variable variable = node.getVariables().get(name);
 
                 if (variable != null) {
                     final Object o = variable.getValue();
@@ -42,20 +45,24 @@ public class Transaction<T> {
                                 }
                             }
                         } else {
-                            field.set(newInstance, new Transaction<>(new Node(o), field.getType()).newInstance());
+                            //field.set(newInstance, new Transaction<>(new Node(o), field.getType()).newInstance());
+                            try {
+                                field.set(newInstance, o);
+                            } catch (Exception e) {
+                                field.set(newInstance, null);
+                            }
                         }
-                    } else {
-                        System.out.println("its null");
                     }
                 }
             }
+            return newInstance;
         } catch (Exception e) {
-            newInstance = null;
             e.printStackTrace();
+            return null;
         }
     }
 
-    public void bind(Node load, Object newInstance) {
+    public void bind(Object newInstance) {
         try {
             final Field fields[] = newInstance.getClass().getDeclaredFields();
 
@@ -63,7 +70,7 @@ public class Transaction<T> {
                 field.setAccessible(true);
 
                 final String name = field.getName();
-                final Variable variable = load.getVariables().get(name);
+                final Variable variable = node.getVariables().get(name);
 
                 if (variable != null) {
                     final Object o = variable.getValue();
@@ -85,10 +92,13 @@ public class Transaction<T> {
                                 }
                             }
                         } else {
-                            field.set(newInstance, new Transaction<>(new Node(o), field.getType()).newInstance());
+                            //field.set(newInstance, new Transaction<>(new Node(o), field.getType()).newInstance());
+                            try {
+                                field.set(newInstance, o);
+                            } catch (Exception e) {
+                                field.set(newInstance, null);
+                            }
                         }
-                    } else {
-                        System.out.println("its null");
                     }
                 }
             }
@@ -104,7 +114,7 @@ public class Transaction<T> {
             E array[] = (E[]) Array.newInstance(c, o.length);
 
             for (int ctr = 0; ctr < o.length; ctr++) {
-                array[ctr] = new Transaction<>(new Node(o[ctr]), c).newInstance();
+                array[ctr] = new Transaction<E>(new Node(o[ctr])).mkInstance(c);
             }
             return array;
         } catch (Exception e) {
@@ -116,8 +126,8 @@ public class Transaction<T> {
     private <E> List<E> mkList(Object arg, Class<E> c) {
         List<E> list = new ArrayList<>();
         for (Object o : (Collection) arg) {
-            Node load = new Node(o);
-            list.add(new Transaction<>(load, c).newInstance);
+            Node node = new Node(o);
+            list.add(new Transaction<E>(node).mkInstance(c));
         }
         return list;
     }
@@ -125,22 +135,9 @@ public class Transaction<T> {
     private <E> Set<E> mkSet(Object arg, Class<E> c) {
         Set<E> set = new HashSet<>();
         for (Object o : (Collection) arg) {
-            Node load = new Node(o);
-            set.add(new Transaction<>(load, c).newInstance);
+            Node node = new Node(o);
+            set.add(new Transaction<E>(node).mkInstance(c));
         }
         return set;
-    }
-
-    public T newInstance() {
-        return newInstance;
-    }
-
-    public static <E> E create(Class<E> c) {
-        try {
-            return c.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
