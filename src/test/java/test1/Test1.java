@@ -18,8 +18,6 @@ public class Test1 {
         PersonDto dto = new PersonDto();
         mapper.set(new Person("Rafael", 18)).mapTo(dto);
 
-
-
         logger.info(dto.toString());
         logger.info(mapper.set(new Person("Verile", 89)).mapTo(Doctor.class).toString());
     }

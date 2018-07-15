@@ -40,14 +40,32 @@ public class Singular extends Optional {
             if (variable.getValue() != null) {
                 node.getVariables().put(to, new Variable(variable.getType(), variable.getValue()));
                 node.getVariables().remove(from);
+                break;
             }
         }
         return this;
     }
 
-    public Singular ignore(String f) {
-        for (Node node : getNodes()) {
-            node.getVariables().remove(f);
+    public Singular ignore(String fromField) {
+        getNodes().iterator().next()
+                .getVariables().remove(fromField);
+        return this;
+    }
+
+    public Singular parseFieldWith(String fromField, TypeConverter typeConverter) {
+        final Node node = getNodes().iterator().next();
+        final Variable variable = node.getVariables().get(fromField);
+
+        if (variable.getValue() != null) {
+            final Object newValue = typeConverter.convert(variable.getValue());
+            if (newValue != null) {
+                variable.setValue(newValue);
+                node.getVariables().put(fromField, variable);
+            } else {
+                node.getVariables().remove(fromField);
+            }
+        } else {
+            node.getVariables().remove(fromField);
         }
         return this;
     }

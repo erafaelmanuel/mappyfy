@@ -49,7 +49,7 @@ public class Transaction<T> {
                             try {
                                 field.set(newInstance, o);
                             } catch (Exception e) {
-                                field.set(newInstance, null);
+                               //field.set(newInstance, null);
                             }
                         }
                     }
@@ -96,7 +96,7 @@ public class Transaction<T> {
                             try {
                                 field.set(newInstance, o);
                             } catch (Exception e) {
-                                field.set(newInstance, null);
+                                //field.set(newInstance, null);
                             }
                         }
                     }
