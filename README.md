@@ -21,8 +21,8 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 <dependencies>
   <dependency>
     <groupId>com.github.erafaelmanuel</groupId>
-    <artifactId>mapfierj</artifactId>
-    <version>x.y.z</version>
+    <artifactId>mappyfy</artifactId>
+    <version>1.0.x</version>
   </dependency>
 </dependencies>
 ```
@@ -41,40 +41,16 @@ Suppose we have some instances of class Person that we’d like to map to instan
  }
 ```
 ```java
-  Mapper mapper = new Mapper();
+  final Mapper mapper = new Mapper();
 ```
 ```java
   Person person = new Person("Foo", 3);
-  PersonDto dto = mapper.set(person).field("name", "fullname").mapTo(PersonDto.class);
+  PersonDto dto = mapper.set(person).bind("name", "fullname").mapTo(PersonDto.class);
  ```
- ### Converters and Custom Converters
-Use converters where the mapper can't handle mapping an instance of a source object into a specific destination type.
+ ### TypeConverter
+In order to create your own custom converter you need to extends the TypeConverter and add the two generic type.
 ```java
- public class Dog {
-  String name;
-  Date dob;
- }
- 
- public class Pet {
-  String name;
-  int age;
- }
-```
-```java
-  Mapper mapper = new Mapper();
-  mapper.getConverter().register(new MyConverter());
-``` 
-```java
-  Dog dog = new Dog("Bar", new Date());
-  Pet pet = mapper.set(dog)
-               .field("dob", "age")
-               .convertField("age", Integer.class)
-               .mapTo(Pet.class);
- ```
-In order to create your own custom converter you need to extends the TypeConverterAdapter and add the two generic type.
-```java
- @TypeConverter
- public class MyConverter extends TypeConverterAdapter<Integer, Date> {
+ public class MyCustomTypeConverter extends TypeConverter<Integer, Date> {
  
    @Override
    public Date convertTo(Long o) {
@@ -87,3 +63,24 @@ In order to create your own custom converter you need to extends the TypeConvert
    }
 }   
 ```
+Use converters where the mapper can't handle mapping an instance of a source object into a specific destination type. Example:
+```java
+ public class Bar {
+  String name;
+  Date date;
+ }
+ 
+ public class Foo {
+  String name;
+  String date;
+ }
+```
+```java
+  final Mapper mapper = new Mapper();
+``` 
+```java
+  Bar bar = new Bar("I love PHP!", new Date());
+  Foo foo = mapper.set(bar)
+               .parseFieldWith("date", new MyCustomTypeConverter())
+               .mapTo(Foo.class);
+ ```
