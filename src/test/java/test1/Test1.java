@@ -41,4 +41,12 @@ public class Test1 {
 //
 //        mapper.set(persons).bind("name", "fullname").map(Doctor.class, System.out::println);
     }
+
+    @Test
+    public void test3() {
+        Bar bar = new Bar();
+        bar.name = Arrays.asList("rafael", "manuel");
+
+        System.out.println(new Mapper().set(bar).mapTo(Foo.class).toString());
+    }
 }

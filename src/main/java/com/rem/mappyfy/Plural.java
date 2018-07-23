@@ -32,20 +32,36 @@ public class Plural extends Optional {
     }
 
     public Plural bind(String from, String to) {
-        for (Node node : getNodes()) {
+        getNodes().parallelStream().forEach(node -> {
             final Variable variable = node.getVariables().get(from);
             if (variable.getValue() != null) {
                 node.getVariables().put(to, new Variable(variable.getType(), variable.getValue()));
                 node.getVariables().remove(from);
             }
-        }
+        });
         return this;
     }
 
     public Plural ignore(String f) {
-        for (Node node : getNodes()) {
-            node.getVariables().remove(f);
-        }
+        getNodes().parallelStream().forEach(node -> node.getVariables().remove(f));
+        return this;
+    }
+
+    public Plural parseFieldWith(String fromField, TypeConverter typeConverter) {
+        getNodes().parallelStream().forEach(node -> {
+            final Variable variable = node.getVariables().get(fromField);
+            if (variable.getValue() != null) {
+                final Object newValue = typeConverter.convert(variable.getValue());
+                if (newValue != null) {
+                    variable.setValue(newValue);
+                    node.getVariables().put(fromField, variable);
+                } else {
+                    node.getVariables().remove(fromField);
+                }
+            } else {
+                node.getVariables().remove(fromField);
+            }
+        });
         return this;
     }
 }
