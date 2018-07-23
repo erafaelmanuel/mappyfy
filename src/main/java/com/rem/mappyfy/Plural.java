@@ -1,11 +1,12 @@
 package com.rem.mappyfy;
 
 import java.lang.reflect.Array;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class Plural extends Optional {
 
-    public Plural(Object arg) {
+    public Plural(Collection arg) {
         super(arg);
     }
 

@@ -1,6 +1,7 @@
 package com.rem.mappyfy;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Optional {
@@ -9,6 +10,12 @@ public class Optional {
 
     public Optional(Object arg) {
         nodes.add(new Node(arg));
+    }
+
+    public Optional(Collection args) {
+        for (Object o : args) {
+            nodes.add(new Node(o));
+        }
     }
 
     public Optional(Object[] args) {
