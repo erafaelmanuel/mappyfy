@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/erafaelmanuel/mapfierj.svg)](https://jitpack.io/#erafaelmanuel/mapfierj)
+[![](https://jitpack.io/v/erafaelmanuel/mapfierj.svg)](https://jitpack.io/#erafaelmanuel/mappyfy)
 
 ### Overview
 A Reflection-based mappers library that maps objects to another objects. It can be very useful when developing multi-layered applications.
@@ -18,13 +18,11 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 ```
 
 ```html
-<dependencies>
-  <dependency>
-    <groupId>com.github.erafaelmanuel</groupId>
-    <artifactId>mappyfy</artifactId>
-    <version>1.0.x</version>
-  </dependency>
-</dependencies>
+<dependency>
+  <groupId>com.github.erafaelmanuel</groupId>
+  <artifactId>mappyfy</artifactId>
+  <version>1.0.5</version>
+</dependency>
 ```
 
 ### How to use
@@ -45,7 +43,7 @@ Suppose we have some instances of class Person that we’d like to map to instan
 ```
 ```java
   Person person = new Person("Foo", 3);
-  PersonDto dto = mapper.set(person).bind("name", "fullname").mapTo(PersonDto.class);
+  PersonDto dto = mapper.from(person).bind("name", "fullname").toInstanceOf(PersonDto.class);
  ```
  ### TypeConverter
 In order to create your own custom converter you need to extends the TypeConverter and add the two generic type.
@@ -54,12 +52,12 @@ In order to create your own custom converter you need to extends the TypeConvert
  
    @Override
    public Date convertTo(Long o) {
-      // Your implementation
+      // implementation
    }
 
    @Override
    public Long convertFrom(Date o) {
-      // Your implementation
+      // implementation
    }
 }   
 ```
@@ -80,7 +78,8 @@ Use converters where the mapper can't handle mapping an instance of a source obj
 ``` 
 ```java
   Bar bar = new Bar("I love PHP!", new Date());
-  Foo foo = mapper.set(bar)
+  Foo foo = mapper
+               .from(bar)
                .parseFieldWith("date", new MyCustomTypeConverter())
-               .mapTo(Foo.class);
+               .toInstanceOf(Foo.class);
  ```
