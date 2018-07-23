@@ -6,31 +6,33 @@ public class Singular extends Optional {
         super(arg);
     }
 
-    public <T> T mapTo(Class<T> c) {
-        try {
-            if (getNodes().size() != 0) {
-                final Node node = getNodes().iterator().next();
-                final Transaction<T> transaction = new Transaction<>(node);
-                return transaction.mkInstance(c);
-            } else {
-                throw new RuntimeException("Error!");
-            }
-        } catch (RuntimeException e) {
-            return null;
-        }
-    }
-
-    public void mapTo(final Object o) {
+    public void to(final Object o) {
         try {
             if (getNodes().size() != 0 && o != null) {
                 final Node node = getNodes().iterator().next();
                 final Transaction transaction = new Transaction(node);
+
                 transaction.bind(o);
             } else {
                 throw new RuntimeException("Error!");
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
+        }
+    }
+
+    public <T> T toInstanceOf(Class<T> c) {
+        try {
+            if (getNodes().size() != 0) {
+                final Node node = getNodes().iterator().next();
+                final Transaction<T> transaction = new Transaction<>(node);
+
+                return transaction.mkInstance(c);
+            } else {
+                throw new RuntimeException("Error!");
+            }
+        } catch (RuntimeException e) {
+            return null;
         }
     }
 
@@ -52,20 +54,20 @@ public class Singular extends Optional {
         return this;
     }
 
-    public Singular parseFieldWith(String fromField, TypeConverter typeConverter) {
+    public Singular parseFieldWith(String field, TypeConverter typeConverter) {
         final Node node = getNodes().iterator().next();
-        final Variable variable = node.getVariables().get(fromField);
+        final Variable variable = node.getVariables().get(field);
 
         if (variable.getValue() != null) {
             final Object newValue = typeConverter.convert(variable.getValue());
             if (newValue != null) {
                 variable.setValue(newValue);
-                node.getVariables().put(fromField, variable);
+                node.getVariables().put(field, variable);
             } else {
-                node.getVariables().remove(fromField);
+                node.getVariables().remove(field);
             }
         } else {
-            node.getVariables().remove(fromField);
+            node.getVariables().remove(field);
         }
         return this;
     }

@@ -1,7 +1,7 @@
 package com.rem.mappyfy;
 
 import java.lang.reflect.Array;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class Plural extends Optional {
@@ -22,13 +22,27 @@ public class Plural extends Optional {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T[] toArray(Class<T> c) {
+    public <T> T[] toArrayOf(Class<T> c) {
         T array[] = (T[]) Array.newInstance(c, getNodes().size());
         for (int i = 0; i < array.length; i++) {
             final Transaction<T> transaction = new Transaction<>(getNodes().get(i));
             array[i] = transaction.mkInstance(c);
         }
         return array;
+    }
+
+    public <T> List<T> toListOf(Class<T> c) {
+        final List<T> list = new ArrayList<>();
+
+        getNodes().forEach(node -> list.add(new Transaction<T>(node).mkInstance(c)));
+        return list;
+    }
+
+    public <T> Set<T> toSetOf(Class<T> c) {
+        final Set<T> set = new HashSet<>();
+
+        getNodes().forEach(node -> set.add(new Transaction<T>(node).mkInstance(c)));
+        return set;
     }
 
     public Plural bind(String from, String to) {

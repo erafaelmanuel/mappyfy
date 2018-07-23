@@ -16,10 +16,10 @@ public class Test1 {
         Mapper mapper = new Mapper();
 
         PersonDto dto = new PersonDto();
-        mapper.set(new Person("Rafael", 18)).mapTo(dto);
+        mapper.from(new Person("Rafael", 18)).to(dto);
 
         logger.info(dto.toString());
-        logger.info(mapper.set(new Person("Verile", 89)).mapTo(Doctor.class).toString());
+        logger.info(mapper.from(new Person("Verile", 89)).toInstanceOf(Doctor.class).toString());
     }
 
 
@@ -31,22 +31,26 @@ public class Test1 {
         //mapper.set(persons).map(PersonDto.class, System.out::println);
 
         List<Person> persons = Arrays.asList(new Person("Rafael", 18), new Person("Albert", 15));
-        mapper.set(persons).map(PersonDto.class, System.out::println);
+//        mapper.set(persons).map(PersonDto.class, System.out::println);
+        System.out.println(mapper.from(persons).toListOf(PersonDto.class));
 
-//        for (PersonDto personDto : mapper.set(persons).toArray(PersonDto.class)) {
-//            System.out.println(personDto);
-//        }
-//
-//        List<Person> personList = Arrays.asList(new Person("Rafael", 18), new Person("Albert", 15));
-//
-//        mapper.set(persons).bind("name", "fullname").map(Doctor.class, System.out::println);
+        for (PersonDto personDto : mapper.from(persons).toArrayOf(PersonDto.class)) {
+            System.out.println(personDto);
+        }
+
+        List<Person> personList = Arrays.asList(new Person("Rafael", 18), new Person("Albert", 15));
+
+        mapper.from(persons).bind("name", "fullname").map(Doctor.class, System.out::println);
     }
 
     @Test
     public void test3() {
+        Mapper mapper = new Mapper();
         Bar bar = new Bar();
         bar.name = Arrays.asList("rafael", "manuel");
 
-        System.out.println(new Mapper().set(bar).mapTo(Foo.class).toString());
+        Foo foo = mapper.from(bar).toInstanceOf(Foo.class);
+
+        System.out.println(foo);
     }
 }

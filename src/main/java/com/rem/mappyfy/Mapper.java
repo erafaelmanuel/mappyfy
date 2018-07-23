@@ -4,15 +4,15 @@ import java.util.Collection;
 
 public class Mapper {
 
-    public Singular set(Object o) {
+    public Singular from(Object o) {
         return new Singular(o);
     }
 
-    public Plural set(Object[] o) {
+    public Plural from(Object[] o) {
         return new Plural(o);
     }
 
-    public Plural set(Collection o) {
+    public Plural from(Collection o) {
         return new Plural(o);
     }
 }
