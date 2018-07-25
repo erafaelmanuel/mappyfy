@@ -78,4 +78,12 @@ public class Plural extends Optional {
         });
         return this;
     }
+
+    public Only only(String field) {
+        final Set<Object> set = new HashSet<>();
+
+        getNodes().parallelStream().forEach(node ->
+           set.add(node.getVariables().get(field).getValue()));
+        return new Only(set);
+    }
 }

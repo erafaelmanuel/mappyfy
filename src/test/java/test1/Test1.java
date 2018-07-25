@@ -41,6 +41,11 @@ public class Test1 {
         List<Person> personList = Arrays.asList(new Person("Rafael", 18), new Person("Albert", 15));
 
         mapper.from(persons).bind("name", "fullname").map(Doctor.class, System.out::println);
+
+//        for (Integer s: mapper.from(personList).only("age").toArrayOf(Integer.class))
+//            System.out.println(s);
+
+        System.out.println(mapper.from(personList).only("age").toListOf(Integer.class));
     }
 
     @Test
