@@ -4,11 +4,11 @@ import java.lang.reflect.Field;
 
 public class Transaction<T> {
 
-    private Node node;
+    private Branch branch;
     private T newInstance;
 
-    public Transaction(Node node) {
-        this.node = node;
+    public Transaction(Branch branch) {
+        this.branch = branch;
     }
 
     public T mkInstance(Class<T> t) {
@@ -27,12 +27,12 @@ public class Transaction<T> {
                 field.setAccessible(true);
 
                 final String name = field.getName();
-                final Variable variable = node.getVariables().get(name);
+                final Node node = branch.getNodes().get(name);
 
-                if (variable != null) {
-                    final Object o = variable.getValue();
+                if (node != null) {
+                    final Object o = node.getValue();
                     if (o != null) {
-                        if (field.getType().toString().equals(variable.getType())) {
+                        if (field.getType().toString().equals(node.getType())) {
                             field.set(newInstance, o);
                         } else {
                             try {

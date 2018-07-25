@@ -15,4 +15,12 @@ public class Mapper {
     public Plural from(Collection o) {
         return new Plural(o);
     }
+
+    public Only set(Object[] o) {
+        return new Only(o);
+    }
+
+    public Only set(Collection o) {
+        return new Only(o);
+    }
 }

@@ -6,27 +6,27 @@ import java.util.List;
 
 public class Optional {
 
-    private final List<Node> nodes = new ArrayList<>();
+    private final List<Branch> branches = new ArrayList<>();
 
     public Optional(Object arg) {
-        nodes.add(new Node(arg));
+        branches.add(new Branch(arg));
     }
 
     public Optional(Collection args) {
         for (Object o : args) {
-            nodes.add(new Node(o));
+            branches.add(new Branch(o));
         }
     }
 
     public Optional(Object[] args) {
         if (args != null) {
             for (Object o : args) {
-                nodes.add(new Node(o));
+                branches.add(new Branch(o));
             }
         }
     }
 
-    public List<Node> getNodes() {
-        return nodes;
+    public List<Branch> getBranches() {
+        return branches;
     }
 }

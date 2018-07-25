@@ -1,27 +1,37 @@
 package com.rem.mappyfy;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Only {
 
-    private Set<Object> objects;
+    private final List<Node> nodes = new ArrayList<>();
+    private final Collection<Object> collection = new ArrayList<>();
 
-    public Only(Set<Object> objects) {
-        this.objects = objects;
+    public Only(Collection args) {
+        collection.addAll(args);
+    }
+
+    public Only(Object[] args) {
+        if (args != null) {
+            collection.addAll(Arrays.asList(args));
+        }
+    }
+
+    public Only just(String field) {
+        collection.forEach(o ->
+                nodes.add(new Node().of(field, o)));
+        return this;
     }
 
     @SuppressWarnings("unchecked")
     public <T> T[] toArrayOf(Class<T> c) {
-        final T array[] = (T[]) Array.newInstance(c, objects.size());
+        final T array[] = (T[]) Array.newInstance(c, nodes.size());
         int ctr = 0;
 
-        for (Object o : objects) {
-            if (c.isInstance(o)) {
-                array[ctr] = (T) o;
+        for (Node node : nodes) {
+            if (c.isInstance(node.getValue())) {
+                array[ctr] = (T) node.getValue();
                 ctr++;
             }
         }
@@ -32,9 +42,9 @@ public class Only {
     public <T> List<T> toListOf(Class<T> c) {
         final List<T> list = new ArrayList<>();
 
-        objects.forEach(o -> {
-            if (c.isInstance(o)) {
-                list.add((T) o);
+        nodes.forEach(node -> {
+            if (c.isInstance(node.getValue())) {
+                list.add((T) node.getValue());
             }
         });
         return list;
@@ -44,9 +54,9 @@ public class Only {
     public <T> Set<T> toSetOf(Class<T> c) {
         final Set<T> set = new HashSet<>();
 
-        objects.forEach(o -> {
-            if (c.isInstance(o)) {
-                set.add((T) o);
+        nodes.forEach(node -> {
+            if (c.isInstance(node.getValue())) {
+                set.add((T) node.getValue());
             }
         });
         return set;

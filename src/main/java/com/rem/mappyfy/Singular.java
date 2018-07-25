@@ -8,9 +8,9 @@ public class Singular extends Optional {
 
     public void to(final Object o) {
         try {
-            if (getNodes().size() != 0 && o != null) {
-                final Node node = getNodes().iterator().next();
-                final Transaction transaction = new Transaction(node);
+            if (getBranches().size() != 0 && o != null) {
+                final Branch branch = getBranches().iterator().next();
+                final Transaction transaction = new Transaction(branch);
 
                 transaction.bind(o);
             } else {
@@ -23,9 +23,9 @@ public class Singular extends Optional {
 
     public <T> T toInstanceOf(Class<T> c) {
         try {
-            if (getNodes().size() != 0) {
-                final Node node = getNodes().iterator().next();
-                final Transaction<T> transaction = new Transaction<>(node);
+            if (getBranches().size() != 0) {
+                final Branch branch = getBranches().iterator().next();
+                final Transaction<T> transaction = new Transaction<>(branch);
 
                 return transaction.mkInstance(c);
             } else {
@@ -37,11 +37,11 @@ public class Singular extends Optional {
     }
 
     public Singular bind(String from, String to) {
-        for (Node node : getNodes()) {
-            final Variable variable = node.getVariables().get(from);
-            if (variable.getValue() != null) {
-                node.getVariables().put(to, new Variable(variable.getType(), variable.getValue()));
-                node.getVariables().remove(from);
+        for (Branch branch : getBranches()) {
+            final Node node = branch.getNodes().get(from);
+            if (node.getValue() != null) {
+                branch.getNodes().put(to, new Node(node.getType(), node.getValue()));
+                branch.getNodes().remove(from);
                 break;
             }
         }
@@ -49,25 +49,25 @@ public class Singular extends Optional {
     }
 
     public Singular ignore(String fromField) {
-        getNodes().iterator().next()
-                .getVariables().remove(fromField);
+        getBranches().iterator().next()
+                .getNodes().remove(fromField);
         return this;
     }
 
     public Singular parseFieldWith(String field, TypeConverter typeConverter) {
-        final Node node = getNodes().iterator().next();
-        final Variable variable = node.getVariables().get(field);
+        final Branch branch = getBranches().iterator().next();
+        final Node node = branch.getNodes().get(field);
 
-        if (variable.getValue() != null) {
-            final Object newValue = typeConverter.convert(variable.getValue());
+        if (node.getValue() != null) {
+            final Object newValue = typeConverter.convert(node.getValue());
             if (newValue != null) {
-                variable.setValue(newValue);
-                node.getVariables().put(field, variable);
+                node.setValue(newValue);
+                branch.getNodes().put(field, node);
             } else {
-                node.getVariables().remove(field);
+                branch.getNodes().remove(field);
             }
         } else {
-            node.getVariables().remove(field);
+            branch.getNodes().remove(field);
         }
         return this;
     }

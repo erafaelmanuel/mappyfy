@@ -45,7 +45,7 @@ public class Test1 {
 //        for (Integer s: mapper.from(personList).only("age").toArrayOf(Integer.class))
 //            System.out.println(s);
 
-        System.out.println(mapper.from(personList).only("age").toListOf(Integer.class));
+        System.out.println(mapper.set(personList).just("age").toListOf(Integer.class));
     }
 
     @Test

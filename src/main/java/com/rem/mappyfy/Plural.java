@@ -15,17 +15,17 @@ public class Plural extends Optional {
     }
 
     public <T> void map(Class<T> c, Consumer<? super T> action) {
-        for (Node node : getNodes()) {
-            final Transaction<T> transaction = new Transaction<>(node);
+        for (Branch branch : getBranches()) {
+            final Transaction<T> transaction = new Transaction<>(branch);
             action.accept(transaction.mkInstance(c));
         }
     }
 
     @SuppressWarnings("unchecked")
     public <T> T[] toArrayOf(Class<T> c) {
-        T array[] = (T[]) Array.newInstance(c, getNodes().size());
+        T array[] = (T[]) Array.newInstance(c, getBranches().size());
         for (int i = 0; i < array.length; i++) {
-            final Transaction<T> transaction = new Transaction<>(getNodes().get(i));
+            final Transaction<T> transaction = new Transaction<>(getBranches().get(i));
             array[i] = transaction.mkInstance(c);
         }
         return array;
@@ -34,56 +34,48 @@ public class Plural extends Optional {
     public <T> List<T> toListOf(Class<T> c) {
         final List<T> list = new ArrayList<>();
 
-        getNodes().forEach(node -> list.add(new Transaction<T>(node).mkInstance(c)));
+        getBranches().forEach(node -> list.add(new Transaction<T>(node).mkInstance(c)));
         return list;
     }
 
     public <T> Set<T> toSetOf(Class<T> c) {
         final Set<T> set = new HashSet<>();
 
-        getNodes().forEach(node -> set.add(new Transaction<T>(node).mkInstance(c)));
+        getBranches().forEach(node -> set.add(new Transaction<T>(node).mkInstance(c)));
         return set;
     }
 
     public Plural bind(String from, String to) {
-        getNodes().parallelStream().forEach(node -> {
-            final Variable variable = node.getVariables().get(from);
+        getBranches().parallelStream().forEach(node -> {
+            final Node variable = node.getNodes().get(from);
             if (variable.getValue() != null) {
-                node.getVariables().put(to, new Variable(variable.getType(), variable.getValue()));
-                node.getVariables().remove(from);
+                node.getNodes().put(to, new Node(variable.getType(), variable.getValue()));
+                node.getNodes().remove(from);
             }
         });
         return this;
     }
 
     public Plural ignore(String f) {
-        getNodes().parallelStream().forEach(node -> node.getVariables().remove(f));
+        getBranches().parallelStream().forEach(node -> node.getNodes().remove(f));
         return this;
     }
 
     public Plural parseFieldWith(String fromField, TypeConverter typeConverter) {
-        getNodes().parallelStream().forEach(node -> {
-            final Variable variable = node.getVariables().get(fromField);
+        getBranches().parallelStream().forEach(node -> {
+            final Node variable = node.getNodes().get(fromField);
             if (variable.getValue() != null) {
                 final Object newValue = typeConverter.convert(variable.getValue());
                 if (newValue != null) {
                     variable.setValue(newValue);
-                    node.getVariables().put(fromField, variable);
+                    node.getNodes().put(fromField, variable);
                 } else {
-                    node.getVariables().remove(fromField);
+                    node.getNodes().remove(fromField);
                 }
             } else {
-                node.getVariables().remove(fromField);
+                node.getNodes().remove(fromField);
             }
         });
         return this;
-    }
-
-    public Only only(String field) {
-        final Set<Object> set = new HashSet<>();
-
-        getNodes().parallelStream().forEach(node ->
-           set.add(node.getVariables().get(field).getValue()));
-        return new Only(set);
     }
 }
