@@ -34,46 +34,47 @@ public class Plural extends Optional {
     public <T> List<T> toListOf(Class<T> c) {
         final List<T> list = new ArrayList<>();
 
-        getBranches().forEach(node -> list.add(new Transaction<T>(node).mkInstance(c)));
+        getBranches().forEach(branch -> list.add(new Transaction<T>(branch).mkInstance(c)));
         return list;
     }
 
     public <T> Set<T> toSetOf(Class<T> c) {
         final Set<T> set = new HashSet<>();
 
-        getBranches().forEach(node -> set.add(new Transaction<T>(node).mkInstance(c)));
+        getBranches().forEach(branch -> set.add(new Transaction<T>(branch).mkInstance(c)));
         return set;
     }
 
-    public Plural bind(String from, String to) {
-        getBranches().parallelStream().forEach(node -> {
-            final Node variable = node.getNodes().get(from);
-            if (variable.getValue() != null) {
-                node.getNodes().put(to, new Node(variable.getType(), variable.getValue()));
-                node.getNodes().remove(from);
+    public Plural field(String from, String to) {
+        getBranches().parallelStream().forEach(branch -> {
+            final Node node = branch.getNodes().get(from);
+            if (node.getValue() != null) {
+                branch.getNodes().put(to, new Node(node.getType(), node.getValue()));
+                branch.getNodes().remove(from);
             }
         });
         return this;
     }
 
     public Plural ignore(String f) {
-        getBranches().parallelStream().forEach(node -> node.getNodes().remove(f));
+        getBranches().parallelStream().forEach(branch -> branch.getNodes().remove(f));
         return this;
     }
 
     public Plural parseFieldWith(String fromField, TypeConverter typeConverter) {
-        getBranches().parallelStream().forEach(node -> {
-            final Node variable = node.getNodes().get(fromField);
-            if (variable.getValue() != null) {
-                final Object newValue = typeConverter.convert(variable.getValue());
+        getBranches().parallelStream().forEach(branch -> {
+            final Node node = branch.getNodes().get(fromField);
+            if (node.getValue() != null) {
+                final Object newValue = typeConverter.convert(node.getValue());
+
                 if (newValue != null) {
-                    variable.setValue(newValue);
-                    node.getNodes().put(fromField, variable);
+                    node.setValue(newValue);
+                    branch.getNodes().put(fromField, node);
                 } else {
-                    node.getNodes().remove(fromField);
+                    branch.getNodes().remove(fromField);
                 }
             } else {
-                node.getNodes().remove(fromField);
+                branch.getNodes().remove(fromField);
             }
         });
         return this;

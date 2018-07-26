@@ -16,11 +16,11 @@ public class Mapper {
         return new Plural(o);
     }
 
-    public Only set(Object[] o) {
-        return new Only(o);
+    public Auxiliary in(Object[] o) {
+        return new Auxiliary(o);
     }
 
-    public Only set(Collection o) {
-        return new Only(o);
+    public Auxiliary in(Collection o) {
+        return new Auxiliary(o);
     }
 }

@@ -3,16 +3,16 @@ package com.rem.mappyfy;
 import java.lang.reflect.Array;
 import java.util.*;
 
-public class Only {
+public class Auxiliary {
 
     private final List<Node> nodes = new ArrayList<>();
     private final Collection<Object> collection = new ArrayList<>();
 
-    public Only(Collection args) {
+    public Auxiliary(Collection args) {
         collection.addAll(args);
     }
 
-    public Only(Object[] args) {
+    public Auxiliary(Object[] args) {
         if (args != null) {
             collection.addAll(Arrays.asList(args));
         }

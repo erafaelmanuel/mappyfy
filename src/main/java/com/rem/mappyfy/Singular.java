@@ -36,7 +36,7 @@ public class Singular extends Optional {
         }
     }
 
-    public Singular bind(String from, String to) {
+    public Singular field(String from, String to) {
         for (Branch branch : getBranches()) {
             final Node node = branch.getNodes().get(from);
             if (node.getValue() != null) {
