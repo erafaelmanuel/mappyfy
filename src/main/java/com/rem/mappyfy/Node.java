@@ -37,10 +37,11 @@ public class Node {
             for (Field field : fields) {
                 field.setAccessible(true);
                 if (field.getName().equalsIgnoreCase(f)) {
-                    return new Node(field.getType().toString(), field.get(o));
+                    setType(field.getType().toString());
+                    setValue(field.get(o));
                 }
             }
         } catch (Exception e) {}
-        return null;
+        return this;
     }
 }

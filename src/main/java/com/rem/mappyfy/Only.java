@@ -18,47 +18,50 @@ public class Only {
         }
     }
 
-    public Only just(String field) {
+    public Produce just(String field) {
         collection.forEach(o ->
                 nodes.add(new Node().of(field, o)));
-        return this;
+        return new Produce();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T[] toArrayOf(Class<T> c) {
-        final T array[] = (T[]) Array.newInstance(c, nodes.size());
-        int ctr = 0;
+    public class Produce {
 
-        for (Node node : nodes) {
-            if (c.isInstance(node.getValue())) {
-                array[ctr] = (T) node.getValue();
-                ctr++;
+        @SuppressWarnings("unchecked")
+        public <T> T[] toArrayOf(Class<T> c) {
+            final T array[] = (T[]) Array.newInstance(c, nodes.size());
+            int ctr = 0;
+
+            for (Node node : nodes) {
+                if (c.isInstance(node.getValue())) {
+                    array[ctr] = (T) node.getValue();
+                    ctr++;
+                }
             }
+            return array;
         }
-        return array;
-    }
 
-    @SuppressWarnings("unchecked")
-    public <T> List<T> toListOf(Class<T> c) {
-        final List<T> list = new ArrayList<>();
+        @SuppressWarnings("unchecked")
+        public <T> List<T> toListOf(Class<T> c) {
+            final List<T> list = new ArrayList<>();
 
-        nodes.forEach(node -> {
-            if (c.isInstance(node.getValue())) {
-                list.add((T) node.getValue());
-            }
-        });
-        return list;
-    }
+            nodes.forEach(node -> {
+                if (c.isInstance(node.getValue())) {
+                    list.add((T) node.getValue());
+                }
+            });
+            return list;
+        }
 
-    @SuppressWarnings("unchecked")
-    public <T> Set<T> toSetOf(Class<T> c) {
-        final Set<T> set = new HashSet<>();
+        @SuppressWarnings("unchecked")
+        public <T> Set<T> toSetOf(Class<T> c) {
+            final Set<T> set = new HashSet<>();
 
-        nodes.forEach(node -> {
-            if (c.isInstance(node.getValue())) {
-                set.add((T) node.getValue());
-            }
-        });
-        return set;
+            nodes.forEach(node -> {
+                if (c.isInstance(node.getValue())) {
+                    set.add((T) node.getValue());
+                }
+            });
+            return set;
+        }
     }
 }
