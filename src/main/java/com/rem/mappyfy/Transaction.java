@@ -15,36 +15,47 @@ public class Transaction<T> {
         try {
             newInstance = t.newInstance();
             bind(newInstance);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return newInstance;
     }
 
     public void bind(Object newInstance) {
         final Field fields[] = newInstance.getClass().getDeclaredFields();
 
-        try {
-            for (Field field : fields) {
+
+        for (Field field : fields) {
+            try {
+                final Bind bind;
+                Node node = null;
+
                 field.setAccessible(true);
-
-                final String name = field.getName();
-                final Node node = branch.getNodes().get(name);
-
+                if (field.getAnnotation(Ignore.class) != null) {
+                    continue;
+                }
+                if ((bind = field.getAnnotation(Bind.class)) != null) {
+                    for (String name : bind.fields()) {
+                        node = branch.getNodes().get(name);
+                        if (node != null)
+                            break;
+                    }
+                }
+                if (node == null) {
+                    node = branch.getNodes().get(field.getName());
+                }
                 if (node != null) {
                     final Object o = node.getValue();
+
                     if (o != null) {
                         if (field.getType().toString().equals(node.getType())) {
                             field.set(newInstance, o);
                         } else {
-                            try {
-                                field.set(newInstance, o);
-                            } catch (Exception e) {
-                            }
+                            field.set(newInstance, o);
                         }
                     }
                 }
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
