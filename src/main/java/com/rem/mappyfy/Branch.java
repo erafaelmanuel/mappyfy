@@ -10,24 +10,26 @@ public class Branch {
     public Branch(Object o) {
         try {
             if (o != null) {
-                Field fields[] = o.getClass().getDeclaredFields();
+                final Field fields[] = o.getClass().getDeclaredFields();
                 for (Field field : fields) {
+                    final com.rem.mappyfy.Field annotation;
+
                     field.setAccessible(true);
                     if (field.getAnnotation(Ignore.class) != null) {
                         continue;
                     }
-                    final com.rem.mappyfy.Field annotation;
                     if ((annotation = field.getAnnotation(com.rem.mappyfy.Field.class)) != null) {
-                        String name = annotation.name();
-                        nodes.put(name, new Node(field.getType().toString(), field.get(o)));
+                        final Node node = new Node(annotation.name(), field.getType().toString(), field.get(o));
+
+                        nodes.put(node.getName(), node);
                     } else {
-                        nodes.put(field.getName(), new Node(field.getType().toString(), field.get(o)));
+                        final Node node = new Node(field.getName(), field.getType().toString(), field.get(o));
+
+                        nodes.put(node.getName(), node);
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
     }
 
     public HashMap<String, Node> getNodes() {

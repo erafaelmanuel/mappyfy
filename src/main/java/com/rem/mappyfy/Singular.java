@@ -36,38 +36,54 @@ public class Singular extends Optional {
         }
     }
 
-    public Singular field(String from, String to) {
-        for (Branch branch : getBranches()) {
-            final Node node = branch.getNodes().get(from);
+    public Singular bind(String f1, String f2) {
+        if (getBranches().size() != 0) {
+            final Branch branch = getBranches().iterator().next();
+            Node node = branch.getNodes().get(f1);
+
             if (node.getValue() != null) {
-                branch.getNodes().put(to, new Node(node.getType(), node.getValue()));
-                branch.getNodes().remove(from);
-                break;
+                final Node other = new Node(f2, node.getType(), node.getValue());
+
+                node.getLink().add(other);
+                branch.getNodes().put(f2, other);
+
+            } else if ((node = branch.getNodes().get(f2)) != null) {
+                final Node other = new Node(f1, node.getType(), node.getValue());
+
+                node.getLink().add(other);
+                branch.getNodes().put(f1, other);
             }
         }
         return this;
     }
 
-    public Singular ignore(String fromField) {
-        getBranches().iterator().next()
-                .getNodes().remove(fromField);
+    public Singular ignore(String field) {
+        if (getBranches().size() != 0) {
+            final Node node = getBranches().iterator().next().getNodes().get(field);
+
+            node.getLink().forEach(n -> ignore(n.getName()));
+            getBranches().iterator().next().getNodes().remove(field);
+        }
         return this;
     }
 
-    public Singular parseFieldWith(String field, TypeConverter typeConverter) {
-        final Branch branch = getBranches().iterator().next();
-        final Node node = branch.getNodes().get(field);
+    public Singular parse(String field, TypeConverter typeConverter) {
+        if (getBranches().size() != 0) {
+            final Branch branch = getBranches().iterator().next();
+            final Node node = branch.getNodes().get(field);
 
-        if (node.getValue() != null) {
-            final Object newValue = typeConverter.convert(node.getValue());
-            if (newValue != null) {
-                node.setValue(newValue);
-                branch.getNodes().put(field, node);
+            if (node.getValue() != null) {
+                final Object newValue = typeConverter.convert(node.getValue());
+                if (newValue != null) {
+                    node.setValue(newValue);
+                    node.getLink().forEach(n -> n.setValue(newValue));
+                    branch.getNodes().put(field, node);
+                } else {
+                    branch.getNodes().remove(field);
+                }
             } else {
                 branch.getNodes().remove(field);
             }
-        } else {
-            branch.getNodes().remove(field);
         }
         return this;
     }

@@ -1,18 +1,33 @@
 package com.rem.mappyfy;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Node {
+
+    private String name;
 
     private String type;
 
     private Object value;
 
+    private Set<Node> link = new HashSet<>();
+
     public Node() {}
 
-    public Node(String type, Object value) {
-        this.value = value;
+    public Node(String name, String type, Object value) {
+        this.name = name;
         this.type = type;
+        this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
@@ -44,4 +59,9 @@ public class Node {
         } catch (Exception e) {}
         return this;
     }
+
+    public Set<Node> getLink() {
+        return link;
+    }
+
 }

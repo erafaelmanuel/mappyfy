@@ -45,36 +45,53 @@ public class Plural extends Optional {
         return set;
     }
 
-    public Plural field(String from, String to) {
+    public Plural bind(String f1, String f2) {
         getBranches().parallelStream().forEach(branch -> {
-            final Node node = branch.getNodes().get(from);
+            Node node = branch.getNodes().get(f1);
+
             if (node.getValue() != null) {
-                branch.getNodes().put(to, new Node(node.getType(), node.getValue()));
-                branch.getNodes().remove(from);
+                final Node other = new Node(f2, node.getType(), node.getValue());
+
+                node.getLink().add(other);
+                branch.getNodes().put(f2, other);
+
+            } else if ((node = branch.getNodes().get(f2)) != null) {
+                final Node other = new Node(f1, node.getType(), node.getValue());
+
+                node.getLink().add(other);
+                branch.getNodes().put(f1, other);
             }
         });
         return this;
     }
 
     public Plural ignore(String f) {
-        getBranches().parallelStream().forEach(branch -> branch.getNodes().remove(f));
+        getBranches().forEach(branch -> {
+            final Node node = branch.getNodes().get(f);
+
+            if (node != null) {
+                node.getLink().forEach(n -> ignore(n.getName()));
+                branch.getNodes().remove(f);
+            }
+        });
         return this;
     }
 
-    public Plural parseFieldWith(String fromField, TypeConverter typeConverter) {
+    public Plural parse(String field, TypeConverter typeConverter) {
         getBranches().parallelStream().forEach(branch -> {
-            final Node node = branch.getNodes().get(fromField);
+            final Node node = branch.getNodes().get(field);
+
             if (node.getValue() != null) {
                 final Object newValue = typeConverter.convert(node.getValue());
-
                 if (newValue != null) {
                     node.setValue(newValue);
-                    branch.getNodes().put(fromField, node);
+                    node.getLink().forEach(n -> n.setValue(newValue));
+                    branch.getNodes().put(field, node);
                 } else {
-                    branch.getNodes().remove(fromField);
+                    branch.getNodes().remove(field);
                 }
             } else {
-                branch.getNodes().remove(fromField);
+                branch.getNodes().remove(field);
             }
         });
         return this;
