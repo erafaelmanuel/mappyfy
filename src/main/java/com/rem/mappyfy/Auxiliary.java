@@ -20,7 +20,7 @@ public class Auxiliary {
 
     public Produce just(String field) {
         collection.forEach(o ->
-                nodes.add(new Node().of(field, o)));
+                nodes.add(Node.of(field, o)));
         return new Produce();
     }
 

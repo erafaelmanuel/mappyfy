@@ -1,5 +1,7 @@
 package com.rem.mappyfy;
 
+import com.sun.istack.internal.NotNull;
+
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,18 +48,21 @@ public class Node {
         this.value = value;
     }
 
-    public Node of(String f, Object o) {
+    public static Node of(String name, @NotNull Object value) {
+        final Node node = new Node();
         try {
-            Field[] fields = o.getClass().getDeclaredFields();
+            final Field[] fields = value.getClass().getDeclaredFields();
+
             for (Field field : fields) {
                 field.setAccessible(true);
-                if (field.getName().equalsIgnoreCase(f)) {
-                    setType(field.getType().toString());
-                    setValue(field.get(o));
+                if (field.getName().equalsIgnoreCase(name)) {
+                    node.setName(name);
+                    node.setType(field.getType().toString());
+                    node.setValue(field.get(value));
                 }
             }
         } catch (Exception e) {}
-        return this;
+        return node;
     }
 
     public Set<Node> getLink() {
