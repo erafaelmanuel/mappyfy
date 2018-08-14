@@ -8,7 +8,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 * Easy-to-use
 
 ### Download
-```html
+```xml
 <repositories>
   <repository>
       <id>jitpack.io</id>
@@ -17,7 +17,7 @@ A Reflection-based mappers library that maps objects to another objects. It can 
 </repositories>
 ```
 
-```html
+```xml
 <dependency>
   <groupId>com.github.erafaelmanuel</groupId>
   <artifactId>mappyfy</artifactId>
