@@ -15,7 +15,7 @@ public class Branch {
                 for (Field field : fields) {
                     field.setAccessible(true);
 
-                    final Node node = new Node(field.getName(), field.getType().toString(), field.get(o));
+                    final var node = new Node(field.getName(), field.getType().toString(), field.get(o));
 
                     nodes.put(node.getName(), node);
                 }

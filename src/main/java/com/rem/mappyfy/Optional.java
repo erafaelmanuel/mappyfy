@@ -13,14 +13,14 @@ public class Optional {
     }
 
     public Optional(Collection args) {
-        for (Object o : args) {
+        for (var o : args) {
             branches.add(new Branch(o));
         }
     }
 
     public Optional(Object[] args) {
         if (args != null) {
-            for (Object o : args) {
+            for (var o : args) {
                 branches.add(new Branch(o));
             }
         }

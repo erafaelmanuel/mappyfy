@@ -22,9 +22,7 @@ public class Transaction<T> {
 
     public void bind(Object newInstance) {
         final Field fields[] = newInstance.getClass().getDeclaredFields();
-
-
-        for (Field field : fields) {
+        for (var field : fields) {
             try {
                 final Bind bind;
                 Node node = null;
@@ -34,7 +32,7 @@ public class Transaction<T> {
                     continue;
                 }
                 if ((bind = field.getAnnotation(Bind.class)) != null) {
-                    for (String name : bind.fields()) {
+                    for (var name : bind.fields()) {
                         node = branch.getNodes().get(name);
                         if (node != null)
                             break;
@@ -44,8 +42,7 @@ public class Transaction<T> {
                     node = branch.getNodes().get(field.getName());
                 }
                 if (node != null) {
-                    final Object o = node.getValue();
-
+                    final var o = node.getValue();
                     if (o != null) {
                         if (field.getType().toString().equals(node.getType())) {
                             field.set(newInstance, o);

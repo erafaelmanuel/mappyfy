@@ -29,9 +29,8 @@ public class Auxiliary {
         @SuppressWarnings("unchecked")
         public <T> T[] toArrayOf(Class<T> c) {
             final T array[] = (T[]) Array.newInstance(c, nodes.size());
-            int ctr = 0;
-
-            for (Node node : nodes) {
+            var ctr = 0;
+            for (var node : nodes) {
                 if (c.isInstance(node.getValue())) {
                     array[ctr] = (T) node.getValue();
                     ctr++;
@@ -42,8 +41,7 @@ public class Auxiliary {
 
         @SuppressWarnings("unchecked")
         public <T> List<T> toListOf(Class<T> c) {
-            final List<T> list = new ArrayList<>();
-
+            final var list = new ArrayList<T>();
             nodes.forEach(node -> {
                 if (c.isInstance(node.getValue())) {
                     list.add((T) node.getValue());
@@ -54,8 +52,7 @@ public class Auxiliary {
 
         @SuppressWarnings("unchecked")
         public <T> Set<T> toSetOf(Class<T> c) {
-            final Set<T> set = new HashSet<>();
-
+            final var set = new HashSet<T>();
             nodes.forEach(node -> {
                 if (c.isInstance(node.getValue())) {
                     set.add((T) node.getValue());
